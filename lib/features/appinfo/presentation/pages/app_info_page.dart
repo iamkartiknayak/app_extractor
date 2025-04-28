@@ -1,10 +1,12 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/app_info_tile.dart';
 import '../widgets/app_action_bar.dart';
 import '../widgets/info_page_header.dart';
+import '../../application/app_info_provider.dart';
 import '../../../../helpers/date_time_helper.dart';
 
 class AppInfoPage extends StatelessWidget {
@@ -21,7 +23,11 @@ class AppInfoPage extends StatelessWidget {
       appBar: AppBar(
         actionsPadding: EdgeInsets.only(right: 8.0),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Symbols.unarchive)),
+          IconButton(
+            onPressed:
+                () => context.read<AppInfoProvider>().extractApk(context, app),
+            icon: Icon(Symbols.unarchive),
+          ),
           IconButton(onPressed: () {}, icon: Icon(Symbols.share)),
         ],
       ),
