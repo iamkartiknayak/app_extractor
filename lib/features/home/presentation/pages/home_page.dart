@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          NavigationDestination(
+            label: 'Installed Apps',
+            icon: Icon(Symbols.archive),
+            selectedIcon: Icon(Symbols.archive, fill: 1),
+          ),
+          NavigationDestination(
+            label: 'System Apps',
+            icon: Icon(Symbols.phone_android),
+            selectedIcon: Icon(Symbols.phone_android, fill: 1),
+          ),
+          NavigationDestination(
+            label: 'Favorite Apps',
+            icon: Icon(Symbols.favorite),
+            selectedIcon: Icon(Symbols.favorite, fill: 1),
+          ),
+          NavigationDestination(
+            label: 'Settings',
+            icon: Icon(Symbols.settings),
+            selectedIcon: Icon(Symbols.settings, fill: 1),
+          ),
+        ],
+      ),
+    );
+  }
+}
