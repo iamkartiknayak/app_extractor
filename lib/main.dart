@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './features/home/presentation/pages/home_page.dart';
+
 void main() => runApp(AppExtractor());
 
 class AppExtractor extends StatelessWidget {
@@ -10,7 +12,7 @@ class AppExtractor extends StatelessWidget {
     return MaterialApp(
       title: 'App Extractor',
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Center(child: Text('App Extractor'))),
+      home: HomePage(),
     );
   }
 }
