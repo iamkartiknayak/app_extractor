@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../application/home_provider.dart';
 import '../../../applist/application/applist_provider.dart';
+import '../../../appinfo/application/app_info_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,6 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final navbarProvider = context.watch<NavbarIndexProvider>();
     context.read<ApplistProvider>().init();
+    context.read<AppInfoProvider>().init(context);
 
     return Scaffold(
       body: IndexedStack(
