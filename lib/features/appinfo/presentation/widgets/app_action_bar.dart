@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import './app_action_item.dart';
 import '../../../../constants.dart';
+import '../../../../helpers/play_store_helper.dart';
 
 class AppActionBar extends StatelessWidget {
   const AppActionBar({super.key, required this.app});
@@ -24,11 +25,22 @@ class AppActionBar extends StatelessWidget {
               label: 'Open',
             ),
             const VerticalDivider(width: 1.0),
-            AppActionItem(
-              onTap: () {},
-              icon: Symbols.shop,
-              label: 'Play Store',
-              // isActive: isAvailable,
+            FutureBuilder(
+              future: PlayStoreHelper.isAppAvailable(app.packageName),
+              builder: (context, snapshot) {
+                final isAvailable = snapshot.data ?? false;
+
+                return AppActionItem(
+                  onTap:
+                      () =>
+                          isAvailable
+                              ? PlayStoreHelper.openPlayStore(app.packageName)
+                              : null,
+                  icon: Symbols.shop,
+                  label: 'Play Store',
+                  isActive: isAvailable,
+                );
+              },
             ),
             VerticalDivider(width: 1.0),
             AppActionItem(
