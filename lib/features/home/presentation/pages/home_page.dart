@@ -12,6 +12,10 @@ class HomePage extends StatelessWidget {
     final navbarProvider = context.watch<NavbarIndexProvider>();
 
     return Scaffold(
+      body: IndexedStack(
+        index: navbarProvider.currentIndex,
+        children: navbarProvider.pages,
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: navbarProvider.currentIndex,
         onDestinationSelected: navbarProvider.updateIndex,
