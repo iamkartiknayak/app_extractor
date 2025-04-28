@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import './fallback_icon.dart';
+import '../../../../helpers/snackbar_helper.dart';
+import '../../../../helpers/app_extract_helper.dart';
 import '../../../appinfo/presentation/pages/app_info_page.dart';
 
 class AppTile extends StatelessWidget {
@@ -31,7 +33,15 @@ class AppTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              final extractedPath = await AppExtractHelper.extractApk(app);
+              if (context.mounted) {
+                SnackbarHelper.showDoneExtractionSnackbar(
+                  context,
+                  extractedPath,
+                );
+              }
+            },
             icon: Icon(Symbols.unarchive),
             color: Theme.of(context).colorScheme.primary,
           ),
