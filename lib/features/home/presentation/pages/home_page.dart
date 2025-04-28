@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:provider/provider.dart';
+
+import '../../application/home_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navbarProvider = context.watch<NavbarIndexProvider>();
+
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        selectedIndex: navbarProvider.currentIndex,
+        onDestinationSelected: navbarProvider.updateIndex,
         destinations: [
           NavigationDestination(
             label: 'Installed Apps',
