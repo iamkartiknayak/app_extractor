@@ -36,6 +36,14 @@ class ApplistProvider extends ChangeNotifier {
 
   bool isFavorite(String packageName) => _favoriteAppsIds.contains(packageName);
 
+  void removeApp(String appId) {
+    _allAppslist.retainWhere((app) => app.packageName != appId);
+    _installedAppsList.retainWhere((app) => app.packageName != appId);
+    _systemAppsList.retainWhere((app) => app.packageName != appId);
+    _favoriteAppsIds.retainWhere((packageName) => packageName != appId);
+    notifyListeners();
+  }
+
   // private methods
   Future<void> _getAppsList() async {
     _allAppslist = await DeviceApps.getInstalledApplications(
