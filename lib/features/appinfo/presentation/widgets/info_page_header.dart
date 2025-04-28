@@ -1,8 +1,10 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../constants.dart';
+import '../../../applist/application/applist_provider.dart';
 
 class InfoPageHeader extends StatelessWidget {
   const InfoPageHeader({super.key, required this.app});
@@ -39,10 +41,17 @@ class InfoPageHeader extends StatelessWidget {
             ),
           ),
           SizedBox(width: 12.0),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Symbols.favorite),
-            color: Theme.of(context).colorScheme.primary,
+          Selector<ApplistProvider, bool>(
+            selector: (_, p1) => p1.isFavorite(app.packageName),
+            shouldRebuild: (previous, next) => previous != next,
+            builder: (_, isFavorite, child) {
+              return IconButton(
+                onPressed:
+                    () => context.read<ApplistProvider>().toggleFavorite(app),
+                icon: Icon(Symbols.favorite, fill: isFavorite ? 1 : 0),
+                color: Theme.of(context).colorScheme.primary,
+              );
+            },
           ),
         ],
       ),
