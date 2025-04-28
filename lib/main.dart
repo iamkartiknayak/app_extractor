@@ -1,8 +1,10 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import './helpers/theme_helper.dart';
+import './features/home/application/home_provider.dart';
 import './features/home/presentation/pages/home_page.dart';
 
 void main() => runApp(AppExtractor());
@@ -38,24 +40,29 @@ class AppExtractor extends StatelessWidget {
           lightColorScheme = ColorScheme.fromSeed(seedColor: Colors.teal);
         }
 
-        return MaterialApp(
-          title: 'App Extractor',
-          debugShowCheckedModeBanner: false,
-          home: HomePage(),
-          theme: ThemeData(
-            colorScheme: lightColorScheme,
-            navigationBarTheme: NavigationBarThemeData(
-              surfaceTintColor: lightColorScheme.surfaceTint,
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => NavbarIndexProvider()),
+          ],
+          child: MaterialApp(
+            title: 'App Extractor',
+            debugShowCheckedModeBanner: false,
+            home: HomePage(),
+            theme: ThemeData(
+              colorScheme: lightColorScheme,
+              navigationBarTheme: NavigationBarThemeData(
+                surfaceTintColor: lightColorScheme.surfaceTint,
+              ),
             ),
-          ),
-          darkTheme: ThemeData(
-            colorScheme: darkColorScheme,
-            navigationBarTheme: NavigationBarThemeData(
-              surfaceTintColor: darkColorScheme.surfaceTint,
-            ),
-            scaffoldBackgroundColor: ThemeHelper.darkenColor(
-              darkColorScheme.surface,
-              0.03,
+            darkTheme: ThemeData(
+              colorScheme: darkColorScheme,
+              navigationBarTheme: NavigationBarThemeData(
+                surfaceTintColor: darkColorScheme.surfaceTint,
+              ),
+              scaffoldBackgroundColor: ThemeHelper.darkenColor(
+                darkColorScheme.surface,
+                0.03,
+              ),
             ),
           ),
         );
