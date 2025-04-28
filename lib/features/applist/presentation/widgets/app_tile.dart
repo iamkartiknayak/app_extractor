@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import './fallback_icon.dart';
+import '../../../appinfo/presentation/pages/app_info_page.dart';
 
 class AppTile extends StatelessWidget {
   const AppTile({super.key, required this.app});
@@ -12,7 +13,10 @@ class AppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap:
+          () => Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => AppInfoPage(app: app))),
       leading:
           app is ApplicationWithIcon
               ? Image.memory(
