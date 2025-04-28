@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import './helpers/theme_helper.dart';
 import './features/home/application/home_provider.dart';
 import './features/home/presentation/pages/home_page.dart';
+import './features/applist/application/applist_provider.dart';
 
 void main() => runApp(AppExtractor());
 
@@ -42,6 +43,7 @@ class AppExtractor extends StatelessWidget {
 
         return MultiProvider(
           providers: [
+            ChangeNotifierProvider(create: (_) => ApplistProvider()),
             ChangeNotifierProvider(create: (_) => NavbarIndexProvider()),
           ],
           child: MaterialApp(
