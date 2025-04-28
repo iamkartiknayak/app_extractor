@@ -5,7 +5,10 @@ class ApplistProvider extends ChangeNotifier {
   // public var (getters)
   List<Application> get installedAppsList => _installedAppsList;
   List<Application> get systemAppsList => _systemAppsList;
-  List<Application> get favoriteAppsList => _favoriteAppsList;
+  List<Application> get favoriteAppsList =>
+      _allAppslist
+          .where((app) => _favoriteAppsIds.contains(app.packageName))
+          .toList();
 
   // private var
   bool _isInitialized = false;
@@ -13,7 +16,7 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _allAppslist = [];
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
-  final List<Application> _favoriteAppsList = [];
+  final Set<String> _favoriteAppsIds = {};
 
   // public methods
   void init() async {
@@ -24,14 +27,14 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void toggleFavorite(Application app) {
-    _favoriteAppsList.contains(app)
-        ? _favoriteAppsList.remove(app)
-        : _favoriteAppsList.add(app);
+    _favoriteAppsIds.contains(app.packageName)
+        ? _favoriteAppsIds.remove(app.packageName)
+        : _favoriteAppsIds.add(app.packageName);
 
     notifyListeners();
   }
 
-  bool isFavorite(Application app) => _favoriteAppsList.contains(app);
+  bool isFavorite(String packageName) => _favoriteAppsIds.contains(packageName);
 
   // private methods
   Future<void> _getAppsList() async {
