@@ -21,10 +21,16 @@ class AppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap:
-          () => Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => AppInfoPage(app: app))),
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => AppInfoPage(app: app)))
+            .then((_) {
+              if (!context.mounted) return;
+              context.read<AppInfoProvider>().setSelectedAppId(null);
+            });
+
+        context.read<AppInfoProvider>().setSelectedAppId(app.packageName);
+      },
       leading: getAppIcon(),
       title: Text(app.appName),
       subtitle: Text(app.packageName),
