@@ -3,6 +3,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../helpers/play_store_helper.dart';
 import '../data/models/cached_app_info_model.dart';
 import '../../../helpers/app_operations_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
@@ -14,6 +15,7 @@ class AppInfoProvider extends ChangeNotifier {
   Map<String, CachedAppInfoModel> get cachedAppInfoMap => _cachedAppInfoMap;
   String get apkSize => _apkSize;
   String get techStack => _techStack;
+  bool get isAvailableOnPlayStore => _isAvailableOnPlayStore;
 
   // private var
   String? _selectedAppId;
@@ -24,6 +26,7 @@ class AppInfoProvider extends ChangeNotifier {
 
   String _apkSize = 'Calculating...';
   String _techStack = 'Parsing...';
+  bool _isAvailableOnPlayStore = false;
 
   // public methods
   void init(BuildContext context) {
@@ -53,12 +56,15 @@ class AppInfoProvider extends ChangeNotifier {
     if (_cachedAppInfoMap.containsKey(app.packageName)) {
       _apkSize = _cachedAppInfoMap[app.packageName]!.appSize;
       _techStack = _cachedAppInfoMap[app.packageName]!.techStack;
+      _isAvailableOnPlayStore =
+          _cachedAppInfoMap[app.packageName]!.isAvailableOnPlayStore;
       notifyListeners();
       return;
     }
 
     await _getApkSize(app);
     await _getTechStack(app);
+    await _getPlayStoreAvailability(app.packageName);
     notifyListeners();
 
     if (_cachedAppInfoMap.containsKey(app.packageName)) return;
@@ -85,10 +91,13 @@ class AppInfoProvider extends ChangeNotifier {
     await Future.delayed(Duration(milliseconds: 500));
     _apkSize = 'Calulating...';
     _techStack = 'Parsing...';
-    // notifyListeners();
+    _isAvailableOnPlayStore = false;
   }
 
   // private methods
+  Future<void> _getPlayStoreAvailability(String appId) async {
+    _isAvailableOnPlayStore = await PlayStoreHelper.isAppAvailable(appId);
+  }
 
   Future<void> _getApkSize(Application app) async {
     _apkSize = await AppOperationsHelper.getAppSize(app.apkFilePath);
@@ -102,7 +111,7 @@ class AppInfoProvider extends ChangeNotifier {
   void _cacheAppInfo(Application app) {
     _cachedAppInfoMap[app.packageName] = CachedAppInfoModel(
       appSize: _apkSize,
-      isAvailableOnPlayStore: false,
+      isAvailableOnPlayStore: _isAvailableOnPlayStore,
       techStack: _techStack,
     );
   }
