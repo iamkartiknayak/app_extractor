@@ -3,7 +3,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../helpers/app_extract_helper.dart';
+import '../../../helpers/app_operations_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
 import '../../applist/application/applist_provider.dart';
 
@@ -42,7 +42,7 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void extractApk(BuildContext context, Application app) async {
-    final extractedPath = await AppExtractHelper.extractApk(app);
+    final extractedPath = await AppOperationsHelper.extractApk(app);
     if (context.mounted) {
       SnackbarHelper.showDoneExtractionSnackbar(context, extractedPath);
     }

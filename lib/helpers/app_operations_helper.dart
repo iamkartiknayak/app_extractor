@@ -4,7 +4,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-class AppExtractHelper {
+class AppOperationsHelper {
   static Future<String?> extractApk(Application app) async {
     try {
       final extractionDir = await _getPrivateExtractionDirectory();
