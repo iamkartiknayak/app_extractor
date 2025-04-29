@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
@@ -176,6 +177,15 @@ class AppOperationsHelper {
     }
   }
 
+  static Future<String> getAppSize(String apkFilePath) async {
+    final file = File(apkFilePath);
+    if (await file.exists()) {
+      final bytes = await file.length();
+      return _formatBytes(bytes);
+    }
+    return '0 B';
+  }
+
   // private methods
   static Future<Directory?> _getPrivateExtractionDirectory() async {
     try {
@@ -191,5 +201,13 @@ class AppOperationsHelper {
       debugPrint('Error creating private directory: $e');
       return null;
     }
+  }
+
+  static String _formatBytes(int bytes, [int decimals = 2]) {
+    if (bytes <= 0) return '0 B';
+    const suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    final i = (log(bytes) / log(1024)).floor();
+    final size = bytes / pow(1024, i);
+    return '${size.toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 }

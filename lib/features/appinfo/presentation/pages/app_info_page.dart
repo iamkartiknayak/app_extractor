@@ -46,6 +46,20 @@ class AppInfoPage extends StatelessWidget {
               label: 'App name',
             ),
             Divider(),
+            FutureBuilder(
+              future: AppOperationsHelper.getAppSize(app.apkFilePath),
+              builder: (context, snapshot) {
+                String appSize = 'Calculating...';
+                if (snapshot.hasData) appSize = snapshot.data!;
+
+                return AppInfoTile(
+                  value: appSize,
+                  icon: Symbols.android,
+                  label: 'Apk Size',
+                );
+              },
+            ),
+            Divider(),
             AppInfoTile(
               value: app.packageName,
               icon: Symbols.package_2,
