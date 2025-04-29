@@ -8,6 +8,7 @@ import '../widgets/app_action_bar.dart';
 import '../widgets/info_page_header.dart';
 import '../../application/app_info_provider.dart';
 import '../../../../helpers/date_time_helper.dart';
+import '../../../../helpers/app_operations_helper.dart';
 
 class AppInfoPage extends StatelessWidget {
   const AppInfoPage({super.key, required this.app});
@@ -79,6 +80,23 @@ class AppInfoPage extends StatelessWidget {
               value: app.dataDir ?? 'Not available',
               icon: Symbols.folder,
               label: 'Data directory',
+            ),
+            Divider(),
+            FutureBuilder(
+              future: AppOperationsHelper.detectTechStack(app.apkFilePath),
+              builder: (context, snapshot) {
+                String techStack = 'Parsing...';
+
+                if (snapshot.hasData) {
+                  techStack = snapshot.data!['framework']!;
+                }
+
+                return AppInfoTile(
+                  value: techStack,
+                  icon: Symbols.construction,
+                  label: 'Tech stack',
+                );
+              },
             ),
           ],
         ),
