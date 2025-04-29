@@ -7,14 +7,24 @@ class SnackbarHelper {
   static void showDoneExtractionSnackbar(
     BuildContext context,
     String? extractedPath,
+    String appName,
   ) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          extractedPath != null
-              ? 'APK extracted to: $extractedPath'
-              : 'Failed to extract APK',
-        ),
+        content:
+            extractedPath != null
+                ? Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: appName,
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      TextSpan(text: ' has been extracted successfully'),
+                    ],
+                  ),
+                )
+                : Text('Failed to extract APK'),
         action: SnackBarAction(
           label: 'Share',
           onPressed: () {

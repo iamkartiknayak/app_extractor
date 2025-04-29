@@ -78,7 +78,11 @@ class AppInfoProvider extends ChangeNotifier {
   void extractApk(BuildContext context, Application app) async {
     final extractedPath = await AppOperationsHelper.extractApk(app);
     if (context.mounted) {
-      SnackbarHelper.showDoneExtractionSnackbar(context, extractedPath);
+      SnackbarHelper.showDoneExtractionSnackbar(
+        context,
+        extractedPath,
+        app.appName,
+      );
     }
   }
 
