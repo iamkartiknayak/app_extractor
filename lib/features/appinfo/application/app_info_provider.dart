@@ -3,6 +3,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data/models/cached_app_info_model.dart';
 import '../../../helpers/app_operations_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
 import '../../applist/application/applist_provider.dart';
@@ -10,16 +11,19 @@ import '../../applist/application/applist_provider.dart';
 class AppInfoProvider extends ChangeNotifier {
   // public var (getters)
   String? get selectedAppId => _selectedAppId;
+  Map<String, CachedAppInfoModel> get cachedAppInfoMap => _cachedAppInfoMap;
   String get apkSize => _apkSize;
   String get techStack => _techStack;
 
   // private var
   String? _selectedAppId;
   bool _isInitialized = false;
-  String _apkSize = 'Calculating...';
-  String _techStack = 'Parsing...';
   late BuildContext _context;
   late AppIUEvents _appIUEvents;
+  final Map<String, CachedAppInfoModel> _cachedAppInfoMap = {};
+
+  String _apkSize = 'Calculating...';
+  String _techStack = 'Parsing...';
 
   // public methods
   void init(BuildContext context) {
@@ -46,9 +50,23 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void calculateAppInfoValues(Application app) async {
+    if (_cachedAppInfoMap.containsKey(app.packageName)) {
+      _apkSize = _cachedAppInfoMap[app.packageName]!.appSize;
+      _techStack = _cachedAppInfoMap[app.packageName]!.techStack;
+      notifyListeners();
+      return;
+    }
+
     await _getApkSize(app);
     await _getTechStack(app);
     notifyListeners();
+
+    if (_cachedAppInfoMap.containsKey(app.packageName)) return;
+    Future.delayed(Duration(milliseconds: 1400), () => _cacheAppInfo(app)).then(
+      (_) {
+        debugPrint(_cachedAppInfoMap.toString());
+      },
+    );
   }
 
   void extractApk(BuildContext context, Application app) async {
@@ -64,12 +82,14 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void resetValues() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     _apkSize = 'Calulating...';
     _techStack = 'Parsing...';
+    // notifyListeners();
   }
 
   // private methods
+
   Future<void> _getApkSize(Application app) async {
     _apkSize = await AppOperationsHelper.getAppSize(app.apkFilePath);
   }
@@ -77,5 +97,13 @@ class AppInfoProvider extends ChangeNotifier {
   Future<void> _getTechStack(Application app) async {
     final result = await AppOperationsHelper.detectTechStack(app.apkFilePath);
     _techStack = result['framework']!;
+  }
+
+  void _cacheAppInfo(Application app) {
+    _cachedAppInfoMap[app.packageName] = CachedAppInfoModel(
+      appSize: _apkSize,
+      isAvailableOnPlayStore: false,
+      techStack: _techStack,
+    );
   }
 }
