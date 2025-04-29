@@ -10,10 +10,14 @@ import '../../applist/application/applist_provider.dart';
 class AppInfoProvider extends ChangeNotifier {
   // public var (getters)
   String? get selectedAppId => _selectedAppId;
+  String get apkSize => _apkSize;
+  String get techStack => _techStack;
 
   // private var
   String? _selectedAppId;
   bool _isInitialized = false;
+  String _apkSize = 'Calculating...';
+  String _techStack = 'Parsing...';
   late BuildContext _context;
   late AppIUEvents _appIUEvents;
 
@@ -41,6 +45,12 @@ class AppInfoProvider extends ChangeNotifier {
     _isInitialized = true;
   }
 
+  void calculateAppInfoValues(Application app) async {
+    await _getApkSize(app);
+    await _getTechStack(app);
+    notifyListeners();
+  }
+
   void extractApk(BuildContext context, Application app) async {
     final extractedPath = await AppOperationsHelper.extractApk(app);
     if (context.mounted) {
@@ -51,5 +61,21 @@ class AppInfoProvider extends ChangeNotifier {
   void setSelectedAppId(String? appId) {
     _selectedAppId = appId;
     notifyListeners();
+  }
+
+  void resetValues() async {
+    await Future.delayed(Duration(seconds: 1));
+    _apkSize = 'Calulating...';
+    _techStack = 'Parsing...';
+  }
+
+  // private methods
+  Future<void> _getApkSize(Application app) async {
+    _apkSize = await AppOperationsHelper.getAppSize(app.apkFilePath);
+  }
+
+  Future<void> _getTechStack(Application app) async {
+    final result = await AppOperationsHelper.detectTechStack(app.apkFilePath);
+    _techStack = result['framework']!;
   }
 }

@@ -8,7 +8,6 @@ import '../widgets/app_action_bar.dart';
 import '../widgets/info_page_header.dart';
 import '../../application/app_info_provider.dart';
 import '../../../../helpers/date_time_helper.dart';
-import '../../../../helpers/app_operations_helper.dart';
 
 class AppInfoPage extends StatelessWidget {
   const AppInfoPage({super.key, required this.app});
@@ -20,106 +19,108 @@ class AppInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actionsPadding: EdgeInsets.only(right: 8.0),
-        actions: [
-          IconButton(
-            onPressed:
-                () => context.read<AppInfoProvider>().extractApk(context, app),
-            icon: Icon(Symbols.unarchive),
-          ),
-          IconButton(onPressed: () {}, icon: Icon(Symbols.share)),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              InfoPageHeader(app: app),
-              SizedBox(height: 8.0),
-              AppActionBar(app: app),
-              SizedBox(height: 24.0),
-              AppInfoTile(
-                value: app.appName,
-                icon: Symbols.title,
-                label: 'App name',
-              ),
-              Divider(),
-              FutureBuilder(
-                future: AppOperationsHelper.getAppSize(app.apkFilePath),
-                builder: (context, snapshot) {
-                  String appSize = 'Calculating...';
-                  if (snapshot.hasData) appSize = snapshot.data!;
+    Future.microtask(() {
+      if (!context.mounted) return;
+      context.read<AppInfoProvider>().calculateAppInfoValues(app);
+    });
 
-                  return AppInfoTile(
-                    value: appSize,
-                    icon: Symbols.android,
-                    label: 'Apk Size',
-                  );
-                },
-              ),
-              Divider(),
-              AppInfoTile(
-                value: app.packageName,
-                icon: Symbols.package_2,
-                label: 'Package name',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: app.versionName!,
-                icon: Symbols.new_releases,
-                label: 'App version',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: getAppCategory(app.category),
-                icon: Symbols.category,
-                label: 'App category',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: app.enabled.toString().capitalize(),
-                icon: Symbols.toggle_off,
-                label: 'Enabled',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: DatetimeHelper.formatEpochTime(app.installTimeMillis),
-                icon: Symbols.calendar_clock,
-                label: 'Installed on',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: app.systemApp.toString().capitalize(),
-                icon: Symbols.phone_android,
-                label: 'System App',
-              ),
-              Divider(),
-              AppInfoTile(
-                value: app.dataDir ?? 'Not available',
-                icon: Symbols.folder,
-                label: 'Data directory',
-              ),
-              Divider(),
-              FutureBuilder(
-                future: AppOperationsHelper.detectTechStack(app.apkFilePath),
-                builder: (context, snapshot) {
-                  String techStack = 'Parsing...';
-
-                  if (snapshot.hasData) {
-                    techStack = snapshot.data!['framework']!;
-                  }
-
-                  return AppInfoTile(
-                    value: techStack,
-                    icon: Symbols.construction,
-                    label: 'Tech stack',
-                  );
-                },
-              ),
-            ],
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        context.read<AppInfoProvider>().resetValues();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actionsPadding: EdgeInsets.only(right: 8.0),
+          actions: [
+            IconButton(
+              onPressed:
+                  () =>
+                      context.read<AppInfoProvider>().extractApk(context, app),
+              icon: Icon(Symbols.unarchive),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Symbols.share)),
+          ],
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                InfoPageHeader(app: app),
+                SizedBox(height: 8.0),
+                AppActionBar(app: app),
+                SizedBox(height: 24.0),
+                AppInfoTile(
+                  value: app.appName,
+                  icon: Symbols.title,
+                  label: 'App name',
+                ),
+                Divider(),
+                Selector<AppInfoProvider, String>(
+                  builder: (context, apkSize, child) {
+                    return AppInfoTile(
+                      value: apkSize,
+                      icon: Symbols.android,
+                      label: 'Apk Size',
+                    );
+                  },
+                  selector: (_, p1) => p1.apkSize,
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: app.packageName,
+                  icon: Symbols.package_2,
+                  label: 'Package name',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: app.versionName!,
+                  icon: Symbols.new_releases,
+                  label: 'App version',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: getAppCategory(app.category),
+                  icon: Symbols.category,
+                  label: 'App category',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: app.enabled.toString().capitalize(),
+                  icon: Symbols.toggle_off,
+                  label: 'Enabled',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: DatetimeHelper.formatEpochTime(app.installTimeMillis),
+                  icon: Symbols.calendar_clock,
+                  label: 'Installed on',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: app.systemApp.toString().capitalize(),
+                  icon: Symbols.phone_android,
+                  label: 'System App',
+                ),
+                Divider(),
+                AppInfoTile(
+                  value: app.dataDir ?? 'Not available',
+                  icon: Symbols.folder,
+                  label: 'Data directory',
+                ),
+                Divider(),
+                Selector<AppInfoProvider, String>(
+                  builder: (context, techStack, child) {
+                    return AppInfoTile(
+                      value: techStack,
+                      icon: Symbols.construction,
+                      label: 'Tech stack',
+                    );
+                  },
+                  selector: (_, p1) => p1.techStack,
+                ),
+              ],
+            ),
           ),
         ),
       ),
