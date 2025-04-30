@@ -45,6 +45,7 @@ dependencies:
   share_plus: ^11.0.0
   app_install_events: ^0.0.3
   archive: ^4.0.7
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
