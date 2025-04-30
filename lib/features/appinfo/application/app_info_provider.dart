@@ -49,6 +49,12 @@ class AppInfoProvider extends ChangeNotifier {
     _isInitialized = true;
   }
 
+  @override
+  void dispose() {
+    _appIUEvents.dispose();
+    super.dispose();
+  }
+
   void calculateAppInfoValues(Application app) {
     if (_cachedAppInfoMap.containsKey(app.packageName)) {
       Future.microtask(() => _setCachedValues(app));
