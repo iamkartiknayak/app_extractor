@@ -37,13 +37,9 @@ class AppInfoProvider extends ChangeNotifier {
     _appIUEvents = AppIUEvents();
     _appIUEvents.appEvents.listen((event) async {
       if (event.type == IUEventType.uninstalled) {
-        debugPrint("App has been uninstalled => ${event.packageName}");
-
         if (!context.mounted) return;
 
-        debugPrint('Before');
         _context.read<ApplistProvider>().removeApp(event.packageName);
-        debugPrint('Done');
         if (_selectedAppId == event.packageName) {
           Navigator.of(_context).pop();
         }
