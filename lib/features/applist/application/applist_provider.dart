@@ -1,10 +1,9 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../../helpers/box_helper.dart';
 
 class ApplistProvider extends ChangeNotifier {
-  static const boxId = 'appData';
-
   // public var (getters)
   List<Application> get installedAppsList => _installedAppsList;
   List<Application> get systemAppsList => _systemAppsList;
@@ -20,14 +19,12 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
   late final List<String> _favoriteAppsIds;
-  late final Box<dynamic> _appData;
 
   // public methods
   void init() async {
     if (_isInitialized) return;
 
-    _appData = Hive.box(boxId);
-    _favoriteAppsIds = _appData.get('favorites', defaultValue: <String>[]);
+    _favoriteAppsIds = BoxHelper.instance.getFavoriteAppsIdList();
     _getAppsList();
     _isInitialized = true;
   }
@@ -37,7 +34,7 @@ class ApplistProvider extends ChangeNotifier {
         ? _favoriteAppsIds.remove(app.packageName)
         : _favoriteAppsIds.add(app.packageName);
 
-    _appData.put('favorites', _favoriteAppsIds.toList());
+    BoxHelper.instance.saveFavorites(_favoriteAppsIds.toList());
     notifyListeners();
   }
 
