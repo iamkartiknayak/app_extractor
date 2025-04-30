@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import './helpers/theme_helper.dart';
@@ -9,7 +10,13 @@ import './features/home/presentation/pages/home_page.dart';
 import './features/applist/application/applist_provider.dart';
 import './features/appinfo/application/app_info_provider.dart';
 
-void main() => runApp(AppExtractor());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox(ApplistProvider.boxId);
+
+  runApp(AppExtractor());
+}
 
 class AppExtractor extends StatelessWidget {
   const AppExtractor({super.key});
