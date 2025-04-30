@@ -27,6 +27,7 @@ class AppInfoProvider extends ChangeNotifier {
   String _apkSize = 'Calculating...';
   String _techStack = 'Parsing...';
   bool _isAvailableOnPlayStore = false;
+  bool _isCalculating = false;
 
   // public methods
   void init(BuildContext context) {
@@ -52,27 +53,22 @@ class AppInfoProvider extends ChangeNotifier {
     _isInitialized = true;
   }
 
-  void calculateAppInfoValues(Application app) async {
+  void calculateAppInfoValues(Application app) {
     if (_cachedAppInfoMap.containsKey(app.packageName)) {
-      _apkSize = _cachedAppInfoMap[app.packageName]!.appSize;
-      _techStack = _cachedAppInfoMap[app.packageName]!.techStack;
-      _isAvailableOnPlayStore =
-          _cachedAppInfoMap[app.packageName]!.isAvailableOnPlayStore;
-      notifyListeners();
+      Future.microtask(() => _setCachedValues(app));
       return;
     }
 
-    await _getApkSize(app);
-    await _getTechStack(app);
-    await _getPlayStoreAvailability(app.packageName);
-    notifyListeners();
-
-    if (_cachedAppInfoMap.containsKey(app.packageName)) return;
-    Future.delayed(Duration(milliseconds: 1400), () => _cacheAppInfo(app)).then(
-      (_) {
-        debugPrint(_cachedAppInfoMap.toString());
-      },
-    );
+    _isCalculating = true;
+    Future.wait([
+      _getApkSize(app),
+      _getTechStack(app),
+      _getPlayStoreAvailability(app.packageName),
+    ]).then((_) {
+      if (!_isCalculating) return;
+      _cacheAppInfo(app);
+      notifyListeners();
+    });
   }
 
   void extractApk(BuildContext context, Application app) async {
@@ -96,6 +92,7 @@ class AppInfoProvider extends ChangeNotifier {
     _apkSize = 'Calulating...';
     _techStack = 'Parsing...';
     _isAvailableOnPlayStore = false;
+    _isCalculating = false;
   }
 
   // private methods
@@ -113,10 +110,20 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void _cacheAppInfo(Application app) {
+    if (_cachedAppInfoMap.containsKey(app.packageName)) return;
+
     _cachedAppInfoMap[app.packageName] = CachedAppInfoModel(
       appSize: _apkSize,
       isAvailableOnPlayStore: _isAvailableOnPlayStore,
       techStack: _techStack,
     );
+  }
+
+  void _setCachedValues(Application app) {
+    _apkSize = _cachedAppInfoMap[app.packageName]!.appSize;
+    _techStack = _cachedAppInfoMap[app.packageName]!.techStack;
+    _isAvailableOnPlayStore =
+        _cachedAppInfoMap[app.packageName]!.isAvailableOnPlayStore;
+    notifyListeners();
   }
 }

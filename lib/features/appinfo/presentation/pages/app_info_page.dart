@@ -19,10 +19,7 @@ class AppInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.microtask(() {
-      if (!context.mounted) return;
-      context.read<AppInfoProvider>().calculateAppInfoValues(app);
-    });
+    context.read<AppInfoProvider>().calculateAppInfoValues(app);
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
