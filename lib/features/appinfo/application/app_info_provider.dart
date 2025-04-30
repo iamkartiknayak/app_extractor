@@ -3,6 +3,8 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../helpers/box_helper.dart';
+import '../data/models/extracted_app_model.dart';
 import '../../../helpers/play_store_helper.dart';
 import '../data/models/cached_app_info_model.dart';
 import '../../../helpers/app_operations_helper.dart';
@@ -16,6 +18,7 @@ class AppInfoProvider extends ChangeNotifier {
   String get apkSize => _apkSize;
   String get techStack => _techStack;
   bool get isAvailableOnPlayStore => _isAvailableOnPlayStore;
+  List<ExtractedAppModel> get extractedAppsList => _extractedAppsList;
 
   // private var
   String? _selectedAppId;
@@ -29,11 +32,15 @@ class AppInfoProvider extends ChangeNotifier {
   bool _isAvailableOnPlayStore = false;
   bool _isCalculating = false;
 
+  late final List<ExtractedAppModel> _extractedAppsList;
+
   // public methods
   void init(BuildContext context) {
     if (_isInitialized) return;
 
     _context = context;
+    _isInitialized = true;
+    _extractedAppsList = BoxHelper.instance.getExtractedAppsList();
     _appIUEvents = AppIUEvents();
     _appIUEvents.appEvents.listen((event) async {
       if (event.type == IUEventType.uninstalled) {
@@ -45,8 +52,6 @@ class AppInfoProvider extends ChangeNotifier {
         }
       }
     });
-
-    _isInitialized = true;
   }
 
   @override
@@ -74,7 +79,19 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void extractApk(BuildContext context, Application app) async {
-    final extractedPath = await AppOperationsHelper.extractApk(app);
+    late final String appSize;
+    late final String? extractedPath;
+
+    final result = await Future.wait([
+      AppOperationsHelper.getAppSize(app.apkFilePath),
+      AppOperationsHelper.extractApk(app),
+    ]);
+
+    appSize = result[0]!;
+    extractedPath = result[1];
+
+    if (extractedPath == null) return;
+
     if (context.mounted) {
       SnackbarHelper.showDoneExtractionSnackbar(
         context,
@@ -82,6 +99,18 @@ class AppInfoProvider extends ChangeNotifier {
         app.appName,
       );
     }
+
+    _extractedAppsList.add(
+      ExtractedAppModel(
+        appIcon: (app as ApplicationWithIcon).icon,
+        appName: app.appName,
+        packageName: app.packageName,
+        appSize: appSize,
+        appPath: extractedPath,
+      ),
+    );
+    BoxHelper.instance.saveExtractedApps(_extractedAppsList);
+    notifyListeners();
   }
 
   void setSelectedAppId(String? appId) {
