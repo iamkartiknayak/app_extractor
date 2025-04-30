@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/app_tile.dart';
+import '../widgets/list_app_tile.dart';
 import '../../application/applist_provider.dart';
 
 class SystemAppsPage extends StatelessWidget {
@@ -17,7 +17,7 @@ class SystemAppsPage extends StatelessWidget {
         itemCount: systemAppsList.length,
         itemBuilder: (context, index) {
           final app = systemAppsList[index];
-          return AppTile(app: app);
+          return ListAppTile(app: app);
         },
       ),
     );
