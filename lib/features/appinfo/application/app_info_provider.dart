@@ -61,6 +61,7 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void calculateAppInfoValues(Application app) {
+    _resetValues();
     if (_cachedAppInfoMap.containsKey(app.packageName)) {
       Future.microtask(() => _setCachedValues(app));
       return;
@@ -118,14 +119,6 @@ class AppInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetValues() async {
-    await Future.delayed(Duration(milliseconds: 500));
-    _apkSize = 'Calulating...';
-    _techStack = 'Parsing...';
-    _isAvailableOnPlayStore = false;
-    _isCalculating = false;
-  }
-
   // private methods
   Future<void> _getPlayStoreAvailability(String appId) async {
     _isAvailableOnPlayStore = await PlayStoreHelper.isAppAvailable(appId);
@@ -148,6 +141,13 @@ class AppInfoProvider extends ChangeNotifier {
       isAvailableOnPlayStore: _isAvailableOnPlayStore,
       techStack: _techStack,
     );
+  }
+
+  void _resetValues() async {
+    _apkSize = 'Calulating...';
+    _techStack = 'Parsing...';
+    _isAvailableOnPlayStore = false;
+    _isCalculating = false;
   }
 
   void _setCachedValues(Application app) {
