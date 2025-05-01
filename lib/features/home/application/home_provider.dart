@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../applist/presentation/pages/settings_page.dart';
-import '../../applist/presentation/pages/system_apps_page.dart';
-import '../../applist/presentation/pages/favorite_apps_page.dart';
-import '../../applist/presentation/pages/installed_apps_page.dart';
+import '../../applist/presentation/pages/app_list_page.dart';
 
 class NavbarIndexProvider extends ChangeNotifier {
   // public var (getters)
@@ -13,9 +11,9 @@ class NavbarIndexProvider extends ChangeNotifier {
   // private var
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    InstalledAppsPage(),
-    SystemAppsPage(),
-    FavoriteAppsPage(),
+    AppListPage(),
+    AppListPage(),
+    AppListPage(),
     SettingsPage(),
   ];
 

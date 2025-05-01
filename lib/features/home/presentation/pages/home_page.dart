@@ -16,10 +16,7 @@ class HomePage extends StatelessWidget {
     context.read<AppInfoProvider>().init(context);
 
     return Scaffold(
-      body: IndexedStack(
-        index: navbarProvider.currentIndex,
-        children: navbarProvider.pages,
-      ),
+      body: navbarProvider.pages[navbarProvider.currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: navbarProvider.currentIndex,
         onDestinationSelected: navbarProvider.updateIndex,

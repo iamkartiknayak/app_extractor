@@ -1,23 +1,21 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../helpers/box_helper.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
-  List<Application> get installedAppsList => _installedAppsList;
-  List<Application> get systemAppsList => _systemAppsList;
-  List<Application> get favoriteAppsList =>
-      _allAppslist
-          .where((app) => _favoriteAppsIds.contains(app.packageName))
-          .toList();
+  bool get fetchingData => _fetchingData;
 
   // private var
   bool _isInitialized = false;
+  bool _fetchingData = false;
 
   List<Application> _allAppslist = [];
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
+  List<Application> _favoriteAppsList = [];
   late final List<String> _favoriteAppsIds;
 
   // public methods
@@ -34,6 +32,7 @@ class ApplistProvider extends ChangeNotifier {
         ? _favoriteAppsIds.remove(app.packageName)
         : _favoriteAppsIds.add(app.packageName);
 
+    updateFavoriteAppsList();
     BoxHelper.instance.saveFavorites(_favoriteAppsIds.toList());
     notifyListeners();
   }
@@ -48,8 +47,47 @@ class ApplistProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateFavoriteAppsList() {
+    _favoriteAppsList =
+        _allAppslist
+            .where((app) => _favoriteAppsIds.contains(app.packageName))
+            .toList();
+  }
+
+  ({List<Application> appList, bool fetchingData, String title}) getData(
+    BuildContext context,
+    int currentIndex,
+  ) {
+    late final List<Application> appList;
+    late final String title;
+
+    switch (currentIndex) {
+      case 0:
+        appList = _installedAppsList;
+        title = 'Installed Apps';
+        break;
+      case 1:
+        appList = _systemAppsList;
+        title = 'System Apps';
+        break;
+      case 2:
+        appList = _favoriteAppsList;
+        title = 'Favorite Apps';
+        break;
+    }
+
+    return (
+      appList: appList,
+      fetchingData: context.select<ApplistProvider, bool>(
+        (p) => p.fetchingData,
+      ),
+      title: title,
+    );
+  }
+
   // private methods
   Future<void> _getAppsList() async {
+    _fetchingData = true;
     _allAppslist = await DeviceApps.getInstalledApplications(
       includeAppIcons: true,
       includeSystemApps: true,
@@ -62,9 +100,9 @@ class ApplistProvider extends ChangeNotifier {
 
     _installedAppsList = _allAppslist.where((app) => !app.systemApp).toList();
     _systemAppsList = _allAppslist.where((app) => app.systemApp).toList();
+    updateFavoriteAppsList();
 
-    debugPrint(_installedAppsList.toString());
-
+    _fetchingData = false;
     notifyListeners();
   }
 }
