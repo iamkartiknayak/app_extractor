@@ -19,18 +19,33 @@ class AppInfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AppInfoProvider>().calculateAppInfoValues(app);
+    final appInfoProvider = context.read<AppInfoProvider>();
+    appInfoProvider.calculateAppInfoValues(app);
 
     return Scaffold(
       appBar: AppBar(
         actionsPadding: EdgeInsets.only(right: 8.0),
         actions: [
           IconButton(
-            onPressed:
-                () => context.read<AppInfoProvider>().extractApk(context, app),
+            onPressed: () => appInfoProvider.extractApk(context, app),
             icon: Icon(Symbols.unarchive),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Symbols.share)),
+          Selector<AppInfoProvider, bool>(
+            builder: (context, hasExtractedApp, child) {
+              return AnimatedContainer(
+                duration: Duration(milliseconds: hasExtractedApp ? 300 : 0),
+                width: hasExtractedApp ? 40.0 : 0.0,
+                child: IconButton(
+                  onPressed:
+                      () => appInfoProvider.shareExtractedApp(
+                        appInfoProvider.extractedAppPath,
+                      ),
+                  icon: Icon(Symbols.share),
+                ),
+              );
+            },
+            selector: (_, p1) => p1.hasExtractedApp,
+          ),
         ],
       ),
       body: Padding(

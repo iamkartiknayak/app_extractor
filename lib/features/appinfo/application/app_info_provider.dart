@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:app_install_events/app_install_events.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../helpers/box_helper.dart';
 import '../data/models/extracted_app_model.dart';
@@ -19,6 +22,8 @@ class AppInfoProvider extends ChangeNotifier {
   String get techStack => _techStack;
   bool get isAvailableOnPlayStore => _isAvailableOnPlayStore;
   List<ExtractedAppModel> get extractedAppsList => _extractedAppsList;
+  bool get hasExtractedApp => _hasExtractedApp;
+  String get extractedAppPath => _extractedAppPath;
 
   // private var
   String? _selectedAppId;
@@ -31,6 +36,8 @@ class AppInfoProvider extends ChangeNotifier {
   String _techStack = 'Parsing...';
   bool _isAvailableOnPlayStore = false;
   bool _isCalculating = false;
+  bool _hasExtractedApp = false;
+  String _extractedAppPath = '';
 
   late final List<ExtractedAppModel> _extractedAppsList;
 
@@ -62,6 +69,7 @@ class AppInfoProvider extends ChangeNotifier {
 
   void calculateAppInfoValues(Application app) {
     _resetValues();
+    updateExtractedAppStatus(app);
     if (_cachedAppInfoMap.containsKey(app.packageName)) {
       Future.microtask(() => _setCachedValues(app));
       return;
@@ -111,12 +119,31 @@ class AppInfoProvider extends ChangeNotifier {
       ),
     );
     BoxHelper.instance.saveExtractedApps(_extractedAppsList);
+    updateExtractedAppStatus(app);
     notifyListeners();
   }
 
   void setSelectedAppId(String? appId) {
     _selectedAppId = appId;
     notifyListeners();
+  }
+
+  void updateExtractedAppStatus(Application app) {
+    _hasExtractedApp = false;
+    _extractedAppPath = '';
+
+    for (final exApp in _extractedAppsList) {
+      if (exApp.packageName == app.packageName) {
+        _hasExtractedApp = true;
+        _extractedAppPath = exApp.appPath;
+        return;
+      }
+    }
+  }
+
+  void shareExtractedApp(String extractedAppPath) {
+    final file = File(extractedAppPath);
+    SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
   }
 
   // private methods
@@ -143,7 +170,7 @@ class AppInfoProvider extends ChangeNotifier {
     );
   }
 
-  void _resetValues() async {
+  void _resetValues() {
     _apkSize = 'Calulating...';
     _techStack = 'Parsing...';
     _isAvailableOnPlayStore = false;
