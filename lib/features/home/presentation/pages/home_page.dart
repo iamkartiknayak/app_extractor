@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
       body: navbarProvider.pages[navbarProvider.currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: navbarProvider.currentIndex,
-        onDestinationSelected: navbarProvider.updateIndex,
+        onDestinationSelected: (p0) => navbarProvider.updateIndex(p0, context),
         destinations: [
           NavigationDestination(
             label: 'Installed Apps',

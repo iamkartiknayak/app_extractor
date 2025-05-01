@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../applist/application/applist_provider.dart';
 import '../../applist/presentation/pages/settings_page.dart';
 import '../../applist/presentation/pages/app_list_page.dart';
 
@@ -18,7 +20,13 @@ class NavbarIndexProvider extends ChangeNotifier {
   ];
 
   // public methods
-  void updateIndex(int selectedIndex) {
+  void updateIndex(int selectedIndex, BuildContext context) {
+    Future.microtask(() {
+      if (context.mounted) {
+        context.read<ApplistProvider>().toggleSearch(enable: false);
+      }
+    });
+
     _currentIndex = selectedIndex;
     notifyListeners();
   }

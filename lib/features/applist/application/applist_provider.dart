@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,16 +9,22 @@ import '../../../helpers/box_helper.dart';
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
   bool get fetchingData => _fetchingData;
+  bool get searchEnabled => _searchEnabled;
+  List<Application> get searchResultList => _searchResultList;
 
   // private var
   bool _isInitialized = false;
   bool _fetchingData = false;
+  bool _searchEnabled = false;
+  String _searchTerm = '';
 
   List<Application> _allAppslist = [];
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
   List<Application> _favoriteAppsList = [];
+  List<Application> _searchResultList = [];
   late final List<String> _favoriteAppsIds;
+  Timer? _debounceTimer;
 
   // public methods
   void init() async {
@@ -25,6 +33,12 @@ class ApplistProvider extends ChangeNotifier {
     _favoriteAppsIds = BoxHelper.instance.getFavoriteAppsIdList();
     _getAppsList();
     _isInitialized = true;
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    super.dispose();
   }
 
   void toggleFavorite(Application app) {
@@ -54,10 +68,15 @@ class ApplistProvider extends ChangeNotifier {
             .toList();
   }
 
-  ({List<Application> appList, bool fetchingData, String title}) getData(
-    BuildContext context,
-    int currentIndex,
-  ) {
+  ({
+    List<Application> appList,
+    bool fetchingData,
+    String title,
+    bool searchEnabled,
+    List<Application> searchResultList,
+    String searchTerm,
+  })
+  getData(BuildContext context, int currentIndex) {
     late final List<Application> appList;
     late final String title;
 
@@ -82,7 +101,35 @@ class ApplistProvider extends ChangeNotifier {
         (p) => p.fetchingData,
       ),
       title: title,
+      searchEnabled: _searchEnabled,
+      searchResultList: _searchResultList,
+      searchTerm: _searchTerm,
     );
+  }
+
+  void toggleSearch({bool? enable}) {
+    _searchEnabled = enable ?? !_searchEnabled;
+
+    if (!_searchEnabled) {
+      _searchTerm = '';
+      _searchResultList.clear();
+    }
+    notifyListeners();
+  }
+
+  void updateSearchResult(String query, List<Application> currentList) {
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer!.cancel();
+    }
+
+    _debounceTimer = Timer(const Duration(milliseconds: 400), () {
+      _searchTerm = query.trim().toLowerCase();
+      _searchResultList =
+          currentList
+              .where((app) => app.appName.toLowerCase().contains(_searchTerm))
+              .toList();
+      notifyListeners();
+    });
   }
 
   // private methods
