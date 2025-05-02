@@ -151,6 +151,7 @@ class AppInfoProvider extends ChangeNotifier {
     final file = File(_extractedAppsList[itemIndex].appPath);
     await file.delete();
     _extractedAppsList.removeAt(itemIndex);
+    BoxHelper.instance.saveExtractedApps(_extractedAppsList);
     notifyListeners();
   }
 
