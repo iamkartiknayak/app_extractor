@@ -8,9 +8,10 @@ import '../../../appinfo/application/app_info_provider.dart';
 import '../../../appinfo/presentation/pages/app_info_page.dart';
 
 class ListAppTile extends StatelessWidget {
-  const ListAppTile({super.key, required this.app});
+  const ListAppTile({super.key, required this.app, required this.index});
 
   final Application app;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class ListAppTile extends StatelessWidget {
       trailingIcon: Symbols.unarchive,
       trailingAction:
           () => context.read<AppInfoProvider>().extractApk(context, app),
+      index: index,
     );
   }
 }

@@ -48,7 +48,7 @@ class AppListPage extends StatelessWidget {
             itemCount: data.currentAppList.length,
             itemBuilder: (context, index) {
               final app = data.currentAppList[index];
-              return ListAppTile(app: app);
+              return ListAppTile(app: app, index: index);
             },
           );
         },

@@ -19,7 +19,8 @@ class ExtractedAppsPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: extractedAppsList.length,
         itemBuilder:
-            (context, index) => ExtractedAppTile(app: extractedAppsList[index]),
+            (context, index) =>
+                ExtractedAppTile(app: extractedAppsList[index], index: index),
       ),
     );
   }

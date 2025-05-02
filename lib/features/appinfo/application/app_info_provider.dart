@@ -87,7 +87,7 @@ class AppInfoProvider extends ChangeNotifier {
     });
   }
 
-  void extractApk(BuildContext context, Application app) async {
+  Future<void> extractApk(BuildContext context, Application app) async {
     late final String appSize;
     late final String? extractedPath;
 

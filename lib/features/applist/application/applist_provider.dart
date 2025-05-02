@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/box_helper.dart';
+import '../../appinfo/application/app_info_provider.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
@@ -12,9 +13,11 @@ class ApplistProvider extends ChangeNotifier {
   bool get fetchingData => _fetchingData;
   bool get searchEnabled => _searchEnabled;
   bool get noSearchData => _noSearchData;
+  bool get longPress => _longPress;
   int get currentIndex => _currentIndex;
 
   List<Application> get currentAppList => _currentAppList;
+  List<int> get selectedItemIndexList => _selectedItemIndexList;
 
   // private var
   bool _isInitialized = false;
@@ -22,6 +25,7 @@ class ApplistProvider extends ChangeNotifier {
   bool _fetchingData = false;
   bool _searchEnabled = false;
   bool _noSearchData = false;
+  bool _longPress = true;
   int _currentIndex = 0;
 
   List<Application> _allAppslist = [];
@@ -29,6 +33,7 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _systemAppsList = [];
   List<Application> _favoriteAppsList = [];
   List<Application> _currentAppList = [];
+  final List<int> _selectedItemIndexList = [];
   late final List<String> _favoriteAppsIds;
   Timer? _debounceTimer;
 
@@ -69,6 +74,9 @@ class ApplistProvider extends ChangeNotifier {
 
   void setData(BuildContext context, int currentIndex) {
     _currentIndex = currentIndex;
+    _longPress = false;
+    _selectedItemIndexList.clear();
+
     switch (currentIndex) {
       case 0:
         _currentAppList = context.select<ApplistProvider, List<Application>>(
@@ -115,6 +123,36 @@ class ApplistProvider extends ChangeNotifier {
       _noSearchData = _currentAppList.isEmpty && query.isNotEmpty;
       notifyListeners();
     });
+  }
+
+  void updateSelectedItemIndexList(int index) {
+    if (!longPress) _longPress = true;
+
+    _selectedItemIndexList.contains(index)
+        ? _selectedItemIndexList.remove(index)
+        : _selectedItemIndexList.add(index);
+
+    if (_selectedItemIndexList.isEmpty) _longPress = false;
+    notifyListeners();
+  }
+
+  void batchAppExtract(BuildContext context) async {
+    final tempList = [..._selectedItemIndexList];
+
+    for (final itemIndex in tempList) {
+      debugPrint('Extracting item $itemIndex');
+      await context.read<AppInfoProvider>().extractApk(
+        context,
+        _getAppList(_currentIndex)[itemIndex],
+      );
+    }
+    resetSelection();
+  }
+
+  void resetSelection() {
+    _selectedItemIndexList.clear();
+    _longPress = false;
+    notifyListeners();
   }
 
   // private methods
