@@ -1,24 +1,20 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
 
 import '../../application/applist_provider.dart';
 
 class SearchField extends StatelessWidget {
-  const SearchField({
-    super.key,
-    required this.appListProvider,
-    required this.appList,
-  });
+  const SearchField({super.key, required this.appList});
 
-  final ApplistProvider appListProvider;
   final List<Application> appList;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       autofocus: true,
-      onChanged: (p0) => appListProvider.updateSearchResult(p0, appList),
+      onChanged: context.read<ApplistProvider>().updateSearchResult,
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Search apps...',

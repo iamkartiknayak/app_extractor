@@ -8,21 +8,27 @@ import '../../../helpers/box_helper.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
+  String get currentTitle => _currentTitle;
   bool get fetchingData => _fetchingData;
   bool get searchEnabled => _searchEnabled;
-  List<Application> get searchResultList => _searchResultList;
+  bool get noSearchData => _noSearchData;
+  int get currentIndex => _currentIndex;
+
+  List<Application> get currentAppList => _currentAppList;
 
   // private var
   bool _isInitialized = false;
+  String _currentTitle = '';
   bool _fetchingData = false;
   bool _searchEnabled = false;
-  String _searchTerm = '';
+  bool _noSearchData = false;
+  int _currentIndex = 0;
 
   List<Application> _allAppslist = [];
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
   List<Application> _favoriteAppsList = [];
-  List<Application> _searchResultList = [];
+  List<Application> _currentAppList = [];
   late final List<String> _favoriteAppsIds;
   Timer? _debounceTimer;
 
@@ -46,8 +52,8 @@ class ApplistProvider extends ChangeNotifier {
         ? _favoriteAppsIds.remove(app.packageName)
         : _favoriteAppsIds.add(app.packageName);
 
-    updateFavoriteAppsList();
     BoxHelper.instance.saveFavorites(_favoriteAppsIds.toList());
+    _updateFavoriteAppsList();
     notifyListeners();
   }
 
@@ -61,73 +67,52 @@ class ApplistProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateFavoriteAppsList() {
-    _favoriteAppsList =
-        _allAppslist
-            .where((app) => _favoriteAppsIds.contains(app.packageName))
-            .toList();
-  }
-
-  ({
-    List<Application> appList,
-    bool fetchingData,
-    String title,
-    bool searchEnabled,
-    List<Application> searchResultList,
-    String searchTerm,
-  })
-  getData(BuildContext context, int currentIndex) {
-    late final List<Application> appList;
-    late final String title;
-
+  void setData(BuildContext context, int currentIndex) {
+    _currentIndex = currentIndex;
     switch (currentIndex) {
       case 0:
-        appList = _installedAppsList;
-        title = 'Installed Apps';
+        _currentAppList = context.select<ApplistProvider, List<Application>>(
+          (p) => p._installedAppsList,
+        );
+        _currentTitle = 'Installed Apps';
         break;
       case 1:
-        appList = _systemAppsList;
-        title = 'System Apps';
+        _currentAppList = context.select<ApplistProvider, List<Application>>(
+          (p) => p._systemAppsList,
+        );
+        _currentTitle = 'System Apps';
         break;
       case 2:
-        appList = _favoriteAppsList;
-        title = 'Favorite Apps';
+        _currentAppList = context.select<ApplistProvider, List<Application>>(
+          (p) => p._favoriteAppsList,
+        );
+        _currentTitle = 'Favorite Apps';
         break;
     }
-
-    return (
-      appList: appList,
-      fetchingData: context.select<ApplistProvider, bool>(
-        (p) => p.fetchingData,
-      ),
-      title: title,
-      searchEnabled: _searchEnabled,
-      searchResultList: _searchResultList,
-      searchTerm: _searchTerm,
-    );
   }
 
   void toggleSearch({bool? enable}) {
     _searchEnabled = enable ?? !_searchEnabled;
 
     if (!_searchEnabled) {
-      _searchTerm = '';
-      _searchResultList.clear();
+      _currentAppList = _getAppList(_currentIndex);
+      _noSearchData = false;
     }
     notifyListeners();
   }
 
-  void updateSearchResult(String query, List<Application> currentList) {
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer!.cancel();
-    }
+  void updateSearchResult(String query) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    final searchList = _getAppList(_currentIndex);
 
     _debounceTimer = Timer(const Duration(milliseconds: 400), () {
-      _searchTerm = query.trim().toLowerCase();
-      _searchResultList =
-          currentList
-              .where((app) => app.appName.toLowerCase().contains(_searchTerm))
+      query = query.trim().toLowerCase();
+      _currentAppList =
+          searchList
+              .where((app) => app.appName.toLowerCase().contains(query))
               .toList();
+
+      _noSearchData = _currentAppList.isEmpty && query.isNotEmpty;
       notifyListeners();
     });
   }
@@ -147,9 +132,28 @@ class ApplistProvider extends ChangeNotifier {
 
     _installedAppsList = _allAppslist.where((app) => !app.systemApp).toList();
     _systemAppsList = _allAppslist.where((app) => app.systemApp).toList();
-    updateFavoriteAppsList();
-
+    _updateFavoriteAppsList();
     _fetchingData = false;
     notifyListeners();
+  }
+
+  void _updateFavoriteAppsList() {
+    _favoriteAppsList =
+        _allAppslist
+            .where((app) => _favoriteAppsIds.contains(app.packageName))
+            .toList();
+  }
+
+  List<Application> _getAppList(int index) {
+    switch (index) {
+      case 0:
+        return _installedAppsList;
+      case 1:
+        return _systemAppsList;
+      case 2:
+        return _favoriteAppsList;
+      default:
+        return _installedAppsList;
+    }
   }
 }
