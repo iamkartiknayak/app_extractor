@@ -29,9 +29,14 @@ class ListAppTile extends StatelessWidget {
       icon: (app as ApplicationWithIcon).icon,
       title: app.appName,
       subTitle: app.packageName,
-      trailingIcon: Symbols.unarchive,
-      trailingAction:
-          () => context.read<AppInfoProvider>().extractApk(context, app),
+      trailing: IconButton(
+        onPressed:
+            () => context.read<AppInfoProvider>().extractApk(context, app),
+        icon: Icon(
+          Symbols.unarchive,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
       index: index,
     );
   }

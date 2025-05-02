@@ -19,11 +19,13 @@ class ExtractedAppTile extends StatelessWidget {
       icon: app.appIcon,
       title: app.appName,
       subTitle: app.appSize,
-      trailingIcon: Symbols.share,
-      trailingAction: () {
-        final file = File(app.appPath);
-        SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
-      },
+      trailing: IconButton(
+        onPressed: () {
+          final file = File(app.appPath);
+          SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+        },
+        icon: Icon(Symbols.share, color: Theme.of(context).colorScheme.primary),
+      ),
       index: index,
     );
   }

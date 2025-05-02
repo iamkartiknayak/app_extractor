@@ -11,8 +11,7 @@ class AppTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subTitle,
-    required this.trailingIcon,
-    required this.trailingAction,
+    required this.trailing,
     required this.index,
   });
 
@@ -20,8 +19,7 @@ class AppTile extends StatelessWidget {
   final dynamic icon;
   final String title;
   final String subTitle;
-  final IconData trailingIcon;
-  final VoidCallback trailingAction;
+  final Widget trailing;
   final int index;
 
   @override
@@ -39,7 +37,6 @@ class AppTile extends StatelessWidget {
               longPress
                   ? () => appListProvider.updateSelectedItemIndexList(index)
                   : onTap,
-
           onLongPress: () => appListProvider.updateSelectedItemIndexList(index),
           leading:
               isSelected
@@ -47,14 +44,7 @@ class AppTile extends StatelessWidget {
                   : Image.memory(icon, width: 40, height: 40),
           title: Text(title),
           subtitle: Text(subTitle),
-          trailing:
-              longPress
-                  ? null
-                  : IconButton(
-                    onPressed: trailingAction,
-                    icon: Icon(trailingIcon),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+          trailing: longPress ? null : trailing,
         );
       },
     );
