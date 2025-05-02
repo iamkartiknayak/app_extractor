@@ -154,6 +154,16 @@ class AppInfoProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteAllExtractedApps() {
+    for (final exApp in _extractedAppsList) {
+      final path = exApp.appPath;
+      final file = File(path);
+      file.deleteSync();
+    }
+    _extractedAppsList.clear();
+    BoxHelper.instance.saveExtractedApps(_extractedAppsList);
+  }
+
   // private methods
   Future<void> _getPlayStoreAvailability(String appId) async {
     _isAvailableOnPlayStore = await PlayStoreHelper.isAppAvailable(appId);
