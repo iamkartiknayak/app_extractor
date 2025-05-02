@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/extracted_apps_page.dart';
 import '../../application/applist_provider.dart';
 import 'search_field.dart';
 
@@ -29,6 +30,16 @@ class DefaultHeader extends StatelessWidget {
           onPressed: () => context.read<ApplistProvider>().toggleSearch(),
           icon: Icon(data.searchEnabled ? Symbols.close : Symbols.search),
         ),
+        if (!data.searchEnabled)
+          IconButton(
+            onPressed:
+                () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => ExtractedAppsPage())),
+            icon: Icon(
+              data.searchEnabled ? Symbols.close : Symbols.inventory_2,
+            ),
+          ),
       ],
     );
   }
