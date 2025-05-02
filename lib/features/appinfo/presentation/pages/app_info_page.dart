@@ -26,25 +26,20 @@ class AppInfoPage extends StatelessWidget {
       appBar: AppBar(
         actionsPadding: EdgeInsets.only(right: 8.0),
         actions: [
-          IconButton(
-            onPressed: () => appInfoProvider.extractApk(context, app),
-            icon: Icon(Symbols.unarchive),
-          ),
           Selector<AppInfoProvider, bool>(
+            selector: (_, p1) => p1.hasExtractedApp,
             builder: (context, hasExtractedApp, child) {
-              return AnimatedContainer(
-                duration: Duration(milliseconds: hasExtractedApp ? 300 : 0),
-                width: hasExtractedApp ? 40.0 : 0.0,
-                child: IconButton(
-                  onPressed:
-                      () => appInfoProvider.shareExtractedApp(
+              return IconButton(
+                onPressed: () {
+                  hasExtractedApp
+                      ? appInfoProvider.shareExtractedApp(
                         appInfoProvider.extractedAppPath,
-                      ),
-                  icon: Icon(Symbols.share),
-                ),
+                      )
+                      : appInfoProvider.extractApk(context, app);
+                },
+                icon: Icon(hasExtractedApp ? Symbols.share : Symbols.unarchive),
               );
             },
-            selector: (_, p1) => p1.hasExtractedApp,
           ),
         ],
       ),
