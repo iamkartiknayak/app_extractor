@@ -88,6 +88,7 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   Future<void> extractApk(BuildContext context, Application app) async {
+    if (_extractedAppsList.any((e) => e.packageName == app.packageName)) return;
     late final String appSize;
     late final String? extractedPath;
 
