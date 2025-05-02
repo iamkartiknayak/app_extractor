@@ -1,5 +1,6 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../../../home/application/home_provider.dart';
@@ -7,6 +8,7 @@ import '../widgets/build_shimmer_list.dart';
 import '../widgets/list_app_tile.dart';
 import '../widgets/app_list_page_header.dart';
 import '../../application/applist_provider.dart';
+import '../../../../common/empty_data_widget.dart';
 
 class AppListPage extends StatelessWidget {
   const AppListPage({super.key});
@@ -39,10 +41,20 @@ class AppListPage extends StatelessWidget {
           if (data.fetchingData) return BuildShimmerList();
 
           if (data.currentAppList.isEmpty && currentIndex == 2) {
-            return Center(child: Text('No Favorites has been added'));
+            return EmptyDataWidget(
+              icon: Symbols.heart_broken,
+              title: 'No Favorites has been added',
+              subTitle: 'Start adding items you love to see them here',
+            );
           }
 
-          if (data.noSearchData) return Center(child: Text('No Results'));
+          if (data.noSearchData) {
+            return EmptyDataWidget(
+              icon: Symbols.search_off,
+              title: 'No results found',
+              subTitle: 'Try adjusting your search keywords',
+            );
+          }
 
           return ListView.builder(
             itemCount: data.currentAppList.length,
