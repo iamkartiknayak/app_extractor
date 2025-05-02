@@ -1,8 +1,10 @@
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/empty_data_widget.dart';
+import '../../application/applist_provider.dart';
 import '../widgets/extracted_app_tile.dart';
 import '../../../appinfo/application/app_info_provider.dart';
 
@@ -15,11 +17,63 @@ class ExtractedAppsPage extends StatelessWidget {
         context.watch<AppInfoProvider>().extractedAppsList;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Extracted Apps (${extractedAppsList.length})'),
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 56.0),
+        child: Selector<
+          ApplistProvider,
+          ({
+            String title,
+            bool searchEnabled,
+            List<Application> appList,
+            int selectedIndexListLength,
+          })
+        >(
+          selector:
+              (_, provider) => (
+                title: provider.currentTitle,
+                searchEnabled: provider.searchEnabled,
+                appList: provider.currentAppList,
+                selectedIndexListLength: provider.selectedItemIndexList.length,
+              ),
+          builder: (_, data, __) {
+            return data.selectedIndexListLength != 0
+                ? Builder(
+                  builder: (_) {
+                    final appListProvider = context.read<ApplistProvider>();
+
+                    return AppBar(
+                      title: Text('${data.selectedIndexListLength} selected'),
+                      automaticallyImplyLeading: false,
+                      actions: [
+                        IconButton(
+                          onPressed:
+                              () => appListProvider.batchAppDelete(context),
+                          icon: Icon(
+                            data.searchEnabled
+                                ? Symbols.close
+                                : Symbols.delete_forever,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: appListProvider.resetSelection,
+                          icon: Icon(
+                            data.searchEnabled ? Symbols.close : Symbols.cancel,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                )
+                : AppBar(
+                  title: Text('Extracted Apps (${extractedAppsList.length})'),
+                );
+          },
+        ),
       ),
-      body:
-          extractedAppsList.isEmpty
+      body: Selector<AppInfoProvider, int>(
+        selector: (_, provider) => provider.extractedAppsList.length,
+        builder: (context, extractedAppsListLength, child) {
+          return extractedAppsListLength == 0
               ? EmptyDataWidget(
                 icon: Symbols.inbox,
                 title: 'No APKs extracted yet',
@@ -32,7 +86,9 @@ class ExtractedAppsPage extends StatelessWidget {
                       app: extractedAppsList[index],
                       index: index,
                     ),
-              ),
+              );
+        },
+      ),
     );
   }
 }

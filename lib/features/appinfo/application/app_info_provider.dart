@@ -146,6 +146,13 @@ class AppInfoProvider extends ChangeNotifier {
     SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
   }
 
+  Future<void> deleteExtractedApp(int itemIndex) async {
+    final file = File(_extractedAppsList[itemIndex].appPath);
+    await file.delete();
+    _extractedAppsList.removeAt(itemIndex);
+    notifyListeners();
+  }
+
   // private methods
   Future<void> _getPlayStoreAvailability(String appId) async {
     _isAvailableOnPlayStore = await PlayStoreHelper.isAppAvailable(appId);

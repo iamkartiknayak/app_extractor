@@ -137,9 +137,7 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void batchAppExtract(BuildContext context) async {
-    final tempList = [..._selectedItemIndexList];
-
-    for (final itemIndex in tempList) {
+    for (final itemIndex in _selectedItemIndexList) {
       debugPrint('Extracting item $itemIndex');
       await context.read<AppInfoProvider>().extractApk(
         context,
@@ -153,6 +151,14 @@ class ApplistProvider extends ChangeNotifier {
     _selectedItemIndexList.clear();
     _longPress = false;
     notifyListeners();
+  }
+
+  void batchAppDelete(BuildContext context) async {
+    for (final itemIndex in _selectedItemIndexList) {
+      debugPrint('Deleting item $itemIndex');
+      await context.read<AppInfoProvider>().deleteExtractedApp(itemIndex);
+    }
+    resetSelection();
   }
 
   // private methods
