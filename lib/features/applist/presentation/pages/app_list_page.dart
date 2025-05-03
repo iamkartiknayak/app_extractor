@@ -60,18 +60,26 @@ class AppListPage extends StatelessWidget {
           }
 
           return data.gridView
-              ? GridView.builder(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                itemCount: data.currentAppList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16.0,
-                  crossAxisSpacing: 16.0,
-                  childAspectRatio: 1.05,
-                ),
-                itemBuilder: (context, index) {
-                  final app = data.currentAppList[index];
-                  return GridAppCard(app: app, index: index);
+              ? LayoutBuilder(
+                builder: (context, constraints) {
+                  final screenWidth = constraints.maxWidth;
+                  final itemWidth = (screenWidth - ((2 - 1) * 16.0)) / 2;
+                  final itemHeight = itemWidth * 1;
+
+                  return GridView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    itemCount: data.currentAppList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16.0,
+                      crossAxisSpacing: 16.0,
+                      childAspectRatio: itemWidth / itemHeight,
+                    ),
+                    itemBuilder: (context, index) {
+                      final app = data.currentAppList[index];
+                      return GridAppCard(app: app, index: index);
+                    },
+                  );
                 },
               )
               : ListView.builder(
