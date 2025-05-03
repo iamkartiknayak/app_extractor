@@ -6,6 +6,7 @@ import 'app_about_page.dart';
 import '../widgets/side_header.dart';
 import '../widgets/default_file_name_dialog.dart';
 import '../../../features/applist/application/applist_provider.dart';
+import '../../../features/appinfo/application/app_info_provider.dart';
 import '../../../features/applist/presentation/widgets/settings_tile.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -28,7 +29,12 @@ class SettingsPage extends StatelessWidget {
                     title: 'Delete All?',
                     content: Text('Permanently delete all extracted APKs?'),
                     actionButton: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        context
+                            .read<AppInfoProvider>()
+                            .deleteAllExtractedApps();
+                      },
                       child: Text(
                         'Delete',
                         style: TextStyle(
