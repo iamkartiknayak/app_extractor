@@ -23,9 +23,9 @@ class DefaultFileNameDialog extends StatelessWidget {
               Navigator.of(context).pop();
               settingsProvider.setApkName(value);
             },
-            value: 'source_version.apk',
+            value: 'name_version.apk',
             groupValue: defaultApkName,
-            title: Text('source_version.apk'),
+            title: Text('name_version.apk'),
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
@@ -33,9 +33,9 @@ class DefaultFileNameDialog extends StatelessWidget {
               Navigator.of(context).pop();
               settingsProvider.setApkName(value);
             },
-            value: 'name_version.apk',
+            value: 'source_version.apk',
             groupValue: defaultApkName,
-            title: Text('name_version.apk'),
+            title: Text('source_version.apk'),
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,

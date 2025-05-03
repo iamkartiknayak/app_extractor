@@ -7,7 +7,7 @@ class SettingsProvider extends ChangeNotifier {
 
   // private var
   bool _gridView = false;
-  String _defaultApkName = 'source_version.apk';
+  String _defaultApkName = 'name_version.apk';
 
   void toggleGridView() {
     _gridView = !_gridView;
@@ -15,7 +15,7 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   void setApkName(String? value) {
-    _defaultApkName = value ?? 'source_version.apk';
+    _defaultApkName = value ?? 'name_version.apk';
     notifyListeners();
   }
 }
