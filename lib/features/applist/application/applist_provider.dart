@@ -14,6 +14,7 @@ class ApplistProvider extends ChangeNotifier {
   bool get searchEnabled => _searchEnabled;
   bool get noSearchData => _noSearchData;
   bool get longPress => _longPress;
+  bool get gridView => _gridView;
   int get currentIndex => _currentIndex;
 
   List<Application> get currentAppList => _currentAppList;
@@ -26,6 +27,7 @@ class ApplistProvider extends ChangeNotifier {
   bool _searchEnabled = false;
   bool _noSearchData = false;
   bool _longPress = true;
+  bool _gridView = false;
   int _currentIndex = 0;
 
   List<Application> _allAppslist = [];
@@ -159,6 +161,11 @@ class ApplistProvider extends ChangeNotifier {
       await context.read<AppInfoProvider>().deleteExtractedApp(itemIndex);
     }
     resetSelection();
+  }
+
+  void toggleGridView() {
+    _gridView = !_gridView;
+    notifyListeners();
   }
 
   // private methods

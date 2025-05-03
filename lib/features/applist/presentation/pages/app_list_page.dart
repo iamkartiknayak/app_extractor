@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/grid_app_card.dart';
 import '../../../home/application/home_provider.dart';
 import '../widgets/build_shimmer_list.dart';
 import '../widgets/list_app_tile.dart';
@@ -28,6 +29,7 @@ class AppListPage extends StatelessWidget {
         ({
           bool noSearchData,
           bool fetchingData,
+          bool gridView,
           List<Application> currentAppList,
         })
       >(
@@ -35,6 +37,7 @@ class AppListPage extends StatelessWidget {
             (_, provider) => (
               noSearchData: provider.noSearchData,
               fetchingData: provider.fetchingData,
+              gridView: provider.gridView,
               currentAppList: provider.currentAppList,
             ),
         builder: (_, data, __) {
@@ -56,13 +59,28 @@ class AppListPage extends StatelessWidget {
             );
           }
 
-          return ListView.builder(
-            itemCount: data.currentAppList.length,
-            itemBuilder: (context, index) {
-              final app = data.currentAppList[index];
-              return ListAppTile(app: app, index: index);
-            },
-          );
+          return data.gridView
+              ? GridView.builder(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                itemCount: data.currentAppList.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16.0,
+                  crossAxisSpacing: 16.0,
+                  childAspectRatio: 1.05,
+                ),
+                itemBuilder: (context, index) {
+                  final app = data.currentAppList[index];
+                  return GridAppCard(app: app, index: index);
+                },
+              )
+              : ListView.builder(
+                itemCount: data.currentAppList.length,
+                itemBuilder: (context, index) {
+                  final app = data.currentAppList[index];
+                  return ListAppTile(app: app, index: index);
+                },
+              );
         },
       ),
     );

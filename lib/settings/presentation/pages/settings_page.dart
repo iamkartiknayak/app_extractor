@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:provider/provider.dart';
 
 import 'app_about_page.dart';
 import '../widgets/side_header.dart';
 import '../widgets/default_file_name_dialog.dart';
+import '../../../features/applist/application/applist_provider.dart';
 import '../../../features/applist/presentation/widgets/settings_tile.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -41,6 +43,23 @@ class SettingsPage extends StatelessWidget {
             icon: Symbols.delete_forever,
             title: 'Delete extracted APKs',
             subTitle: 'Remove all extracted APKs from storage',
+          ),
+
+          SideHeader(header: 'Customization'),
+          SettingsTile(
+            icon: Symbols.grid_view,
+            title: 'Grid layout',
+            trailing: Selector<ApplistProvider, bool>(
+              selector: (_, provider) => provider.gridView,
+              builder: (_, value, _) {
+                return Switch(
+                  value: value,
+                  onChanged:
+                      (value) =>
+                          context.read<ApplistProvider>().toggleGridView(),
+                );
+              },
+            ),
           ),
 
           SideHeader(header: 'About'),
