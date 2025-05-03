@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../applist/application/applist_provider.dart';
-import '../../applist/presentation/pages/settings_page.dart';
+import '../../../settings/presentation/pages/settings_page.dart';
 import '../../applist/presentation/pages/app_list_page.dart';
 
 class NavbarIndexProvider extends ChangeNotifier {
