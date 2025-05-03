@@ -1,10 +1,9 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../constants.dart';
-import '../features/appinfo/application/app_info_provider.dart';
+import 'extract_share_toggle_button.dart';
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -24,12 +23,6 @@ class AppCard extends StatelessWidget {
   final String title;
   final String subTitle;
   final int index;
-
-  String? _getExtractedPath(AppInfoProvider provider) {
-    return provider.extractedAppsList
-        .firstWhere((exApp) => exApp.packageName == app.packageName)
-        .appPath;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,33 +77,7 @@ class AppCard extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-
-                  Selector<AppInfoProvider, bool>(
-                    selector:
-                        (_, provider) => provider.extractedAppsList.any(
-                          (exApp) => exApp.packageName == app.packageName,
-                        ),
-                    builder: (context, isExtracted, _) {
-                      return IconButton(
-                        icon: Icon(
-                          isExtracted ? Symbols.share : Symbols.unarchive,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        onPressed: () {
-                          final appInfoProvider =
-                              context.read<AppInfoProvider>();
-                          if (isExtracted) {
-                            final path = _getExtractedPath(appInfoProvider);
-                            if (path != null) {
-                              appInfoProvider.shareExtractedApp(path);
-                            }
-                          } else {
-                            appInfoProvider.extractApk(context, app);
-                          }
-                        },
-                      );
-                    },
-                  ),
+                  ExtractShareToggleButton(app: app),
                 ],
               ),
             ],
