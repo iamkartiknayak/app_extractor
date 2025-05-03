@@ -13,8 +13,8 @@ class SettingsTile extends StatelessWidget {
   });
 
   final IconData icon;
-  final String title;
-  final String? subTitle;
+  final Widget title;
+  final Widget? subTitle;
   final Widget? navigateTo;
   final VoidCallback? onTap;
   final Widget? trailing;
@@ -30,8 +30,8 @@ class SettingsTile extends StatelessWidget {
               )
               : onTap,
       leading: Icon(icon),
-      title: Text(title),
-      subtitle: subTitle != null ? Text(subTitle!) : null,
+      title: title,
+      subtitle: subTitle,
       trailing: navigateTo != null ? Icon(Symbols.chevron_right) : trailing,
     );
   }
