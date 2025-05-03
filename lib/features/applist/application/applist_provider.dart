@@ -154,8 +154,8 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void batchAppDelete(BuildContext context) async {
-    for (final itemIndex in _selectedItemIndexList) {
-      debugPrint('Deleting item $itemIndex');
+    final sortedIndices = [..._selectedItemIndexList]..sort((a, b) => b - a);
+    for (final itemIndex in sortedIndices) {
       await context.read<AppInfoProvider>().deleteExtractedApp(itemIndex);
     }
     resetSelection();
