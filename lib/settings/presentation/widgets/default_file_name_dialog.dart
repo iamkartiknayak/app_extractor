@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../features/appinfo/application/app_info_provider.dart';
+import '../../application/settings_provider.dart';
 
 class DefaultFileNameDialog extends StatelessWidget {
   const DefaultFileNameDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final appInfoProvider = context.read<AppInfoProvider>();
-    final defaultApkName = context.select<AppInfoProvider, String>(
+    final settingsProvider = context.read<SettingsProvider>();
+    final defaultApkName = context.select<SettingsProvider, String>(
       (p) => p.defaultApkName,
     );
     return CustomAlertDialog(
@@ -21,7 +21,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             onChanged: (value) {
               Navigator.of(context).pop();
-              appInfoProvider.setApkName(value);
+              settingsProvider.setApkName(value);
             },
             value: 'source_version.apk',
             groupValue: defaultApkName,
@@ -31,7 +31,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             onChanged: (value) {
               Navigator.of(context).pop();
-              appInfoProvider.setApkName(value);
+              settingsProvider.setApkName(value);
             },
             value: 'name_version.apk',
             groupValue: defaultApkName,
@@ -41,7 +41,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             onChanged: (value) {
               Navigator.of(context).pop();
-              appInfoProvider.setApkName(value);
+              settingsProvider.setApkName(value);
             },
             value: 'source.apk',
             groupValue: defaultApkName,
@@ -51,7 +51,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             onChanged: (value) {
               Navigator.of(context).pop();
-              appInfoProvider.setApkName(value);
+              settingsProvider.setApkName(value);
             },
             value: 'name.apk',
             groupValue: defaultApkName,

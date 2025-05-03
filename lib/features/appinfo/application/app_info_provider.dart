@@ -13,6 +13,7 @@ import '../data/models/cached_app_info_model.dart';
 import '../../../helpers/app_operations_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
 import '../../applist/application/applist_provider.dart';
+import '../../../settings/application/settings_provider.dart';
 
 class AppInfoProvider extends ChangeNotifier {
   // public var (getters)
@@ -24,7 +25,6 @@ class AppInfoProvider extends ChangeNotifier {
   List<ExtractedAppModel> get extractedAppsList => _extractedAppsList;
   bool get hasExtractedApp => _hasExtractedApp;
   String get extractedAppPath => _extractedAppPath;
-  String get defaultApkName => _defaultApkName;
 
   // private var
   String? _selectedAppId;
@@ -39,7 +39,6 @@ class AppInfoProvider extends ChangeNotifier {
   bool _isCalculating = false;
   bool _hasExtractedApp = false;
   String _extractedAppPath = '';
-  String _defaultApkName = 'source_version.apk';
 
   late final List<ExtractedAppModel> _extractedAppsList;
 
@@ -94,7 +93,7 @@ class AppInfoProvider extends ChangeNotifier {
     late final String appSize;
     late final String? extractedPath;
 
-    final defaultApkName = _defaultApkName;
+    final defaultApkName = context.read<SettingsProvider>().defaultApkName;
     final appName = AppOperationsHelper.generateApkFileName(
       app,
       defaultApkName,
@@ -171,11 +170,6 @@ class AppInfoProvider extends ChangeNotifier {
     }
     _extractedAppsList.clear();
     BoxHelper.instance.saveExtractedApps(_extractedAppsList);
-  }
-
-  void setApkName(String? value) {
-    _defaultApkName = value ?? 'source_version.apk';
-    notifyListeners();
   }
 
   // private methods

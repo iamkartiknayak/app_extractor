@@ -10,6 +10,7 @@ import '../widgets/list_app_tile.dart';
 import '../widgets/app_list_page_header.dart';
 import '../../application/applist_provider.dart';
 import '../../../../common/empty_data_widget.dart';
+import '../../../../settings/application/settings_provider.dart';
 
 class AppListPage extends StatelessWidget {
   const AppListPage({super.key});
@@ -29,7 +30,6 @@ class AppListPage extends StatelessWidget {
         ({
           bool noSearchData,
           bool fetchingData,
-          bool gridView,
           List<Application> currentAppList,
         })
       >(
@@ -37,7 +37,6 @@ class AppListPage extends StatelessWidget {
             (_, provider) => (
               noSearchData: provider.noSearchData,
               fetchingData: provider.fetchingData,
-              gridView: provider.gridView,
               currentAppList: provider.currentAppList,
             ),
         builder: (_, data, __) {
@@ -59,7 +58,7 @@ class AppListPage extends StatelessWidget {
             );
           }
 
-          return data.gridView
+          return context.read<SettingsProvider>().gridView
               ? LayoutBuilder(
                 builder: (context, constraints) {
                   final screenWidth = constraints.maxWidth;

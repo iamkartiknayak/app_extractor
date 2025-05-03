@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import './app_about_page.dart';
 import '../widgets/side_header.dart';
 import '../widgets/default_file_name_dialog.dart';
-import '../../../features/applist/application/applist_provider.dart';
+import '../../application/settings_provider.dart';
 import '../../../features/appinfo/application/app_info_provider.dart';
 import '../../../features/applist/presentation/widgets/settings_tile.dart';
 
@@ -59,7 +59,7 @@ class SettingsPage extends StatelessWidget {
             },
             icon: Symbols.save_as,
             title: Text('Default filename for extracted APKs'),
-            subTitle: Selector<AppInfoProvider, String>(
+            subTitle: Selector<SettingsProvider, String>(
               selector: (_, provider) => provider.defaultApkName,
               builder: (_, value, _) {
                 return Text(value);
@@ -70,14 +70,14 @@ class SettingsPage extends StatelessWidget {
           SettingsTile(
             icon: Symbols.grid_view,
             title: Text('Grid layout'),
-            trailing: Selector<ApplistProvider, bool>(
+            trailing: Selector<SettingsProvider, bool>(
               selector: (_, provider) => provider.gridView,
               builder: (_, value, _) {
                 return Switch(
                   value: value,
                   onChanged:
                       (value) =>
-                          context.read<ApplistProvider>().toggleGridView(),
+                          context.read<SettingsProvider>().toggleGridView(),
                 );
               },
             ),
