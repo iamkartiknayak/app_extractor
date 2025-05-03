@@ -12,23 +12,41 @@ import '../features/appinfo/application/app_info_provider.dart';
 import '../features/appinfo/presentation/pages/app_info_page.dart';
 
 class AppOperationsHelper {
-  static Future<String?> extractApk(Application app) async {
+  static String generateApkFileName(Application app, String condition) {
+    final sanitizedAppName = app.appName.replaceAll(
+      RegExp(r'[^a-zA-Z0-9]+'),
+      '_',
+    );
+    final sanitizedSourceName = app.packageName.replaceAll(
+      RegExp(r'[^\w\s]+'),
+      '_',
+    );
+    final version = app.versionName;
+
+    switch (condition) {
+      case 'source_version.apk':
+        return '${sanitizedSourceName}_$version.apk';
+      case 'name_version.apk':
+        return '${sanitizedAppName}_$version.apk';
+      case 'source.apk':
+        return '$sanitizedSourceName.apk';
+      case 'name.apk':
+        return '$sanitizedAppName.apk';
+      default:
+        return '${sanitizedAppName}_$version.apk';
+    }
+  }
+
+  static Future<String?> extractApk(String apkFilePath, String appName) async {
     try {
       final extractionDir = await _getPrivateExtractionDirectory();
-      if (extractionDir == null) {
-        return null;
-      }
+      if (extractionDir == null) return null;
 
-      final sourceApkPath = app.apkFilePath;
-      if (sourceApkPath.isEmpty) {
-        return null;
-      }
-
-      final sanitizedAppName = app.appName.replaceAll(RegExp(r'[^\w\s]+'), '_');
-      final destinationPath =
-          '${extractionDir.path}/$sanitizedAppName-${app.versionName}.apk';
+      final sourceApkPath = apkFilePath;
+      if (sourceApkPath.isEmpty) return null;
 
       final sourceFile = File(sourceApkPath);
+      final destinationPath = '${extractionDir.path}/$appName';
 
       if (!await sourceFile.exists()) return null;
 

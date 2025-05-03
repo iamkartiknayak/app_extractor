@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import 'app_about_page.dart';
+import './app_about_page.dart';
 import '../widgets/side_header.dart';
 import '../widgets/default_file_name_dialog.dart';
 import '../../../features/applist/application/applist_provider.dart';
@@ -47,14 +47,29 @@ class SettingsPage extends StatelessWidget {
               );
             },
             icon: Symbols.delete_forever,
-            title: 'Delete extracted APKs',
-            subTitle: 'Remove all extracted APKs from storage',
+            title: Text('Delete extracted APKs'),
+            subTitle: Text('Remove all extracted APKs from storage'),
           ),
-
+          SettingsTile(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => DefaultFileNameDialog(),
+              );
+            },
+            icon: Symbols.save_as,
+            title: Text('Default filename for extracted APKs'),
+            subTitle: Selector<AppInfoProvider, String>(
+              selector: (_, provider) => provider.defaultApkName,
+              builder: (_, value, _) {
+                return Text(value);
+              },
+            ),
+          ),
           SideHeader(header: 'Customization'),
           SettingsTile(
             icon: Symbols.grid_view,
-            title: 'Grid layout',
+            title: Text('Grid layout'),
             trailing: Selector<ApplistProvider, bool>(
               selector: (_, provider) => provider.gridView,
               builder: (_, value, _) {
@@ -71,7 +86,7 @@ class SettingsPage extends StatelessWidget {
           SideHeader(header: 'About'),
           SettingsTile(
             icon: Symbols.info,
-            title: 'App Info',
+            title: Text('App Info'),
             navigateTo: AppAboutPage(),
           ),
         ],
