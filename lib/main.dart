@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import './helpers/theme_helper.dart';
 import './helpers/box_helper.dart';
+import 'settings/application/settings_provider.dart';
 import './features/home/application/home_provider.dart';
 import './features/home/presentation/pages/home_page.dart';
 import './features/applist/application/applist_provider.dart';
@@ -52,6 +53,7 @@ class AppExtractor extends StatelessWidget {
             ChangeNotifierProvider(create: (_) => AppInfoProvider()),
             ChangeNotifierProvider(create: (_) => ApplistProvider()),
             ChangeNotifierProvider(create: (_) => NavbarIndexProvider()),
+            ChangeNotifierProvider(create: (_) => SettingsProvider()),
           ],
           child: MaterialApp(
             title: 'App Extractor',
