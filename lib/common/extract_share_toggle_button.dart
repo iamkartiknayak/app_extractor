@@ -37,7 +37,7 @@ class ExtractShareToggleButton extends StatelessWidget {
                 appInfoProvider.shareExtractedApp(path);
               }
             } else {
-              appInfoProvider.extractApk(context, app);
+              appInfoProvider.extractApk(context: context, app: app);
             }
           },
         );

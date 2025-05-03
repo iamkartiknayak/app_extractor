@@ -1,16 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 class SnackbarHelper {
-  static void showDoneExtractionSnackbar(
-    BuildContext context,
-    String? extractedPath,
-    String appName,
-  ) {
+  static void showSnackbar({
+    required BuildContext context,
+    required String? extractedPath,
+    required String appName,
+    required String successMessage,
+    required String errorMessage,
+    Duration? duration,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: duration ?? Duration(seconds: 1),
         content:
             extractedPath != null
                 ? Text.rich(
@@ -20,20 +21,11 @@ class SnackbarHelper {
                         text: appName,
                         style: TextStyle(fontWeight: FontWeight.w500),
                       ),
-                      TextSpan(text: ' has been extracted successfully'),
+                      TextSpan(text: successMessage),
                     ],
                   ),
                 )
-                : Text('Failed to extract APK'),
-        action: SnackBarAction(
-          label: 'Share',
-          onPressed: () {
-            if (extractedPath != null) {
-              final file = File(extractedPath);
-              SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
-            }
-          },
-        ),
+                : Text(errorMessage),
       ),
     );
   }

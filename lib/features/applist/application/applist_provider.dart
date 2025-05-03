@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../helpers/box_helper.dart';
+import '../../../helpers/snackbar_helper.dart';
 import '../../appinfo/application/app_info_provider.dart';
 
 class ApplistProvider extends ChangeNotifier {
@@ -140,10 +141,23 @@ class ApplistProvider extends ChangeNotifier {
     for (final itemIndex in _selectedItemIndexList) {
       debugPrint('Extracting item $itemIndex');
       await context.read<AppInfoProvider>().extractApk(
-        context,
-        _getAppList(_currentIndex)[itemIndex],
+        context: context,
+        app: _getAppList(_currentIndex)[itemIndex],
+        showSnackBar: _selectedItemIndexList.length == 1,
       );
     }
+
+    if (context.mounted && _selectedItemIndexList.length > 1) {
+      SnackbarHelper.showSnackbar(
+        context: context,
+        extractedPath: '',
+        appName: '',
+        successMessage: 'All selected apps have been extracted successfully',
+        errorMessage: 'Failed to extract all APKs',
+        duration: Duration(milliseconds: 2500),
+      );
+    }
+
     resetSelection();
   }
 
@@ -156,7 +170,21 @@ class ApplistProvider extends ChangeNotifier {
   void batchAppDelete(BuildContext context) async {
     final sortedIndices = [..._selectedItemIndexList]..sort((a, b) => b - a);
     for (final itemIndex in sortedIndices) {
-      await context.read<AppInfoProvider>().deleteExtractedApp(itemIndex);
+      await context.read<AppInfoProvider>().deleteExtractedApp(
+        itemIndex: itemIndex,
+        showSnackbar: _selectedItemIndexList.length == 1,
+      );
+    }
+
+    if (context.mounted && _selectedItemIndexList.length > 1) {
+      SnackbarHelper.showSnackbar(
+        context: context,
+        extractedPath: '',
+        appName: '',
+        successMessage: 'All selected apps have been deleted successfully',
+        errorMessage: 'Failed to delete all APKs',
+        duration: Duration(milliseconds: 2500),
+      );
     }
     resetSelection();
   }

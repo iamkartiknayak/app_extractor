@@ -35,7 +35,7 @@ class AppInfoPage extends StatelessWidget {
                       ? appInfoProvider.shareExtractedApp(
                         appInfoProvider.extractedAppPath,
                       )
-                      : appInfoProvider.extractApk(context, app);
+                      : appInfoProvider.extractApk(context: context, app: app);
                 },
                 icon: Icon(hasExtractedApp ? Symbols.share : Symbols.unarchive),
               );

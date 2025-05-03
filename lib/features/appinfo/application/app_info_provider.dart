@@ -88,7 +88,11 @@ class AppInfoProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> extractApk(BuildContext context, Application app) async {
+  Future<void> extractApk({
+    required BuildContext context,
+    required Application app,
+    bool showSnackBar = true,
+  }) async {
     if (_extractedAppsList.any((e) => e.packageName == app.packageName)) return;
     late final String appSize;
     late final String? extractedPath;
@@ -107,15 +111,17 @@ class AppInfoProvider extends ChangeNotifier {
     appSize = result[0]!;
     extractedPath = result[1];
 
-    if (extractedPath == null) return;
-
-    if (context.mounted) {
-      SnackbarHelper.showDoneExtractionSnackbar(
-        context,
-        extractedPath,
-        app.appName,
+    if (context.mounted && showSnackBar) {
+      SnackbarHelper.showSnackbar(
+        context: context,
+        extractedPath: extractedPath,
+        appName: app.appName,
+        successMessage: ' has been extracted successfully',
+        errorMessage: 'Failed to extract APK',
       );
     }
+
+    if (extractedPath == null) return;
 
     _extractedAppsList.add(
       ExtractedAppModel(
@@ -154,9 +160,24 @@ class AppInfoProvider extends ChangeNotifier {
     SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
   }
 
-  Future<void> deleteExtractedApp(int itemIndex) async {
-    final file = File(_extractedAppsList[itemIndex].appPath);
+  Future<void> deleteExtractedApp({
+    required int itemIndex,
+    bool showSnackbar = true,
+  }) async {
+    final app = _extractedAppsList[itemIndex];
+    final file = File(app.appPath);
     await file.delete();
+
+    if (_context.mounted && showSnackbar) {
+      SnackbarHelper.showSnackbar(
+        context: _context,
+        extractedPath: '',
+        appName: app.appName,
+        successMessage: ' has been deleted successfully',
+        errorMessage: 'Failed to delete APK',
+      );
+    }
+
     _extractedAppsList.removeAt(itemIndex);
     BoxHelper.instance.saveExtractedApps(_extractedAppsList);
     notifyListeners();
