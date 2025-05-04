@@ -20,7 +20,7 @@ class ApplistProvider extends ChangeNotifier {
 
   List<Application> get currentAppList => _currentAppList;
   List<int> get selectedItemIndexList => _selectedItemIndexList;
-  Map<String, Uint8List> get imageCache => _imageCache;
+  Map<String, Uint8List> get imageCache => _iconCache;
 
   // private var
   bool _isInitialized = false;
@@ -37,7 +37,7 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _favoriteAppsList = [];
   List<Application> _currentAppList = [];
   final List<int> _selectedItemIndexList = [];
-  final Map<String, Uint8List> _imageCache = {};
+  final Map<String, Uint8List> _iconCache = {};
   late final List<String> _favoriteAppsIds;
   Timer? _debounceTimer;
 
@@ -192,39 +192,17 @@ class ApplistProvider extends ChangeNotifier {
     resetSelection();
   }
 
-  Future<void> setImageCache() async {
-    Future.microtask(() async {
-      final installedAppsWithIcons = await DeviceApps.getInstalledApplications(
-        includeAppIcons: true,
-        includeSystemApps: false,
-        onlyAppsWithLaunchIntent: true,
-      );
-
-      for (final app in installedAppsWithIcons) {
-        _imageCache[app.packageName] = (app as ApplicationWithIcon).icon;
-      }
-      _fetchingData = false;
-      notifyListeners();
-    });
-
-    Future.microtask(() async {
-      final systemAppsWithIcons = await DeviceApps.getInstalledApplications(
-        includeAppIcons: true,
-        includeSystemApps: true,
-        onlyAppsWithLaunchIntent: false,
-      );
-
-      for (final app in systemAppsWithIcons) {
-        _imageCache[app.packageName] = (app as ApplicationWithIcon).icon;
-      }
-      notifyListeners();
-    });
-  }
-
   // private methods
   Future<void> _getAppsList() async {
-    unawaited(setImageCache());
     _fetchingData = true;
+    _fetchAppsData(
+      assignList: (updatedList) => _installedAppsList = updatedList,
+      includeSystemApps: false,
+    );
+    _fetchAppsData(
+      assignList: (updatedList) => _systemAppsList = updatedList,
+      includeSystemApps: true,
+    );
 
     _allAppslist = await DeviceApps.getInstalledApplications(
       includeAppIcons: false,
@@ -236,8 +214,6 @@ class ApplistProvider extends ChangeNotifier {
       (a, b) => a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
     );
 
-    _installedAppsList = _allAppslist.where((app) => !app.systemApp).toList();
-    _systemAppsList = _allAppslist.where((app) => app.systemApp).toList();
     _updateFavoriteAppsList();
     notifyListeners();
   }
@@ -260,5 +236,38 @@ class ApplistProvider extends ChangeNotifier {
       default:
         return _installedAppsList;
     }
+  }
+
+  Future<void> _fetchAppsData({
+    required bool includeSystemApps,
+    required void Function(List<Application>) assignList,
+  }) async {
+    Future.microtask(() async {
+      final appsWithIcons = await DeviceApps.getInstalledApplications(
+        includeAppIcons: true,
+        includeSystemApps: includeSystemApps,
+        onlyAppsWithLaunchIntent: !includeSystemApps,
+      );
+      for (final app in appsWithIcons) {
+        _iconCache[app.packageName] = (app as ApplicationWithIcon).icon;
+      }
+      _fetchingData = false;
+      notifyListeners();
+    });
+
+    var apps = await DeviceApps.getInstalledApplications(
+      includeAppIcons: false,
+      includeSystemApps: includeSystemApps,
+      onlyAppsWithLaunchIntent: !includeSystemApps,
+    );
+
+    if (includeSystemApps) apps.retainWhere((app) => app.systemApp);
+
+    apps.sort(
+      (a, b) => a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
+    );
+
+    assignList(apps);
+    notifyListeners();
   }
 }
