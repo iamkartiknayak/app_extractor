@@ -52,13 +52,16 @@ class AppInfoProvider extends ChangeNotifier {
     _appIUEvents = AppIUEvents();
     _appIUEvents.appEvents.listen((event) async {
       if (event.type == IUEventType.uninstalled) {
-        if (!context.mounted) return;
+        if (!_context.mounted) return;
 
         _context.read<ApplistProvider>().removeApp(event.packageName);
         if (_selectedAppId == event.packageName) {
           Navigator.of(_context).pop();
         }
       }
+
+      if (!_context.mounted) return;
+      _context.read<ApplistProvider>().refreshList();
     });
   }
 
