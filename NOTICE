@@ -1,0 +1,77 @@
+This project includes software developed by third parties. Below is a list of dependencies and their respective licenses.
+
+---
+
+**Hive (hive_flutter)**
+License: Apache License 2.0  
+https://github.com/hivedb/hive/blob/main/LICENSE
+
+---
+
+**path_provider**
+License: BSD 3-Clause  
+https://github.com/flutter/packages/blob/main/packages/path_provider/path_provider/LICENSE
+
+---
+
+**url_launcher**
+License: BSD 3-Clause  
+https://github.com/flutter/packages/blob/main/packages/url_launcher/url_launcher/LICENSE
+
+---
+
+**material_symbols_icons**
+License: Apache License 2.0  
+https://github.com/timmaffett/material_symbols_icons/blob/master/LICENSE
+
+---
+
+**dynamic_color**
+License: MIT  
+https://github.com/material-foundation/flutter-packages/blob/main/packages/dynamic_color/LICENSE
+
+---
+
+**provider**
+License: MIT  
+https://github.com/rrousselGit/provider/blob/master/packages/provider/LICENSE
+
+---
+
+**device_apps**
+License: Apache License 2.0  
+https://github.com/g123k/flutter_plugin_device_apps/blob/master/LICENSE
+
+---
+
+**intl**
+License: BSD 3-Clause  
+https://github.com/dart-lang/i18n/blob/main/pkgs/intl/LICENSE
+
+---
+
+**http**
+License: BSD 3-Clause  
+https://github.com/dart-lang/http/blob/master/pkgs/http/LICENSE
+
+---
+
+**app_install_events**
+License: MIT  
+https://github.com/AbianS/app_install_events/blob/main/LICENSE
+
+---
+
+**archive**
+License: MIT  
+https://github.com/brendan-duncan/archive/blob/master/LICENSE
+
+---
+
+**shimmer**
+License: MIT  
+https://github.com/hnvn/flutter_shimmer/blob/master/LICENSE
+
+---
+
+All other code in this project is © 2025 Kartik Nayak <https://github.com/iamkartiknayak> and licensed under the GNU General Public License v3.0 (or later).
