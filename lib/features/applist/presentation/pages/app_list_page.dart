@@ -1,4 +1,3 @@
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -29,17 +28,13 @@ class AppListPage extends StatelessWidget {
       ),
       body: Selector<
         ApplistProvider,
-        ({
-          bool noSearchData,
-          bool fetchingData,
-          List<Application> currentAppList,
-        })
+        ({bool noSearchData, bool fetchingData, int currentAppListLength})
       >(
         selector:
             (_, provider) => (
               noSearchData: provider.noSearchData,
               fetchingData: provider.fetchingData,
-              currentAppList: provider.currentAppList,
+              currentAppListLength: provider.currentAppList.length,
             ),
         builder: (_, data, __) {
           final gridView = context.read<SettingsProvider>().gridView;
@@ -48,7 +43,7 @@ class AppListPage extends StatelessWidget {
             return gridView ? BuildShimmerCard() : BuildShimmerList();
           }
 
-          if (data.currentAppList.isEmpty && currentIndex == 2) {
+          if (data.currentAppListLength == 0 && currentIndex == 2) {
             return EmptyDataWidget(
               icon: Symbols.heart_broken,
               title: 'No Favorites has been added',
@@ -64,6 +59,8 @@ class AppListPage extends StatelessWidget {
             );
           }
 
+          final currentAppList = appListProvider.currentAppList;
+
           return RefreshIndicator(
             onRefresh: () => appListProvider.refreshList(),
             child:
@@ -76,7 +73,7 @@ class AppListPage extends StatelessWidget {
 
                         return GridView.builder(
                           padding: EdgeInsets.symmetric(vertical: 16.0),
-                          itemCount: data.currentAppList.length,
+                          itemCount: data.currentAppListLength,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -85,16 +82,16 @@ class AppListPage extends StatelessWidget {
                                 childAspectRatio: itemWidth / itemHeight,
                               ),
                           itemBuilder: (context, index) {
-                            final app = data.currentAppList[index];
+                            final app = currentAppList[index];
                             return GridAppCard(app: app, index: index);
                           },
                         );
                       },
                     )
                     : ListView.builder(
-                      itemCount: data.currentAppList.length,
+                      itemCount: data.currentAppListLength,
                       itemBuilder: (context, index) {
-                        final app = data.currentAppList[index];
+                        final app = currentAppList[index];
                         return ListAppTile(app: app, index: index);
                       },
                     ),

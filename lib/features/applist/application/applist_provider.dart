@@ -107,7 +107,7 @@ class ApplistProvider extends ChangeNotifier {
     _searchEnabled = enable ?? !_searchEnabled;
 
     if (!_searchEnabled) {
-      _currentAppList = _getAppList(_currentIndex);
+      _currentAppList = _getCurrentAppList(_currentIndex);
       _noSearchData = false;
     }
     notifyListeners();
@@ -115,7 +115,7 @@ class ApplistProvider extends ChangeNotifier {
 
   void updateSearchResult(String query) {
     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-    final searchList = _getAppList(_currentIndex);
+    final searchList = _getCurrentAppList(_currentIndex);
 
     _debounceTimer = Timer(const Duration(milliseconds: 400), () {
       query = query.trim().toLowerCase();
@@ -145,7 +145,7 @@ class ApplistProvider extends ChangeNotifier {
       debugPrint('Extracting item $itemIndex');
       await context.read<AppInfoProvider>().extractApk(
         context: context,
-        app: _getAppList(_currentIndex)[itemIndex],
+        app: _getCurrentAppList(_currentIndex)[itemIndex],
         showSnackBar: _selectedItemIndexList.length == 1,
       );
     }
@@ -233,7 +233,7 @@ class ApplistProvider extends ChangeNotifier {
             .toList();
   }
 
-  List<Application> _getAppList(int index) {
+  List<Application> _getCurrentAppList(int index) {
     switch (index) {
       case 0:
         return _installedAppsList;

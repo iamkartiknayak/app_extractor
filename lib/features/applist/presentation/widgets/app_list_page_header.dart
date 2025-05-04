@@ -16,7 +16,8 @@ class AppListPageHeader extends StatelessWidget {
       ({
         String title,
         bool searchEnabled,
-        List<Application> appList,
+        List<Application> currentAppList,
+        int currentAppListLength,
         int selectedIndexListLength,
       })
     >(
@@ -24,13 +25,23 @@ class AppListPageHeader extends StatelessWidget {
           (_, provider) => (
             title: provider.currentTitle,
             searchEnabled: provider.searchEnabled,
-            appList: provider.currentAppList,
+            currentAppList: provider.currentAppList,
+            currentAppListLength: provider.currentAppList.length,
             selectedIndexListLength: provider.selectedItemIndexList.length,
           ),
       builder: (_, data, __) {
         return data.selectedIndexListLength != 0
-            ? SelectionHeader(data: data)
-            : DefaultHeader(data: data);
+            ? SelectionHeader(
+              title: data.title,
+              searchEnabled: data.searchEnabled,
+              selectedIndexListLength: data.selectedIndexListLength,
+            )
+            : DefaultHeader(
+              title: data.title,
+              searchEnabled: data.searchEnabled,
+              currentAppList: data.currentAppList,
+              currentAppListLength: data.currentAppListLength,
+            );
       },
     );
   }

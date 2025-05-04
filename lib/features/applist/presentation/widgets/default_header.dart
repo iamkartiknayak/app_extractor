@@ -8,37 +8,39 @@ import '../../application/applist_provider.dart';
 import 'search_field.dart';
 
 class DefaultHeader extends StatelessWidget {
-  const DefaultHeader({super.key, required this.data});
+  const DefaultHeader({
+    super.key,
+    required this.title,
+    required this.searchEnabled,
+    required this.currentAppList,
+    required this.currentAppListLength,
+  });
 
-  final ({
-    List<Application> appList,
-    bool searchEnabled,
-    int selectedIndexListLength,
-    String title,
-  })
-  data;
+  final String title;
+  final bool searchEnabled;
+  final List<Application> currentAppList;
+  final int currentAppListLength;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title:
-          data.searchEnabled
-              ? SearchField(appList: data.appList)
-              : Text('${data.title} (${data.appList.length})'),
+          searchEnabled
+              ? SearchField(appList: currentAppList)
+              : Text('$title (${currentAppList.length})'),
       actionsPadding: const EdgeInsets.only(right: 24.0),
       actions: [
         IconButton(
           onPressed: () => context.read<ApplistProvider>().toggleSearch(),
-          icon: Icon(data.searchEnabled ? Symbols.close : Symbols.search),
+          icon: Icon(searchEnabled ? Symbols.close : Symbols.search),
         ),
-        if (!data.searchEnabled)
+        if (!searchEnabled)
           IconButton(
             onPressed:
                 () => Navigator.of(
                   context,
                 ).push(MaterialPageRoute(builder: (_) => ExtractedAppsPage())),
-            icon: Icon(
-              data.searchEnabled ? Symbols.close : Symbols.inventory_2,
-            ),
+            icon: Icon(searchEnabled ? Symbols.close : Symbols.inventory_2),
           ),
       ],
     );
