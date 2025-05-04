@@ -19,7 +19,8 @@ class AppListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentIndex = context.watch<NavbarIndexProvider>().currentIndex;
-    context.read<ApplistProvider>().setData(context, currentIndex);
+    final appListProvider = context.read<ApplistProvider>();
+    appListProvider.setData(context, currentIndex);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -63,36 +64,41 @@ class AppListPage extends StatelessWidget {
             );
           }
 
-          return gridView
-              ? LayoutBuilder(
-                builder: (context, constraints) {
-                  final screenWidth = constraints.maxWidth;
-                  final itemWidth = (screenWidth - ((2 - 1) * 16.0)) / 2;
-                  final itemHeight = itemWidth * 1;
+          return RefreshIndicator(
+            onRefresh: () => appListProvider.refreshList(),
+            child:
+                gridView
+                    ? LayoutBuilder(
+                      builder: (context, constraints) {
+                        final screenWidth = constraints.maxWidth;
+                        final itemWidth = (screenWidth - ((2 - 1) * 16.0)) / 2;
+                        final itemHeight = itemWidth * 1;
 
-                  return GridView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    itemCount: data.currentAppList.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16.0,
-                      crossAxisSpacing: 16.0,
-                      childAspectRatio: itemWidth / itemHeight,
+                        return GridView.builder(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          itemCount: data.currentAppList.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 16.0,
+                                crossAxisSpacing: 16.0,
+                                childAspectRatio: itemWidth / itemHeight,
+                              ),
+                          itemBuilder: (context, index) {
+                            final app = data.currentAppList[index];
+                            return GridAppCard(app: app, index: index);
+                          },
+                        );
+                      },
+                    )
+                    : ListView.builder(
+                      itemCount: data.currentAppList.length,
+                      itemBuilder: (context, index) {
+                        final app = data.currentAppList[index];
+                        return ListAppTile(app: app, index: index);
+                      },
                     ),
-                    itemBuilder: (context, index) {
-                      final app = data.currentAppList[index];
-                      return GridAppCard(app: app, index: index);
-                    },
-                  );
-                },
-              )
-              : ListView.builder(
-                itemCount: data.currentAppList.length,
-                itemBuilder: (context, index) {
-                  final app = data.currentAppList[index];
-                  return ListAppTile(app: app, index: index);
-                },
-              );
+          );
         },
       ),
     );

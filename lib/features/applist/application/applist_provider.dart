@@ -192,6 +192,14 @@ class ApplistProvider extends ChangeNotifier {
     resetSelection();
   }
 
+  Future<void> refreshList() async {
+    _fetchAppsData(
+      assignList: (updatedList) => _installedAppsList = updatedList,
+      includeSystemApps: false,
+    );
+    _updateFavoriteAppsList();
+  }
+
   // private methods
   Future<void> _getAppsList() async {
     _fetchingData = true;
