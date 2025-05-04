@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../features/applist/presentation/widgets/shimmer_container.dart';
+import '../../../common/shimmer_container.dart';
 import '../widgets/section_card.dart';
 
 class AppAboutPage extends StatelessWidget {

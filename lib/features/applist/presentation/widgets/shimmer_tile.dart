@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import './shimmer_container.dart';
+import '../../../../common/shimmer_container.dart';
 
 class ShimmerTile extends StatelessWidget {
   const ShimmerTile({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Shimmer.fromColors(
-      baseColor: Theme.of(context).colorScheme.surface,
+      baseColor:
+          isLight
+              ? Colors.grey.shade200
+              : Theme.of(context).colorScheme.surface,
       highlightColor: Theme.of(context).colorScheme.primary,
-      child: Row(
-        children: [
-          ShimmerContainer(height: 40.0, width: 40.0),
-          SizedBox(width: 12.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ShimmerContainer(height: 16.0, width: 160.0),
-                SizedBox(height: 8.0),
-                ShimmerContainer(height: 12.0, width: 200.0),
-              ],
-            ),
-          ),
-          ShimmerContainer(height: 24.0, width: 24.0),
-          SizedBox(width: 20.0),
-        ],
+      child: ListTile(
+        leading: ShimmerContainer(height: 40.0, width: 40.0),
+        title: ShimmerContainer(height: 16.0, width: 160.0),
+        subtitle: ShimmerContainer(height: 12.0, width: 200.0),
+        trailing: Padding(
+          padding: EdgeInsets.only(right: 14.0),
+          child: ShimmerContainer(height: 20.0, width: 20.0),
+        ),
       ),
     );
   }

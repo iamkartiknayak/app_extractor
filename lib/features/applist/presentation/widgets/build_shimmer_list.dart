@@ -7,12 +7,9 @@ class BuildShimmerList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (_, _) => ShimmerTile(),
+    return ListView.builder(
       itemCount: 12,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      separatorBuilder:
-          (BuildContext context, int index) => SizedBox(height: 28.0),
+      itemBuilder: (_, _) => ShimmerTile(),
     );
   }
 }

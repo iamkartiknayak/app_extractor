@@ -7,6 +7,7 @@ import '../widgets/grid_app_card.dart';
 import '../../../home/application/home_provider.dart';
 import '../widgets/build_shimmer_list.dart';
 import '../widgets/list_app_tile.dart';
+import '../widgets/build_shimmer_card.dart';
 import '../widgets/app_list_page_header.dart';
 import '../../application/applist_provider.dart';
 import '../../../../common/empty_data_widget.dart';
@@ -40,7 +41,11 @@ class AppListPage extends StatelessWidget {
               currentAppList: provider.currentAppList,
             ),
         builder: (_, data, __) {
-          if (data.fetchingData) return BuildShimmerList();
+          final gridView = context.read<SettingsProvider>().gridView;
+
+          if (data.fetchingData) {
+            return gridView ? BuildShimmerCard() : BuildShimmerList();
+          }
 
           if (data.currentAppList.isEmpty && currentIndex == 2) {
             return EmptyDataWidget(
@@ -58,7 +63,7 @@ class AppListPage extends StatelessWidget {
             );
           }
 
-          return context.read<SettingsProvider>().gridView
+          return gridView
               ? LayoutBuilder(
                 builder: (context, constraints) {
                   final screenWidth = constraints.maxWidth;
