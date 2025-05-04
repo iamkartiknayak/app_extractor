@@ -5,6 +5,7 @@ import '../features/appinfo/data/models/extracted_app_model.dart';
 class BoxHelper {
   static final BoxHelper _instance = BoxHelper._internal();
   late final Box<dynamic> _appBox;
+  late final Box<dynamic> _settingsBox;
 
   BoxHelper._internal();
 
@@ -16,9 +17,11 @@ class BoxHelper {
       Hive.registerAdapter(ExtractedAppModelAdapter());
     }
     _appBox = await Hive.openBox<dynamic>('appData');
+    _settingsBox = await Hive.openBox<dynamic>('settingsBox');
   }
 
   Box<dynamic> get appBox => _appBox;
+  Box<dynamic> get settingsBox => _settingsBox;
 
   Future<void> saveFavorites(List<String> favoriteAppsIdList) async {
     await _appBox.put('favoriteApps', favoriteAppsIdList);
