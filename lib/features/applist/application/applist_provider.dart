@@ -20,7 +20,7 @@ class ApplistProvider extends ChangeNotifier {
 
   List<Application> get currentAppList => _currentAppList;
   List<int> get selectedItemIndexList => _selectedItemIndexList;
-  Map<String, Uint8List> get imageCache => _iconCache;
+  Map<String, Uint8List> get iconCache => _iconCache;
 
   // private var
   bool _isInitialized = false;
@@ -39,7 +39,7 @@ class ApplistProvider extends ChangeNotifier {
   final List<int> _selectedItemIndexList = [];
   final Map<String, Uint8List> _iconCache = {};
   late final List<String> _favoriteAppsIds;
-  Timer? _debounceTimer;
+  Timer? _searchdebounce;
 
   // public methods
   void init() async {
@@ -52,7 +52,7 @@ class ApplistProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    _debounceTimer?.cancel();
+    _searchdebounce?.cancel();
     super.dispose();
   }
 
@@ -114,10 +114,10 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void updateSearchResult(String query) {
-    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    if (_searchdebounce?.isActive ?? false) _searchdebounce!.cancel();
     final searchList = _getCurrentAppList(_currentIndex);
 
-    _debounceTimer = Timer(const Duration(milliseconds: 400), () {
+    _searchdebounce = Timer(const Duration(milliseconds: 400), () {
       query = query.trim().toLowerCase();
       _currentAppList =
           searchList

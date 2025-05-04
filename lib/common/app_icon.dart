@@ -22,10 +22,10 @@ class AppIcon extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Selector<ApplistProvider, bool>(
-      selector: (_, provider) => provider.imageCache.containsKey(packageName),
+      selector: (_, provider) => provider.iconCache.containsKey(packageName),
       builder: (_, iconExists, _) {
         if (iconExists) {
-          final icon = context.read<ApplistProvider>().imageCache[packageName]!;
+          final icon = context.read<ApplistProvider>().iconCache[packageName]!;
           return Image.memory(
             icon,
             height: height ?? 40.0,
