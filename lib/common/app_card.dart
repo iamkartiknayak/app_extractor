@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
+import './app_icon.dart';
 import './selection_indicator.dart';
 import '../../../../constants.dart';
 import '../features/applist/application/applist_provider.dart';
@@ -14,7 +15,6 @@ class AppCard extends StatelessWidget {
     required this.app,
     required this.index,
     this.onTap,
-    required this.icon,
     required this.title,
     required this.subTitle,
   });
@@ -22,7 +22,6 @@ class AppCard extends StatelessWidget {
   final Application app;
 
   final VoidCallback? onTap;
-  final dynamic icon;
   final String title;
   final String subTitle;
   final int index;
@@ -56,7 +55,11 @@ class AppCard extends StatelessWidget {
                   SizedBox(height: 8.0),
                   isSelected
                       ? SelectionIndicator(height: 56.0, width: 56.0)
-                      : Image.memory(icon, height: 56.0, width: 56.0),
+                      : AppIcon(
+                        packageName: app.packageName,
+                        height: 56.0,
+                        width: 56.0,
+                      ),
                   SizedBox(height: 20.0),
                   Text(
                     title,

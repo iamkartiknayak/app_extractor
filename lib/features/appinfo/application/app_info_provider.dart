@@ -111,6 +111,9 @@ class AppInfoProvider extends ChangeNotifier {
     appSize = result[0]!;
     extractedPath = result[1];
 
+    final appWithIcon = await DeviceApps.getApp(app.packageName, true);
+    final appIcon = (appWithIcon as ApplicationWithIcon).icon;
+
     if (context.mounted && showSnackBar) {
       SnackbarHelper.showSnackbar(
         context: context,
@@ -125,7 +128,7 @@ class AppInfoProvider extends ChangeNotifier {
 
     _extractedAppsList.add(
       ExtractedAppModel(
-        appIcon: (app as ApplicationWithIcon).icon,
+        appIcon: appIcon,
         appName: app.appName,
         packageName: app.packageName,
         appSize: appSize,

@@ -15,9 +15,9 @@ class ListAppTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppTile(
       onTap: () => AppOperationsHelper.navigateToAppInfo(context, app),
-      icon: (app as ApplicationWithIcon).icon,
       title: app.appName,
       subTitle: app.packageName,
+      packageName: app.packageName,
       index: index,
       trailing: ExtractShareToggleButton(app: app),
     );

@@ -16,9 +16,9 @@ class ExtractedAppTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppTile(
-      icon: app.appIcon,
       title: app.appName,
       subTitle: app.appSize,
+      packageName: app.packageName,
       trailing: IconButton(
         onPressed: () {
           final file = File(app.appPath);

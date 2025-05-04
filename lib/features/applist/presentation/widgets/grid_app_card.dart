@@ -15,7 +15,6 @@ class GridAppCard extends StatelessWidget {
     return AppCard(
       app: app,
       onTap: () => AppOperationsHelper.navigateToAppInfo(context, app),
-      icon: (app as ApplicationWithIcon).icon,
       title: app.appName,
       subTitle: app.packageName,
       index: index,

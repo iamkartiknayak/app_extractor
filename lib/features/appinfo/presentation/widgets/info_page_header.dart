@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../common/app_icon.dart';
 import '../../../../constants.dart';
 import '../../../applist/application/applist_provider.dart';
 
@@ -22,10 +23,7 @@ class InfoPageHeader extends StatelessWidget {
             height: 60.0,
             width: 60.0,
             decoration: BoxDecoration(borderRadius: kBorderRadius),
-            child:
-                app is ApplicationWithIcon
-                    ? Image.memory((app as ApplicationWithIcon).icon)
-                    : Icon(Symbols.android),
+            child: AppIcon(packageName: app.packageName),
           ),
           SizedBox(width: 20.0),
           Expanded(
