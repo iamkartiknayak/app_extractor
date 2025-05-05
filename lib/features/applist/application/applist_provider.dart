@@ -37,7 +37,7 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _favoriteAppsList = [];
   List<Application> _currentAppList = [];
   final List<int> _selectedItemIndexList = [];
-  final Map<String, Uint8List> _iconCache = {};
+  late final Map<String, Uint8List> _iconCache;
   late final List<String> _favoriteAppsIds;
   Timer? _searchdebounce;
 
@@ -46,6 +46,7 @@ class ApplistProvider extends ChangeNotifier {
     if (_isInitialized) return;
 
     _favoriteAppsIds = BoxHelper.instance.getFavoriteAppsIdList();
+    _iconCache = BoxHelper.instance.getIconCache();
     _getAppsList();
     _isInitialized = true;
   }
@@ -257,9 +258,11 @@ class ApplistProvider extends ChangeNotifier {
         onlyAppsWithLaunchIntent: !includeSystemApps,
       );
       for (final app in appsWithIcons) {
+        if (_iconCache.containsKey(app.packageName)) continue;
         _iconCache[app.packageName] = (app as ApplicationWithIcon).icon;
       }
       _fetchingData = false;
+      BoxHelper.instance.saveIconCache(_iconCache);
       notifyListeners();
     });
 
@@ -274,6 +277,8 @@ class ApplistProvider extends ChangeNotifier {
     apps.sort(
       (a, b) => a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
     );
+
+    if (_iconCache.isNotEmpty) _fetchingData = false;
 
     assignList(apps);
     notifyListeners();
