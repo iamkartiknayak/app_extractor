@@ -80,7 +80,7 @@ class AppCard extends StatelessWidget {
                     AnimatedContainer(
                       curve: Curves.easeInOut,
                       duration: const Duration(milliseconds: 140),
-                      height: longPress ? 0.0 : 30.0,
+                      height: longPress ? 0.0 : 40.0,
                       width: longPress ? 0.0 : double.maxFinite,
                       child: AnimatedOpacity(
                         curve: Curves.easeInOut,
