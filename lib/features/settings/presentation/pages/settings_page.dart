@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../../../features/appinfo/application/app_info_provider.dart';
-import '../../../features/applist/presentation/widgets/settings_tile.dart';
+import '../../../appinfo/application/app_info_provider.dart';
+import '../../../applist/presentation/widgets/settings_tile.dart';
 import '../../application/settings_provider.dart';
 import '../widgets/default_file_name_dialog.dart';
 import '../widgets/side_header.dart';
-import './app_about_page.dart';
+import 'app_about_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

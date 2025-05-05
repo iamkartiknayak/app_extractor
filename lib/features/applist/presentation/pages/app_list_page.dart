@@ -3,8 +3,8 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/empty_data_widget.dart';
-import '../../../../settings/application/settings_provider.dart';
 import '../../../home/application/home_provider.dart';
+import '../../../settings/application/settings_provider.dart';
 import '../../application/applist_provider.dart';
 import '../widgets/app_list_page_header.dart';
 import '../widgets/build_shimmer_card.dart';

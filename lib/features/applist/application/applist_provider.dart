@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../../helpers/box_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
-import '../../../settings/application/settings_provider.dart';
 import '../../appinfo/application/app_info_provider.dart';
+import '../../settings/application/settings_provider.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)

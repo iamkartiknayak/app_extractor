@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../features/applist/application/applist_provider.dart';
-import '../../helpers/box_helper.dart';
+import '../../../helpers/box_helper.dart';
+import '../../applist/application/applist_provider.dart';
 
 class SettingsProvider extends ChangeNotifier {
   SettingsProvider() {

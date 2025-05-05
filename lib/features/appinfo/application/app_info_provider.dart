@@ -10,8 +10,8 @@ import '../../../helpers/app_operations_helper.dart';
 import '../../../helpers/box_helper.dart';
 import '../../../helpers/play_store_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
-import '../../../settings/application/settings_provider.dart';
 import '../../applist/application/applist_provider.dart';
+import '../../settings/application/settings_provider.dart';
 import '../data/models/cached_app_info_model.dart';
 import '../data/models/extracted_app_model.dart';
 

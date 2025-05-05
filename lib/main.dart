@@ -9,7 +9,7 @@ import './features/home/application/home_provider.dart';
 import './features/home/presentation/pages/home_page.dart';
 import './helpers/box_helper.dart';
 import './helpers/theme_helper.dart';
-import 'settings/application/settings_provider.dart';
+import 'features/settings/application/settings_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
