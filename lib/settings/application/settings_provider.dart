@@ -13,10 +13,7 @@ class SettingsProvider extends ChangeNotifier {
       'defaultApkName',
       defaultValue: 'name_version.apk',
     );
-    _showNonLaunchable = _settingsBox.get(
-      'showNonLaunchable',
-      defaultValue: false,
-    );
+
     notifyListeners();
   }
 
@@ -39,7 +36,6 @@ class SettingsProvider extends ChangeNotifier {
 
   void toggleNonLaunchable(bool value, BuildContext context) {
     _showNonLaunchable = value;
-    _settingsBox.put('showNonLaunchable', value);
     context.read<ApplistProvider>().updateSystemAppsList(!value);
     notifyListeners();
   }
