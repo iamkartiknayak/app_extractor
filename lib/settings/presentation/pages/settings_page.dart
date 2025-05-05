@@ -14,6 +14,8 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = context.read<SettingsProvider>();
+
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: Column(
@@ -66,6 +68,22 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
+          SettingsTile(
+            icon: Symbols.settings_applications,
+            title: Text('Show non-launchable apps'),
+            subTitle: Text('Includes system background apps'),
+            trailing: Selector<SettingsProvider, bool>(
+              selector: (_, provider) => provider.showNonLaunchable,
+              builder: (_, value, _) {
+                return Switch(
+                  value: value,
+                  onChanged:
+                      (value) =>
+                          settingsProvider.toggleNonLaunchable(value, context),
+                );
+              },
+            ),
+          ),
           SideHeader(header: 'Customization'),
           SettingsTile(
             icon: Symbols.grid_view,
@@ -75,14 +93,11 @@ class SettingsPage extends StatelessWidget {
               builder: (_, value, _) {
                 return Switch(
                   value: value,
-                  onChanged:
-                      (value) =>
-                          context.read<SettingsProvider>().toggleGridView(),
+                  onChanged: (value) => settingsProvider.toggleGridView(),
                 );
               },
             ),
           ),
-
           SideHeader(header: 'About'),
           SettingsTile(
             icon: Symbols.info,

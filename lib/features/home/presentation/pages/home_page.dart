@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navbarProvider = context.watch<NavbarIndexProvider>();
-    context.read<ApplistProvider>().init();
+    context.read<ApplistProvider>().init(context);
     context.read<AppInfoProvider>().init(context);
 
     return Scaffold(

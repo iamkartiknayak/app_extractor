@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../helpers/box_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
 import '../../appinfo/application/app_info_provider.dart';
+import '../../../settings/application/settings_provider.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
@@ -24,6 +25,7 @@ class ApplistProvider extends ChangeNotifier {
 
   // private var
   bool _isInitialized = false;
+  late final BuildContext _context;
   String _currentTitle = '';
   bool _fetchingData = false;
   bool _searchEnabled = false;
@@ -34,6 +36,8 @@ class ApplistProvider extends ChangeNotifier {
   List<Application> _allAppslist = [];
   List<Application> _installedAppsList = [];
   List<Application> _systemAppsList = [];
+  List<Application> _runnableSystemAppsList = [];
+  List<Application> _allSystemAppsList = [];
   List<Application> _favoriteAppsList = [];
   List<Application> _currentAppList = [];
   final List<int> _selectedItemIndexList = [];
@@ -42,9 +46,10 @@ class ApplistProvider extends ChangeNotifier {
   Timer? _searchdebounce;
 
   // public methods
-  void init() async {
+  void init(BuildContext context) async {
     if (_isInitialized) return;
 
+    _context = context;
     _favoriteAppsIds = BoxHelper.instance.getFavoriteAppsIdList();
     _iconCache = BoxHelper.instance.getIconCache();
     _getAppsList();
@@ -201,6 +206,20 @@ class ApplistProvider extends ChangeNotifier {
     _updateFavoriteAppsList();
   }
 
+  Future<void> updateSystemAppsList(bool hideBackgroundApps) async {
+    if (_runnableSystemAppsList.isEmpty || _allSystemAppsList.isEmpty) {
+      _fetchAppsData(
+        assignList: (updatedList) => _systemAppsList = updatedList,
+        includeSystemApps: true,
+      );
+      return;
+    }
+
+    _systemAppsList =
+        hideBackgroundApps ? _runnableSystemAppsList : _allSystemAppsList;
+    notifyListeners();
+  }
+
   // private methods
   Future<void> _getAppsList() async {
     _fetchingData = true;
@@ -251,11 +270,14 @@ class ApplistProvider extends ChangeNotifier {
     required bool includeSystemApps,
     required void Function(List<Application>) assignList,
   }) async {
+    final hideBackgroundApps =
+        !_context.read<SettingsProvider>().showNonLaunchable;
+
     Future.microtask(() async {
       final appsWithIcons = await DeviceApps.getInstalledApplications(
         includeAppIcons: true,
         includeSystemApps: includeSystemApps,
-        onlyAppsWithLaunchIntent: !includeSystemApps,
+        onlyAppsWithLaunchIntent: hideBackgroundApps,
       );
       for (final app in appsWithIcons) {
         if (_iconCache.containsKey(app.packageName)) continue;
@@ -269,14 +291,22 @@ class ApplistProvider extends ChangeNotifier {
     var apps = await DeviceApps.getInstalledApplications(
       includeAppIcons: false,
       includeSystemApps: includeSystemApps,
-      onlyAppsWithLaunchIntent: !includeSystemApps,
+      onlyAppsWithLaunchIntent: hideBackgroundApps,
     );
-
-    if (includeSystemApps) apps.retainWhere((app) => app.systemApp);
 
     apps.sort(
       (a, b) => a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
     );
+
+    if (includeSystemApps) apps.retainWhere((app) => app.systemApp);
+
+    if (includeSystemApps) {
+      if (_runnableSystemAppsList.isEmpty && hideBackgroundApps) {
+        _runnableSystemAppsList = apps;
+      } else if (_allSystemAppsList.isEmpty && !hideBackgroundApps) {
+        _allSystemAppsList = apps;
+      }
+    }
 
     if (_iconCache.isNotEmpty) _fetchingData = false;
 

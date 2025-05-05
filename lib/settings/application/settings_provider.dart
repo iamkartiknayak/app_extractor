@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../helpers/box_helper.dart';
+import '../../features/applist/application/applist_provider.dart';
 
 class SettingsProvider extends ChangeNotifier {
   // public var (getters)
   bool get gridView => _gridView;
   String get defaultApkName => _defaultApkName;
+  bool get showNonLaunchable => _showNonLaunchable;
 
   // private var
   bool _gridView = false;
+  bool _showNonLaunchable = false;
   String _defaultApkName = 'name_version.apk';
   late final Box<dynamic> _settingsBox;
 
@@ -21,12 +25,23 @@ class SettingsProvider extends ChangeNotifier {
       'defaultApkName',
       defaultValue: 'name_version.apk',
     );
+    _showNonLaunchable = _settingsBox.get(
+      'showNonLaunchable',
+      defaultValue: false,
+    );
     notifyListeners();
   }
 
   void toggleGridView() {
     _gridView = !_gridView;
     _settingsBox.put('gridView', _gridView);
+    notifyListeners();
+  }
+
+  void toggleNonLaunchable(bool value, BuildContext context) {
+    _showNonLaunchable = value;
+    _settingsBox.put('showNonLaunchable', value);
+    context.read<ApplistProvider>().updateSystemAppsList(!value);
     notifyListeners();
   }
 
