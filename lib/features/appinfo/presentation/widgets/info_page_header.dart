@@ -13,48 +13,45 @@ class InfoPageHeader extends StatelessWidget {
   final Application app;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
-      child: Row(
-        children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            height: 60.0,
-            width: 60.0,
-            decoration: BoxDecoration(borderRadius: kBorderRadius),
-            child: AppIcon(packageName: app.packageName),
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
+    child: Row(
+      children: [
+        Container(
+          clipBehavior: Clip.antiAlias,
+          height: 60.0,
+          width: 60.0,
+          decoration: BoxDecoration(borderRadius: kBorderRadius),
+          child: AppIcon(packageName: app.packageName),
+        ),
+        const SizedBox(width: 20.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                app.appName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Text(app.packageName, overflow: TextOverflow.ellipsis),
+            ],
           ),
-          SizedBox(width: 20.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  app.appName,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Text(app.packageName, overflow: TextOverflow.ellipsis),
-              ],
-            ),
-          ),
-          SizedBox(width: 12.0),
-          Selector<ApplistProvider, bool>(
-            selector: (_, p1) => p1.isFavorite(app.packageName),
-            shouldRebuild: (previous, next) => previous != next,
-            builder: (_, isFavorite, child) {
-              return IconButton(
+        ),
+        const SizedBox(width: 12.0),
+        Selector<ApplistProvider, bool>(
+          selector: (_, p1) => p1.isFavorite(app.packageName),
+          shouldRebuild: (previous, next) => previous != next,
+          builder:
+              (_, isFavorite, child) => IconButton(
                 onPressed:
                     () => context.read<ApplistProvider>().toggleFavorite(app),
                 icon: Icon(Symbols.favorite, fill: isFavorite ? 1 : 0),
                 color: Theme.of(context).colorScheme.primary,
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
+              ),
+        ),
+      ],
+    ),
+  );
 }

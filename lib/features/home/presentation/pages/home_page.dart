@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/home_provider.dart';
-import '../../../applist/application/applist_provider.dart';
 import '../../../appinfo/application/app_info_provider.dart';
+import '../../../applist/application/applist_provider.dart';
+import '../../application/home_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navbarProvider.currentIndex,
         onDestinationSelected: (p0) => navbarProvider.updateIndex(p0, context),
-        destinations: [
+        destinations: const [
           NavigationDestination(
             label: 'Installed Apps',
             icon: Icon(Symbols.archive),

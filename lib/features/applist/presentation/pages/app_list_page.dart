@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/grid_app_card.dart';
-import '../../../home/application/home_provider.dart';
-import '../widgets/build_shimmer_list.dart';
-import '../widgets/list_app_tile.dart';
-import '../widgets/build_shimmer_card.dart';
-import '../widgets/app_list_page_header.dart';
-import '../../application/applist_provider.dart';
 import '../../../../common/empty_data_widget.dart';
 import '../../../../settings/application/settings_provider.dart';
+import '../../../home/application/home_provider.dart';
+import '../../application/applist_provider.dart';
+import '../widgets/app_list_page_header.dart';
+import '../widgets/build_shimmer_card.dart';
+import '../widgets/build_shimmer_list.dart';
+import '../widgets/grid_app_card.dart';
+import '../widgets/list_app_tile.dart';
 
 class AppListPage extends StatelessWidget {
   const AppListPage({super.key});
@@ -22,7 +22,7 @@ class AppListPage extends StatelessWidget {
     appListProvider.setData(context, currentIndex);
 
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size(double.infinity, 56.0),
         child: AppListPageHeader(),
       ),
@@ -40,11 +40,13 @@ class AppListPage extends StatelessWidget {
           final gridView = context.read<SettingsProvider>().gridView;
 
           if (data.fetchingData) {
-            return gridView ? BuildShimmerCard() : BuildShimmerList();
+            return gridView
+                ? const BuildShimmerCard()
+                : const BuildShimmerList();
           }
 
           if (data.currentAppListLength == 0 && currentIndex == 2) {
-            return EmptyDataWidget(
+            return const EmptyDataWidget(
               icon: Symbols.heart_broken,
               title: 'No Favorites has been added',
               subTitle: 'Start adding items you love to see them here',
@@ -52,7 +54,7 @@ class AppListPage extends StatelessWidget {
           }
 
           if (data.noSearchData) {
-            return EmptyDataWidget(
+            return const EmptyDataWidget(
               icon: Symbols.search_off,
               title: 'No results found',
               subTitle: 'Try adjusting your search keywords',
@@ -72,7 +74,7 @@ class AppListPage extends StatelessWidget {
                         final itemHeight = itemWidth * 1;
 
                         return GridView.builder(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
                           itemCount: data.currentAppListLength,
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(

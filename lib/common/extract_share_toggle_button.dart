@@ -10,21 +10,19 @@ class ExtractShareToggleButton extends StatelessWidget {
 
   final Application app;
 
-  String? _getExtractedPath(AppInfoProvider provider) {
-    return provider.extractedAppsList
-        .firstWhere((exApp) => exApp.packageName == app.packageName)
-        .appPath;
-  }
+  String? _getExtractedPath(AppInfoProvider provider) =>
+      provider.extractedAppsList
+          .firstWhere((exApp) => exApp.packageName == app.packageName)
+          .appPath;
 
   @override
-  Widget build(BuildContext context) {
-    return Selector<AppInfoProvider, bool>(
-      selector:
-          (_, provider) => provider.extractedAppsList.any(
-            (exApp) => exApp.packageName == app.packageName,
-          ),
-      builder: (context, isExtracted, _) {
-        return IconButton(
+  Widget build(BuildContext context) => Selector<AppInfoProvider, bool>(
+    selector:
+        (_, provider) => provider.extractedAppsList.any(
+          (exApp) => exApp.packageName == app.packageName,
+        ),
+    builder:
+        (context, isExtracted, _) => IconButton(
           icon: Icon(
             isExtracted ? Symbols.share : Symbols.unarchive,
             color: Theme.of(context).colorScheme.primary,
@@ -40,8 +38,6 @@ class ExtractShareToggleButton extends StatelessWidget {
               appInfoProvider.extractApk(context: context, app: app);
             }
           },
-        );
-      },
-    );
-  }
+        ),
+  );
 }

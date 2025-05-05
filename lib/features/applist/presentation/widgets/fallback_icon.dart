@@ -7,17 +7,12 @@ class FallbackIcon extends StatelessWidget {
   const FallbackIcon({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: kBorderRadius,
-        color: Theme.of(context).colorScheme.onInverseSurface,
-      ),
-      padding: EdgeInsets.all(8.0),
-      child: Icon(
-        Symbols.android,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+    decoration: BoxDecoration(
+      borderRadius: kBorderRadius,
+      color: Theme.of(context).colorScheme.onInverseSurface,
+    ),
+    padding: const EdgeInsets.all(8.0),
+    child: Icon(Symbols.android, color: Theme.of(context).colorScheme.primary),
+  );
 }

@@ -16,7 +16,7 @@ class ShimmerTile extends StatelessWidget {
               ? Colors.grey.shade200
               : Theme.of(context).colorScheme.surface,
       highlightColor: Theme.of(context).colorScheme.primary,
-      child: ListTile(
+      child: const ListTile(
         leading: ShimmerContainer(height: 40.0, width: 40.0),
         title: ShimmerContainer(height: 16.0, width: 160.0),
         subtitle: ShimmerContainer(height: 12.0, width: 200.0),

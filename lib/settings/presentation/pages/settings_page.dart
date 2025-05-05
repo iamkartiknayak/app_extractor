@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 
-import './app_about_page.dart';
-import '../widgets/side_header.dart';
-import '../widgets/default_file_name_dialog.dart';
-import '../../application/settings_provider.dart';
 import '../../../features/appinfo/application/app_info_provider.dart';
 import '../../../features/applist/presentation/widgets/settings_tile.dart';
+import '../../application/settings_provider.dart';
+import '../widgets/default_file_name_dialog.dart';
+import '../widgets/side_header.dart';
+import './app_about_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -17,89 +17,89 @@ class SettingsPage extends StatelessWidget {
     final settingsProvider = context.read<SettingsProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
+      appBar: AppBar(title: const Text('Settings')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SideHeader(header: 'Settings'),
+          const SideHeader(header: 'Settings'),
           SettingsTile(
             onTap: () {
-              showDialog(
+              showDialog<void>(
                 context: context,
-                builder: (BuildContext context) {
-                  return CustomAlertDialog(
-                    title: 'Delete All?',
-                    content: Text('Permanently delete all extracted APKs?'),
-                    actionButton: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        context
-                            .read<AppInfoProvider>()
-                            .deleteAllExtractedApps();
-                      },
-                      child: Text(
-                        'Delete',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
+                builder:
+                    (BuildContext context) => CustomAlertDialog(
+                      title: 'Delete All?',
+                      content: const Text(
+                        'Permanently delete all extracted APKs?',
+                      ),
+                      actionButton: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          context
+                              .read<AppInfoProvider>()
+                              .deleteAllExtractedApps();
+                        },
+                        child: Text(
+                          'Delete',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
               );
             },
             icon: Symbols.delete_forever,
-            title: Text('Delete extracted APKs'),
-            subTitle: Text('Remove all extracted APKs from storage'),
+            title: const Text('Delete extracted APKs'),
+            subTitle: const Text('Remove all extracted APKs from storage'),
           ),
           SettingsTile(
             onTap: () {
-              showDialog(
+              showDialog<void>(
                 context: context,
-                builder: (BuildContext context) => DefaultFileNameDialog(),
+                builder:
+                    (BuildContext context) => const DefaultFileNameDialog(),
               );
             },
             icon: Symbols.save_as,
-            title: Text('Default filename for extracted APKs'),
+            title: const Text('Default filename for extracted APKs'),
             subTitle: Selector<SettingsProvider, String>(
               selector: (_, provider) => provider.defaultApkName,
-              builder: (_, value, _) {
-                return Text(value);
-              },
+              builder: (_, value, _) => Text(value),
             ),
           ),
           SettingsTile(
             icon: Symbols.settings_applications,
-            title: Text('Show non-launchable apps'),
-            subTitle: Text('Includes system background apps'),
+            title: const Text('Show non-launchable apps'),
+            subTitle: const Text('Includes system background apps'),
             trailing: Selector<SettingsProvider, bool>(
               selector: (_, provider) => provider.showNonLaunchable,
-              builder: (_, value, _) {
-                return Switch(
-                  value: value,
-                  onChanged:
-                      (value) =>
-                          settingsProvider.toggleNonLaunchable(value, context),
-                );
-              },
+              builder:
+                  (_, value, _) => Switch(
+                    value: value,
+                    onChanged:
+                        (value) => settingsProvider.toggleNonLaunchable(
+                          value,
+                          context,
+                        ),
+                  ),
             ),
           ),
-          SideHeader(header: 'Customization'),
+          const SideHeader(header: 'Customization'),
           SettingsTile(
             icon: Symbols.grid_view,
-            title: Text('Grid layout'),
+            title: const Text('Grid layout'),
             trailing: Selector<SettingsProvider, bool>(
               selector: (_, provider) => provider.gridView,
-              builder: (_, value, _) {
-                return Switch(
-                  value: value,
-                  onChanged: (value) => settingsProvider.toggleGridView(),
-                );
-              },
+              builder:
+                  (_, value, _) => Switch(
+                    value: value,
+                    onChanged: (value) => settingsProvider.toggleGridView(),
+                  ),
             ),
           ),
-          SideHeader(header: 'About'),
-          SettingsTile(
+          const SideHeader(header: 'About'),
+          const SettingsTile(
             icon: Symbols.info,
             title: Text('App Info'),
             navigateTo: AppAboutPage(),

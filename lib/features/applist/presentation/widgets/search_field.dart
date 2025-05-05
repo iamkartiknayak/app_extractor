@@ -11,16 +11,14 @@ class SearchField extends StatelessWidget {
   final List<Application> appList;
 
   @override
-  Widget build(BuildContext context) {
-    return TextField(
-      autofocus: true,
-      onChanged: context.read<ApplistProvider>().updateSearchResult,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'Search apps...',
-        prefixIcon: Icon(Symbols.search),
-        contentPadding: EdgeInsets.symmetric(vertical: 12),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => TextField(
+    autofocus: true,
+    onChanged: context.read<ApplistProvider>().updateSearchResult,
+    decoration: const InputDecoration(
+      border: InputBorder.none,
+      hintText: 'Search apps...',
+      prefixIcon: Icon(Symbols.search),
+      contentPadding: EdgeInsets.symmetric(vertical: 12),
+    ),
+  );
 }

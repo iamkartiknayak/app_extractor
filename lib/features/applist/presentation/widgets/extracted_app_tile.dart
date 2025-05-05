@@ -14,19 +14,17 @@ class ExtractedAppTile extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return AppTile(
-      title: app.appName,
-      subTitle: app.appSize,
-      packageName: app.packageName,
-      trailing: IconButton(
-        onPressed: () {
-          final file = File(app.appPath);
-          SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
-        },
-        icon: Icon(Symbols.share, color: Theme.of(context).colorScheme.primary),
-      ),
-      index: index,
-    );
-  }
+  Widget build(BuildContext context) => AppTile(
+    title: app.appName,
+    subTitle: app.appSize,
+    packageName: app.packageName,
+    trailing: IconButton(
+      onPressed: () {
+        final file = File(app.appPath);
+        SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+      },
+      icon: Icon(Symbols.share, color: Theme.of(context).colorScheme.primary),
+    ),
+    index: index,
+  );
 }

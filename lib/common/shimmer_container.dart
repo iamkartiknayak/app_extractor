@@ -11,14 +11,12 @@ class ShimmerContainer extends StatelessWidget {
   final double width;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(height / 5),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+    height: height,
+    width: width,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(height / 5),
+    ),
+  );
 }

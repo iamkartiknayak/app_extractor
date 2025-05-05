@@ -6,11 +6,9 @@ class SectionCard extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      surfaceTintColor: Theme.of(context).colorScheme.onSurface,
-      child: Padding(padding: const EdgeInsets.all(16.0), child: child),
-    );
-  }
+  Widget build(BuildContext context) => Card(
+    elevation: 1,
+    surfaceTintColor: Theme.of(context).colorScheme.onSurface,
+    child: Padding(padding: const EdgeInsets.all(16.0), child: child),
+  );
 }

@@ -25,7 +25,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             },
             value: 'name_version.apk',
             groupValue: defaultApkName,
-            title: Text('name_version.apk'),
+            title: const Text('name_version.apk'),
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
@@ -35,7 +35,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             },
             value: 'source_version.apk',
             groupValue: defaultApkName,
-            title: Text('source_version.apk'),
+            title: const Text('source_version.apk'),
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
@@ -45,7 +45,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             },
             value: 'source.apk',
             groupValue: defaultApkName,
-            title: Text('source.apk'),
+            title: const Text('source.apk'),
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
@@ -55,7 +55,7 @@ class DefaultFileNameDialog extends StatelessWidget {
             },
             value: 'name.apk',
             groupValue: defaultApkName,
-            title: Text('name.apk'),
+            title: const Text('name.apk'),
           ),
         ],
       ),
@@ -76,22 +76,20 @@ class CustomAlertDialog extends StatelessWidget {
   final Widget? actionButton;
 
   @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      title: Text(title),
-      contentPadding: EdgeInsets.fromLTRB(24.0, 12.0, 12.0, 4.0),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.7,
-        child: content,
+  Widget build(BuildContext context) => AlertDialog(
+    insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+    title: Text(title),
+    contentPadding: const EdgeInsets.fromLTRB(24.0, 12.0, 12.0, 4.0),
+    content: SizedBox(
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: content,
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: const Text('Cancel'),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
-        ),
-        if (actionButton != null) actionButton!,
-      ],
-    );
-  }
+      if (actionButton != null) actionButton!,
+    ],
+  );
 }

@@ -11,7 +11,7 @@ class SnackbarHelper {
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: duration ?? Duration(seconds: 1),
+        duration: duration ?? const Duration(seconds: 1),
         content:
             extractedPath != null
                 ? Text.rich(
@@ -19,7 +19,7 @@ class SnackbarHelper {
                     children: [
                       TextSpan(
                         text: appName,
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                       TextSpan(text: successMessage),
                     ],

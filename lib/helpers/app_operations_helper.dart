@@ -40,15 +40,21 @@ class AppOperationsHelper {
   static Future<String?> extractApk(String apkFilePath, String appName) async {
     try {
       final extractionDir = await _getPrivateExtractionDirectory();
-      if (extractionDir == null) return null;
+      if (extractionDir == null) {
+        return null;
+      }
 
       final sourceApkPath = apkFilePath;
-      if (sourceApkPath.isEmpty) return null;
+      if (sourceApkPath.isEmpty) {
+        return null;
+      }
 
       final sourceFile = File(sourceApkPath);
       final destinationPath = '${extractionDir.path}/$appName';
 
-      if (!await sourceFile.exists()) return null;
+      if (!await sourceFile.exists()) {
+        return null;
+      }
 
       await sourceFile.copy(destinationPath);
       return destinationPath;
@@ -59,14 +65,14 @@ class AppOperationsHelper {
   }
 
   static Future<Map<String, String>> detectTechStack(String apkPath) async {
-    File apkFile = File(apkPath);
+    final File apkFile = File(apkPath);
 
     if (!await apkFile.exists()) {
       return {'status': 'error', 'message': 'APK file does not exist'};
     }
 
-    Uint8List apkBytes = await apkFile.readAsBytes();
-    Archive archive = ZipDecoder().decodeBytes(apkBytes, verify: false);
+    final Uint8List apkBytes = await apkFile.readAsBytes();
+    final Archive archive = ZipDecoder().decodeBytes(apkBytes, verify: false);
 
     int flutterScore = 0;
     int reactScore = 0;
@@ -210,19 +216,23 @@ class AppOperationsHelper {
 
   static void navigateToAppInfo(BuildContext context, Application app) {
     context.read<AppInfoProvider>().setSelectedAppId(app.packageName);
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => AppInfoPage(app: app))).then((_) {
-      if (!context.mounted) return;
-      context.read<AppInfoProvider>().setSelectedAppId(null);
-    });
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => AppInfoPage(app: app)))
+        .then((_) {
+          if (!context.mounted) {
+            return;
+          }
+          context.read<AppInfoProvider>().setSelectedAppId(null);
+        });
   }
 
   // private methods
   static Future<Directory?> _getPrivateExtractionDirectory() async {
     try {
       final baseDir = await getExternalStorageDirectory();
-      if (baseDir == null) return null;
+      if (baseDir == null) {
+        return null;
+      }
 
       final extractorDir = Directory('${baseDir.path}/ApxExtractor');
       if (!await extractorDir.exists()) {
@@ -236,7 +246,9 @@ class AppOperationsHelper {
   }
 
   static String _formatBytes(int bytes, [int decimals = 2]) {
-    if (bytes <= 0) return '0 B';
+    if (bytes <= 0) {
+      return '0 B';
+    }
     const suffixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     final i = (log(bytes) / log(1024)).floor();
     final size = bytes / pow(1024, i);

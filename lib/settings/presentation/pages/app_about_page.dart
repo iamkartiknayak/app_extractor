@@ -16,7 +16,7 @@ class AppAboutPage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text('App Info')),
+      appBar: AppBar(title: const Text('App Info')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -101,23 +101,28 @@ class AppAboutPage extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: Container(
                       clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
                       height: 50.0,
                       width: 50.0,
 
                       child: Image.network(
                         'https://avatars.githubusercontent.com/u/65574961?v=4',
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset('assets/images/profile.jpg');
-                        },
+                        errorBuilder:
+                            (context, error, stackTrace) =>
+                                Image.asset('assets/images/profile.jpg'),
                         loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return ShimmerContainer(height: 20.0, width: 20.0);
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return const ShimmerContainer(
+                            height: 20.0,
+                            width: 20.0,
+                          );
                         },
                       ),
                     ),
-                    title: Text('Kartik Nayak'),
-                    subtitle: Text(gitProfile),
+                    title: const Text('Kartik Nayak'),
+                    subtitle: const Text(gitProfile),
                     subtitleTextStyle: TextStyle(color: colorScheme.primary),
                     trailing: IconButton(
                       onPressed: () {
@@ -126,13 +131,13 @@ class AppAboutPage extends StatelessWidget {
                           mode: LaunchMode.externalApplication,
                         );
                       },
-                      icon: Icon(Symbols.launch),
+                      icon: const Icon(Symbols.launch),
                     ),
                   ),
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Center(
               child: Text.rich(
                 style: TextStyle(
@@ -141,7 +146,7 @@ class AppAboutPage extends StatelessWidget {
                 ),
                 TextSpan(
                   children: [
-                    TextSpan(text: 'Made with '),
+                    const TextSpan(text: 'Made with '),
                     WidgetSpan(
                       child: Icon(
                         Symbols.favorite,
@@ -150,8 +155,8 @@ class AppAboutPage extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    TextSpan(text: ' in '),
-                    TextSpan(
+                    const TextSpan(text: ' in '),
+                    const TextSpan(
                       text: 'Bharat',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -162,7 +167,7 @@ class AppAboutPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
           ],
         ),
       ),

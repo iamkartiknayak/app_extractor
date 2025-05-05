@@ -6,10 +6,8 @@ class BuildShimmerList extends StatelessWidget {
   const BuildShimmerList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 12,
-      itemBuilder: (_, _) => ShimmerTile(),
-    );
-  }
+  Widget build(BuildContext context) => ListView.builder(
+    itemCount: 12,
+    itemBuilder: (_, _) => const ShimmerTile(),
+  );
 }

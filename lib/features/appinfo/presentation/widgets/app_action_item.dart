@@ -25,12 +25,12 @@ class AppActionItem extends StatelessWidget {
         child: InkWell(
           onTap: isActive ? onTap : null,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.0),
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(icon, color: !isActive ? inActiveColor : null),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   label,
                   style: TextStyle(

@@ -16,38 +16,36 @@ class AppInfoTile extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      customBorder: RoundedRectangleBorder(borderRadius: kBorderRadius),
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: value));
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$label has been copied to clipboard'),
-            duration: Duration(milliseconds: 800),
-          ),
-        );
-      },
-      child: Container(
-        height: 52.0,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: [
-            Icon(icon),
-            SizedBox(width: 16.0),
-            Expanded(child: Text(label)),
-            Expanded(
-              child: Text(
-                value,
-                style: TextStyle(fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.right,
-                maxLines: 2,
-              ),
-            ),
-          ],
+  Widget build(BuildContext context) => InkWell(
+    customBorder: RoundedRectangleBorder(borderRadius: kBorderRadius),
+    onTap: () {
+      Clipboard.setData(ClipboardData(text: value));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$label has been copied to clipboard'),
+          duration: const Duration(milliseconds: 800),
         ),
+      );
+    },
+    child: Container(
+      height: 52.0,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: [
+          Icon(icon),
+          const SizedBox(width: 16.0),
+          Expanded(child: Text(label)),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              maxLines: 2,
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }

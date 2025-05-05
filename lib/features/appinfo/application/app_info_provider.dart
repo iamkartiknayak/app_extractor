@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../helpers/box_helper.dart';
-import '../data/models/extracted_app_model.dart';
-import '../../../helpers/play_store_helper.dart';
-import '../data/models/cached_app_info_model.dart';
 import '../../../helpers/app_operations_helper.dart';
+import '../../../helpers/box_helper.dart';
+import '../../../helpers/play_store_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
-import '../../applist/application/applist_provider.dart';
 import '../../../settings/application/settings_provider.dart';
+import '../../applist/application/applist_provider.dart';
+import '../data/models/cached_app_info_model.dart';
+import '../data/models/extracted_app_model.dart';
 
 class AppInfoProvider extends ChangeNotifier {
   // public var (getters)
@@ -44,7 +44,9 @@ class AppInfoProvider extends ChangeNotifier {
 
   // public methods
   void init(BuildContext context) {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      return;
+    }
 
     _context = context;
     _isInitialized = true;
@@ -52,7 +54,9 @@ class AppInfoProvider extends ChangeNotifier {
     _appIUEvents = AppIUEvents();
     _appIUEvents.appEvents.listen((event) async {
       if (event.type == IUEventType.uninstalled) {
-        if (!_context.mounted) return;
+        if (!_context.mounted) {
+          return;
+        }
 
         _context.read<ApplistProvider>().removeApp(event.packageName);
         if (_selectedAppId == event.packageName) {
@@ -60,7 +64,9 @@ class AppInfoProvider extends ChangeNotifier {
         }
       }
 
-      if (!_context.mounted) return;
+      if (!_context.mounted) {
+        return;
+      }
       _context.read<ApplistProvider>().refreshList();
     });
   }
@@ -85,7 +91,9 @@ class AppInfoProvider extends ChangeNotifier {
       _getTechStack(app),
       _getPlayStoreAvailability(app.packageName),
     ]).then((_) {
-      if (!_isCalculating) return;
+      if (!_isCalculating) {
+        return;
+      }
       _cacheAppInfo(app);
       notifyListeners();
     });
@@ -96,7 +104,9 @@ class AppInfoProvider extends ChangeNotifier {
     required Application app,
     bool showSnackBar = true,
   }) async {
-    if (_extractedAppsList.any((e) => e.packageName == app.packageName)) return;
+    if (_extractedAppsList.any((e) => e.packageName == app.packageName)) {
+      return;
+    }
     late final String appSize;
     late final String? extractedPath;
 
@@ -127,7 +137,9 @@ class AppInfoProvider extends ChangeNotifier {
       );
     }
 
-    if (extractedPath == null) return;
+    if (extractedPath == null) {
+      return;
+    }
 
     _extractedAppsList.add(
       ExtractedAppModel(
@@ -214,7 +226,9 @@ class AppInfoProvider extends ChangeNotifier {
   }
 
   void _cacheAppInfo(Application app) {
-    if (_cachedAppInfoMap.containsKey(app.packageName)) return;
+    if (_cachedAppInfoMap.containsKey(app.packageName)) {
+      return;
+    }
 
     _cachedAppInfoMap[app.packageName] = CachedAppInfoModel(
       appSize: _apkSize,

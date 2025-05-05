@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../../helpers/box_helper.dart';
 import '../../../helpers/snackbar_helper.dart';
-import '../../appinfo/application/app_info_provider.dart';
 import '../../../settings/application/settings_provider.dart';
+import '../../appinfo/application/app_info_provider.dart';
 
 class ApplistProvider extends ChangeNotifier {
   // public var (getters)
@@ -46,8 +46,10 @@ class ApplistProvider extends ChangeNotifier {
   Timer? _searchdebounce;
 
   // public methods
-  void init(BuildContext context) async {
-    if (_isInitialized) return;
+  Future<void> init(BuildContext context) async {
+    if (_isInitialized) {
+      return;
+    }
 
     _context = context;
     _favoriteAppsIds = BoxHelper.instance.getFavoriteAppsIdList();
@@ -120,7 +122,9 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void updateSearchResult(String query) {
-    if (_searchdebounce?.isActive ?? false) _searchdebounce!.cancel();
+    if (_searchdebounce?.isActive ?? false) {
+      _searchdebounce!.cancel();
+    }
     final searchList = _getCurrentAppList(_currentIndex);
 
     _searchdebounce = Timer(const Duration(milliseconds: 400), () {
@@ -136,17 +140,21 @@ class ApplistProvider extends ChangeNotifier {
   }
 
   void updateSelectedItemIndexList(int index) {
-    if (!longPress) _longPress = true;
+    if (!longPress) {
+      _longPress = true;
+    }
 
     _selectedItemIndexList.contains(index)
         ? _selectedItemIndexList.remove(index)
         : _selectedItemIndexList.add(index);
 
-    if (_selectedItemIndexList.isEmpty) _longPress = false;
+    if (_selectedItemIndexList.isEmpty) {
+      _longPress = false;
+    }
     notifyListeners();
   }
 
-  void batchAppExtract(BuildContext context) async {
+  Future<void> batchAppExtract(BuildContext context) async {
     for (final itemIndex in _selectedItemIndexList) {
       debugPrint('Extracting item $itemIndex');
       await context.read<AppInfoProvider>().extractApk(
@@ -163,7 +171,7 @@ class ApplistProvider extends ChangeNotifier {
         appName: '',
         successMessage: 'All selected apps have been extracted successfully',
         errorMessage: 'Failed to extract all APKs',
-        duration: Duration(milliseconds: 2500),
+        duration: const Duration(milliseconds: 2500),
       );
     }
 
@@ -176,7 +184,7 @@ class ApplistProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void batchAppDelete(BuildContext context) async {
+  Future<void> batchAppDelete(BuildContext context) async {
     final sortedIndices = [..._selectedItemIndexList]..sort((a, b) => b - a);
     for (final itemIndex in sortedIndices) {
       await context.read<AppInfoProvider>().deleteExtractedApp(
@@ -192,7 +200,7 @@ class ApplistProvider extends ChangeNotifier {
         appName: '',
         successMessage: 'All selected apps have been deleted successfully',
         errorMessage: 'Failed to delete all APKs',
-        duration: Duration(milliseconds: 2500),
+        duration: const Duration(milliseconds: 2500),
       );
     }
     resetSelection();
@@ -280,7 +288,9 @@ class ApplistProvider extends ChangeNotifier {
         onlyAppsWithLaunchIntent: hideBackgroundApps,
       );
       for (final app in appsWithIcons) {
-        if (_iconCache.containsKey(app.packageName)) continue;
+        if (_iconCache.containsKey(app.packageName)) {
+          continue;
+        }
         _iconCache[app.packageName] = (app as ApplicationWithIcon).icon;
       }
       _fetchingData = false;
@@ -288,7 +298,7 @@ class ApplistProvider extends ChangeNotifier {
       notifyListeners();
     });
 
-    var apps = await DeviceApps.getInstalledApplications(
+    final apps = await DeviceApps.getInstalledApplications(
       includeAppIcons: false,
       includeSystemApps: includeSystemApps,
       onlyAppsWithLaunchIntent: hideBackgroundApps,
@@ -298,7 +308,9 @@ class ApplistProvider extends ChangeNotifier {
       (a, b) => a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
     );
 
-    if (includeSystemApps) apps.retainWhere((app) => app.systemApp);
+    if (includeSystemApps) {
+      apps.retainWhere((app) => app.systemApp);
+    }
 
     if (includeSystemApps) {
       if (_runnableSystemAppsList.isEmpty && hideBackgroundApps) {
@@ -308,7 +320,9 @@ class ApplistProvider extends ChangeNotifier {
       }
     }
 
-    if (_iconCache.isNotEmpty) _fetchingData = false;
+    if (_iconCache.isNotEmpty) {
+      _fetchingData = false;
+    }
 
     assignList(apps);
     notifyListeners();

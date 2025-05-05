@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../features/applist/application/applist_provider.dart';
 import './app_icon.dart';
 import './selection_indicator.dart';
-import '../features/applist/application/applist_provider.dart';
 
 class AppTile extends StatelessWidget {
   const AppTile({
@@ -32,26 +32,26 @@ class AppTile extends StatelessWidget {
 
     return Selector<ApplistProvider, bool>(
       selector: (_, p1) => p1.selectedItemIndexList.contains(index),
-      builder: (_, isSelected, _) {
-        return ListTile(
-          onTap:
-              longPress
-                  ? () => appListProvider.updateSelectedItemIndexList(index)
-                  : onTap,
-          onLongPress: () => appListProvider.updateSelectedItemIndexList(index),
-          leading:
-              isSelected
-                  ? SelectionIndicator()
-                  : AppIcon(packageName: packageName),
-          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(
-            subTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+      builder:
+          (_, isSelected, _) => ListTile(
+            onTap:
+                longPress
+                    ? () => appListProvider.updateSelectedItemIndexList(index)
+                    : onTap,
+            onLongPress:
+                () => appListProvider.updateSelectedItemIndexList(index),
+            leading:
+                isSelected
+                    ? const SelectionIndicator()
+                    : AppIcon(packageName: packageName),
+            title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+            subtitle: Text(
+              subTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: longPress ? null : trailing,
           ),
-          trailing: longPress ? null : trailing,
-        );
-      },
     );
   }
 }

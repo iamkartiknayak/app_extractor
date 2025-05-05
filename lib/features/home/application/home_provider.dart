@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../applist/application/applist_provider.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
+import '../../applist/application/applist_provider.dart';
 import '../../applist/presentation/pages/app_list_page.dart';
 
 class NavbarIndexProvider extends ChangeNotifier {
@@ -13,10 +13,10 @@ class NavbarIndexProvider extends ChangeNotifier {
   // private var
   int _currentIndex = 0;
   final List<Widget> _pages = [
-    AppListPage(),
-    AppListPage(),
-    AppListPage(),
-    SettingsPage(),
+    const AppListPage(),
+    const AppListPage(),
+    const AppListPage(),
+    const SettingsPage(),
   ];
 
   // public methods

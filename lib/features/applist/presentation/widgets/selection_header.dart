@@ -21,21 +21,20 @@ class SelectionHeader extends StatelessWidget {
     final appListProvider = context.read<ApplistProvider>();
 
     return Builder(
-      builder: (_) {
-        return AppBar(
-          title: Text('$selectedIndexListLength selected'),
-          actions: [
-            IconButton(
-              onPressed: () => appListProvider.batchAppExtract(context),
-              icon: Icon(searchEnabled ? Symbols.close : Symbols.unarchive),
-            ),
-            IconButton(
-              onPressed: appListProvider.resetSelection,
-              icon: Icon(searchEnabled ? Symbols.close : Symbols.cancel),
-            ),
-          ],
-        );
-      },
+      builder:
+          (_) => AppBar(
+            title: Text('$selectedIndexListLength selected'),
+            actions: [
+              IconButton(
+                onPressed: () => appListProvider.batchAppExtract(context),
+                icon: Icon(searchEnabled ? Symbols.close : Symbols.unarchive),
+              ),
+              IconButton(
+                onPressed: appListProvider.resetSelection,
+                icon: Icon(searchEnabled ? Symbols.close : Symbols.cancel),
+              ),
+            ],
+          ),
     );
   }
 }

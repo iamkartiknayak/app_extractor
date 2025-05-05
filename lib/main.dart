@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import './helpers/theme_helper.dart';
-import './helpers/box_helper.dart';
-import 'settings/application/settings_provider.dart';
+import './features/appinfo/application/app_info_provider.dart';
+import './features/applist/application/applist_provider.dart';
 import './features/home/application/home_provider.dart';
 import './features/home/presentation/pages/home_page.dart';
-import './features/applist/application/applist_provider.dart';
-import './features/appinfo/application/app_info_provider.dart';
+import './helpers/box_helper.dart';
+import './helpers/theme_helper.dart';
+import 'settings/application/settings_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await BoxHelper.instance.init();
-  runApp(AppExtractor());
+  runApp(const AppExtractor());
 }
 
 class AppExtractor extends StatelessWidget {
@@ -58,7 +58,7 @@ class AppExtractor extends StatelessWidget {
           child: MaterialApp(
             title: 'App Extractor',
             debugShowCheckedModeBanner: false,
-            home: HomePage(),
+            home: const HomePage(),
             theme: ThemeData(
               colorScheme: lightColorScheme,
               navigationBarTheme: NavigationBarThemeData(

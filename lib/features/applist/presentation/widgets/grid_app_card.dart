@@ -11,13 +11,11 @@ class GridAppCard extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return AppCard(
-      app: app,
-      onTap: () => AppOperationsHelper.navigateToAppInfo(context, app),
-      title: app.appName,
-      subTitle: app.packageName,
-      index: index,
-    );
-  }
+  Widget build(BuildContext context) => AppCard(
+    app: app,
+    onTap: () => AppOperationsHelper.navigateToAppInfo(context, app),
+    title: app.appName,
+    subTitle: app.packageName,
+    index: index,
+  );
 }

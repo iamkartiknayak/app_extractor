@@ -5,11 +5,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../features/appinfo/data/models/extracted_app_model.dart';
 
 class BoxHelper {
+  BoxHelper._internal();
   static final BoxHelper _instance = BoxHelper._internal();
   late final Box<dynamic> _appBox;
   late final Box<dynamic> _settingsBox;
-
-  BoxHelper._internal();
 
   static BoxHelper get instance => _instance;
 

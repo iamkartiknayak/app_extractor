@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
-import '../pages/extracted_apps_page.dart';
 import '../../application/applist_provider.dart';
+import '../pages/extracted_apps_page.dart';
 import 'search_field.dart';
 
 class DefaultHeader extends StatelessWidget {
@@ -22,27 +22,27 @@ class DefaultHeader extends StatelessWidget {
   final int currentAppListLength;
 
   @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title:
-          searchEnabled
-              ? SearchField(appList: currentAppList)
-              : Text('$title (${currentAppList.length})'),
-      actionsPadding: const EdgeInsets.only(right: 24.0),
-      actions: [
+  Widget build(BuildContext context) => AppBar(
+    title:
+        searchEnabled
+            ? SearchField(appList: currentAppList)
+            : Text('$title (${currentAppList.length})'),
+    actionsPadding: const EdgeInsets.only(right: 24.0),
+    actions: [
+      IconButton(
+        onPressed: () => context.read<ApplistProvider>().toggleSearch(),
+        icon: Icon(searchEnabled ? Symbols.close : Symbols.search),
+      ),
+      if (!searchEnabled)
         IconButton(
-          onPressed: () => context.read<ApplistProvider>().toggleSearch(),
-          icon: Icon(searchEnabled ? Symbols.close : Symbols.search),
+          onPressed:
+              () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ExtractedAppsPage(),
+                ),
+              ),
+          icon: Icon(searchEnabled ? Symbols.close : Symbols.inventory_2),
         ),
-        if (!searchEnabled)
-          IconButton(
-            onPressed:
-                () => Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (_) => ExtractedAppsPage())),
-            icon: Icon(searchEnabled ? Symbols.close : Symbols.inventory_2),
-          ),
-      ],
-    );
-  }
+    ],
+  );
 }

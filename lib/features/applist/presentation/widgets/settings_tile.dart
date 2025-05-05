@@ -20,19 +20,17 @@ class SettingsTile extends StatelessWidget {
   final Widget? trailing;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap:
-          navigateTo != null
-              ? () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => navigateTo!),
-              )
-              : onTap,
-      leading: Icon(icon),
-      title: title,
-      subtitle: subTitle,
-      trailing: navigateTo != null ? Icon(Symbols.chevron_right) : trailing,
-    );
-  }
+  Widget build(BuildContext context) => ListTile(
+    onTap:
+        navigateTo != null
+            ? () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (_) => navigateTo!),
+            )
+            : onTap,
+    leading: Icon(icon),
+    title: title,
+    subtitle: subTitle,
+    trailing: navigateTo != null ? const Icon(Symbols.chevron_right) : trailing,
+  );
 }
