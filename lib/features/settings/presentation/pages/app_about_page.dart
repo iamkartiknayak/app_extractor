@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../common/shimmer_container.dart';
 import '../widgets/section_card.dart';
 
 class AppAboutPage extends StatelessWidget {
@@ -114,10 +113,7 @@ class AppAboutPage extends StatelessWidget {
                           if (loadingProgress == null) {
                             return child;
                           }
-                          return const ShimmerContainer(
-                            height: 20.0,
-                            width: 20.0,
-                          );
+                          return Image.asset('assets/images/profile.jpg');
                         },
                       ),
                     ),
