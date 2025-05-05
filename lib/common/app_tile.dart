@@ -43,8 +43,12 @@ class AppTile extends StatelessWidget {
               isSelected
                   ? SelectionIndicator()
                   : AppIcon(packageName: packageName),
-          title: Text(title),
-          subtitle: Text(subTitle),
+          title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text(
+            subTitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: longPress ? null : trailing,
         );
       },

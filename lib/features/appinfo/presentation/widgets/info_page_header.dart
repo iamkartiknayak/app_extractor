@@ -32,6 +32,8 @@ class InfoPageHeader extends StatelessWidget {
               children: [
                 Text(
                   app.appName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(app.packageName, overflow: TextOverflow.ellipsis),
