@@ -15,7 +15,7 @@ class SettingsProvider extends ChangeNotifier {
 
   // private Box reference
   SettingsProvider() {
-    _settingsBox = BoxHelper.instance.appBox;
+    _settingsBox = BoxHelper.instance.settingsBox;
     _gridView = _settingsBox.get('gridView', defaultValue: false);
     _defaultApkName = _settingsBox.get(
       'defaultApkName',
