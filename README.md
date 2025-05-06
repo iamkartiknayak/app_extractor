@@ -1,4 +1,4 @@
-# app_extractor
+# dexify
 
 A new Flutter project.
 

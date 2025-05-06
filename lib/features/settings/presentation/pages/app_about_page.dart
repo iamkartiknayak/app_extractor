@@ -47,17 +47,10 @@ class AppAboutPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('APK Extractor Pro', style: textTheme.titleLarge),
+                        Text('Dexify', style: textTheme.titleLarge),
                         const SizedBox(height: 4),
                         Text(
-                          'Version 2.3.1 (Build 230)',
-                          style: textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Installed: April 2, 2025',
+                          'Version 1.0.0',
                           style: textTheme.bodyMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
@@ -123,7 +116,7 @@ class AppAboutPage extends StatelessWidget {
                     trailing: IconButton(
                       onPressed: () {
                         launchUrl(
-                          Uri.parse('https://$gitProfile/app_extractor'),
+                          Uri.parse('https://$gitProfile/dexify'),
                           mode: LaunchMode.externalApplication,
                         );
                       },

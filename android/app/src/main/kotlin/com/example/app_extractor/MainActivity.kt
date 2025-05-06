@@ -1,4 +1,4 @@
-package com.example.app_extractor
+package com.iamkartiknayak.dexify
 
 import io.flutter.embedding.android.FlutterActivity
 

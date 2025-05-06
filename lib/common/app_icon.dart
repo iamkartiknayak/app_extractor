@@ -1,8 +1,8 @@
-import 'package:app_extractor/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../features/applist/application/applist_provider.dart';
 
 class AppIcon extends StatelessWidget {
