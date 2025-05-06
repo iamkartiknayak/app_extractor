@@ -20,29 +20,25 @@ class AppAboutPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 8.0,
           children: [
             SectionCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8.0,
+                vertical: 16.0,
+              ),
               child: Row(
                 children: [
-                  Container(
-                    width: 64.0,
+                  SizedBox(
                     height: 64.0,
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'APK',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: colorScheme.onPrimaryContainer,
-                        ),
-                      ),
+                    width: 64.0,
+                    child: Image.asset(
+                      'assets/icons/icon.png',
+                      height: 64.0,
+                      width: 64.0,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12.0),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,14 +57,26 @@ class AppAboutPage extends StatelessWidget {
                 ],
               ),
             ),
-
-            const SizedBox(height: 16),
+            SectionCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Description', style: textTheme.titleMedium),
+                  Text(
+                    'Dexify is a modern, ad-free APK extractor with Material 3 design, supporting app export, system app viewing, and grid/list layouts',
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      height: 1.8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SectionCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Features', style: textTheme.titleMedium),
-                  const SizedBox(height: 8),
                   Text(
                     '- View app info: version, build platform and more.\n'
                     '- Extract and backup APK files with ease.\n'
@@ -82,7 +90,6 @@ class AppAboutPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
             SectionCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
