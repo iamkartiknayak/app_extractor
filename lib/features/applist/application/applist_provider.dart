@@ -288,10 +288,12 @@ class ApplistProvider extends ChangeNotifier {
         onlyAppsWithLaunchIntent: hideBackgroundApps,
       );
       for (final app in appsWithIcons) {
-        if (_iconCache.containsKey(app.packageName)) {
+        final appIcon = (app as ApplicationWithIcon).icon;
+        if (_iconCache.containsKey(app.packageName) &&
+            _iconCache[app.packageName] == appIcon) {
           continue;
         }
-        _iconCache[app.packageName] = (app as ApplicationWithIcon).icon;
+        _iconCache[app.packageName] = appIcon;
       }
       _fetchingData = false;
       BoxHelper.instance.saveIconCache(_iconCache);
