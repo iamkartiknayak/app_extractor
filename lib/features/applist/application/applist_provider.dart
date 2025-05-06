@@ -295,7 +295,6 @@ class ApplistProvider extends ChangeNotifier {
         }
         _iconCache[app.packageName] = appIcon;
       }
-      _fetchingData = false;
       BoxHelper.instance.saveIconCache(_iconCache);
       notifyListeners();
     });
@@ -322,10 +321,11 @@ class ApplistProvider extends ChangeNotifier {
       }
     }
 
-    if (_iconCache.isNotEmpty) {
-      _fetchingData = false;
+    if (_iconCache.isEmpty) {
+      await Future<void>.delayed(const Duration(seconds: 2));
     }
 
+    _fetchingData = false;
     assignList(apps);
     notifyListeners();
   }
