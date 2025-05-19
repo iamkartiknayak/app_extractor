@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() => runApp(const Dexify());
+import './features/home/presentation/pages/home_page.dart';
+
+void main() => runApp(const ProviderScope(child: Dexify()));
 
 class Dexify extends StatelessWidget {
   const Dexify({super.key});
@@ -9,6 +12,6 @@ class Dexify extends StatelessWidget {
   Widget build(final BuildContext context) => const MaterialApp(
     title: 'Dexify',
     debugShowCheckedModeBanner: false,
-    home: Scaffold(body: Center(child: Text('Dexify'))),
+    home: HomePage(),
   );
 }
