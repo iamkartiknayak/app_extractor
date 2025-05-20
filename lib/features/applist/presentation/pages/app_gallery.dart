@@ -1,11 +1,13 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 import '../../../appinfo/application/favorite_apps_provider.dart';
 import '../../application/installed_apps_provider.dart';
 import '../../application/system_apps_provider.dart';
 import '../widgets/build_app_list.dart';
+import './extracted_app_list_page.dart';
 
 enum AppGalleryType { installed, system, favorites }
 
@@ -38,7 +40,21 @@ class AppGallery extends ConsumerWidget {
     final apps = ref.watch(appProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text('$title (${apps.length})')),
+      appBar: AppBar(
+        title: Text('$title (${apps.length})'),
+        actionsPadding: const EdgeInsets.only(right: 24.0),
+        actions: [
+          IconButton(
+            onPressed:
+                () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const ExtractedAppListPage(),
+                  ),
+                ),
+            icon: const Icon(Symbols.inventory_2),
+          ),
+        ],
+      ),
       body: Builder(builder: (final context) => BuildAppList(apps: apps)),
     );
   }
