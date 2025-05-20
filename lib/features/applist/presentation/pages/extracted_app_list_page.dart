@@ -16,6 +16,7 @@ class ExtractedAppListPage extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
+    final exAppNotifier = ref.read(extractedAppsProvider.notifier);
     final longPress = ref.watch(longPressProvider);
     final extractedApps =
         ref.watch(extractedAppsProvider).extractedApps.values.toList();
@@ -23,7 +24,10 @@ class ExtractedAppListPage extends ConsumerWidget {
     return Scaffold(
       appBar:
           longPress
-              ? SelectionAppBar(onPressed: () {}, icon: Symbols.delete_forever)
+              ? SelectionAppBar(
+                onPressed: () => exAppNotifier.batchDeleteApks(ref),
+                icon: Symbols.delete_forever,
+              )
               : DefaultAppBar(
                 title: 'Extracted Apps',
                 count: extractedApps.length,

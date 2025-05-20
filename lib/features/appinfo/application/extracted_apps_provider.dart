@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/helpers/app_utils.dart';
 import '../../../core/helpers/box_helper.dart';
+import '../../applist/application/long_press_provider.dart';
 import '../data/models/extracted_app_model.dart';
 
 final extractedAppsProvider =
@@ -96,6 +99,45 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
         extractingApps: {...state.extractingApps}..remove(app.packageName),
       );
     }
+  }
+
+  void batchExtractApks(final WidgetRef ref, final List<Application> apps) {
+    final indexList = ref.read(selectedItemsProvider);
+    resetSelection(ref);
+    for (final index in indexList) {
+      extractApk(app: apps[index]);
+    }
+  }
+
+  Future<void> batchDeleteApks(
+    final WidgetRef ref, {
+    final bool showSnackbar = true,
+  }) async {
+    final selectedIndexes = ref.read(selectedItemsProvider);
+    resetSelection(ref);
+
+    final apps = state.extractedApps.values.toList();
+    final updatedMap = {...state.extractedApps};
+
+    await Future.wait(
+      selectedIndexes.map((final index) async {
+        if (index >= apps.length) {
+          return;
+        }
+
+        final app = apps[index];
+        final file = File(app.appPath);
+
+        if (await file.exists()) {
+          await file.delete();
+        }
+
+        updatedMap.remove(app.packageName);
+      }),
+    );
+
+    state = state.copyWith(extractedApps: updatedMap);
+    await BoxHelper.instance.saveExtractedApps(updatedMap.values.toList());
   }
 
   String? getExtractedApkPath(final String packageName) =>

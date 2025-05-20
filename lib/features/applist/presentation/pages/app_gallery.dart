@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../appinfo/application/extracted_apps_provider.dart';
 import '../../../appinfo/application/favorite_apps_provider.dart';
 import '../../application/installed_apps_provider.dart';
 import '../../application/long_press_provider.dart';
@@ -20,6 +21,7 @@ class AppGallery extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
+    final exAppNotifier = ref.read(extractedAppsProvider.notifier);
     final longPress = ref.watch(longPressProvider);
 
     late final Provider<List<Application>> appProvider;
@@ -46,7 +48,10 @@ class AppGallery extends ConsumerWidget {
     return Scaffold(
       appBar:
           longPress
-              ? SelectionAppBar(onPressed: () {}, icon: Symbols.unarchive)
+              ? SelectionAppBar(
+                onPressed: () => exAppNotifier.batchExtractApks(ref, apps),
+                icon: Symbols.unarchive,
+              )
               : DefaultAppBar(title: title, count: apps.length),
       body: Builder(builder: (final context) => BuildAppList(apps: apps)),
     );
