@@ -14,7 +14,7 @@ class HomePage extends ConsumerWidget {
     final pages = ref.read(navbarPages);
 
     return Scaffold(
-      body: Center(child: pages[currentIndex]),
+      body: pages[currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
         onDestinationSelected: ref.read(navbarProvider.notifier).updateIndex,
