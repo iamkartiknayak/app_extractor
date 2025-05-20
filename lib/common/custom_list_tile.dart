@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
 class CustomListTile extends StatelessWidget {
   const CustomListTile({
     super.key,
     this.onTap,
+    this.onLongPress,
+    required this.leading,
     required this.title,
     required this.subTitle,
-    required this.trailing,
+    this.trailing,
   });
 
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final Widget leading;
   final String title;
   final String subTitle;
-  final Widget trailing;
+  final Widget? trailing;
 
   @override
   Widget build(final BuildContext context) => Card(
@@ -23,11 +26,9 @@ class CustomListTile extends StatelessWidget {
     color: Theme.of(context).colorScheme.surfaceTint.withValues(alpha: 0.04),
     child: ListTile(
       onTap: onTap,
+      onLongPress: onLongPress,
       contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
-      leading: Icon(
-        Symbols.android,
-        color: Theme.of(context).colorScheme.primary,
-      ),
+      leading: leading,
       title: _TileText(text: title),
       subtitle: _TileText(text: subTitle),
       trailing: trailing,
