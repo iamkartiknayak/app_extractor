@@ -20,7 +20,7 @@ final navbarPages = Provider<List<Widget>>(
   (final ref) => const [
     AppGallery(AppGalleryType.installed),
     AppGallery(AppGalleryType.system),
-    Text('Favorite Apps Page'),
+    AppGallery(AppGalleryType.favorites),
     Text('Settings Page'),
   ],
 );
