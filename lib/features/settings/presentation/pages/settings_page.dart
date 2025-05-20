@@ -7,6 +7,7 @@ import '../widgets/default_file_name_dialog.dart';
 import '../widgets/delete_extacted_apk_tile.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/side_header.dart';
+import './app_about_page.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -61,6 +62,12 @@ class SettingsPage extends ConsumerWidget {
               value: gridView,
               onChanged: (_) => notifier.toggleGridView(),
             ),
+          ),
+          const SideHeader(header: 'About'),
+          const SettingsTile(
+            icon: Symbols.info,
+            title: Text('App Info'),
+            navigateTo: AppAboutPage(),
           ),
         ],
       ),
