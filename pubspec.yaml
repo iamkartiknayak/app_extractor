@@ -38,6 +38,7 @@ dependencies:
   material_symbols_icons: ^4.2815.0
   dynamic_color: ^1.7.0
   device_apps: ^2.2.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
