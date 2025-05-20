@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
   material_symbols_icons: ^4.2815.0
+  dynamic_color: ^1.7.0
 
 dev_dependencies:
   flutter_test:
