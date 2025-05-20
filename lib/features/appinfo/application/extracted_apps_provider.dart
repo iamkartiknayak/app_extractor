@@ -2,6 +2,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/helpers/app_utils.dart';
+import '../../../core/helpers/box_helper.dart';
 import '../data/models/extracted_app_model.dart';
 
 final extractedAppsProvider =
@@ -35,7 +36,7 @@ class ExtractedAppsState {
 class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
   @override
   ExtractedAppsState build() {
-    final extractedAppList = <ExtractedAppModel>[];
+    final extractedAppList = BoxHelper.instance.getExtractedAppsList();
     final extractedMap = {
       for (final app in extractedAppList) app.packageName: app,
     };
@@ -87,6 +88,9 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
       };
 
       state = state.copyWith(extractedApps: newExtractedApps);
+      await BoxHelper.instance.saveExtractedApps(
+        newExtractedApps.values.toList(),
+      );
     } finally {
       state = state.copyWith(
         extractingApps: {...state.extractingApps}..remove(app.packageName),
