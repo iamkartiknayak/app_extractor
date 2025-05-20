@@ -20,6 +20,9 @@ class SettingsPage extends ConsumerWidget {
     final showNonLaunchable = ref.watch(
       settingsProvider.select((final s) => s.showNonLaunchable),
     );
+    final gridView = ref.watch(
+      settingsProvider.select((final s) => s.gridView),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -48,6 +51,15 @@ class SettingsPage extends ConsumerWidget {
             trailing: Switch(
               value: showNonLaunchable,
               onChanged: (final val) => notifier.toggleNonLaunchable(val, ref),
+            ),
+          ),
+          const SideHeader(header: 'Customization'),
+          SettingsTile(
+            icon: Symbols.grid_view,
+            title: const Text('Grid layout'),
+            trailing: Switch(
+              value: gridView,
+              onChanged: (_) => notifier.toggleGridView(),
             ),
           ),
         ],

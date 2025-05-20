@@ -5,9 +5,11 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import '../../../appinfo/application/extracted_apps_provider.dart';
 import '../../../appinfo/application/favorite_apps_provider.dart';
+import '../../../settings/application/settings_provider.dart';
 import '../../application/installed_apps_provider.dart';
 import '../../application/long_press_provider.dart';
 import '../../application/system_apps_provider.dart';
+import '../widgets/build_app_grid.dart';
 import '../widgets/build_app_list.dart';
 import '../widgets/default_app_bar.dart';
 import '../widgets/selection_app_bar.dart';
@@ -23,6 +25,9 @@ class AppGallery extends ConsumerWidget {
   Widget build(final BuildContext context, final WidgetRef ref) {
     final exAppNotifier = ref.read(extractedAppsProvider.notifier);
     final longPress = ref.watch(longPressProvider);
+    final gridView = ref.watch(
+      settingsProvider.select((final s) => s.gridView),
+    );
 
     late final Provider<List<Application>> appProvider;
     late String title;
@@ -53,7 +58,7 @@ class AppGallery extends ConsumerWidget {
                 icon: Symbols.unarchive,
               )
               : DefaultAppBar(title: title, count: apps.length),
-      body: Builder(builder: (final context) => BuildAppList(apps: apps)),
+      body: gridView ? BuildAppGrid(apps: apps) : BuildAppList(apps: apps),
     );
   }
 }
