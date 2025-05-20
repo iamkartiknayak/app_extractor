@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../common/custom_list_tile.dart';
 import '../../../appinfo/application/extracted_apps_provider.dart';
 
 class ExtractedAppListPage extends ConsumerWidget {
@@ -20,31 +21,18 @@ class ExtractedAppListPage extends ConsumerWidget {
         itemBuilder: (_, final index) {
           final app = extractedApps[index];
 
-          return Card(
-            elevation: 0,
-            clipBehavior: Clip.antiAlias,
-            margin: EdgeInsets.zero,
-            color: Theme.of(
-              context,
-            ).colorScheme.surfaceTint.withValues(alpha: 0.04),
-            child: ListTile(
-              contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
-              leading: Icon(
-                Symbols.android,
+          return CustomListTile(
+            title: app.appName,
+            subTitle: app.appSize,
+            trailing: IconButton(
+              onPressed: () {
+                SharePlus.instance.share(
+                  ShareParams(files: [XFile(app.appPath)]),
+                );
+              },
+              icon: Icon(
+                Symbols.share,
                 color: Theme.of(context).colorScheme.primary,
-              ),
-              title: Text(app.appName),
-              subtitle: Text(app.appSize),
-              trailing: IconButton(
-                onPressed: () {
-                  SharePlus.instance.share(
-                    ShareParams(files: [XFile(app.appPath)]),
-                  );
-                },
-                icon: Icon(
-                  Symbols.share,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
               ),
             ),
           );
