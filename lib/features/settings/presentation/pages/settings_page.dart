@@ -13,8 +13,12 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
+    final notifier = ref.read(settingsProvider.notifier);
     final defaultApkName = ref.watch(
       settingsProvider.select((final s) => s.defaultApkName),
+    );
+    final showNonLaunchable = ref.watch(
+      settingsProvider.select((final s) => s.showNonLaunchable),
     );
 
     return Scaffold(
@@ -36,6 +40,15 @@ class SettingsPage extends ConsumerWidget {
             icon: Symbols.save_as,
             title: const Text('Default filename for extracted APKs'),
             subTitle: Text(defaultApkName),
+          ),
+          SettingsTile(
+            icon: Symbols.settings_applications,
+            title: const Text('Show non-launchable apps'),
+            subTitle: const Text('Includes system background apps'),
+            trailing: Switch(
+              value: showNonLaunchable,
+              onChanged: (final val) => notifier.toggleNonLaunchable(val, ref),
+            ),
           ),
         ],
       ),

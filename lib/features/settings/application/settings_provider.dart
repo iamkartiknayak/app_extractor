@@ -5,15 +5,21 @@ final settingsProvider = NotifierProvider<SettingsNotifier, SettingsModel>(
 );
 
 class SettingsModel {
-  const SettingsModel({required this.defaultApkName});
+  const SettingsModel({
+    required this.showNonLaunchable,
+    required this.defaultApkName,
+  });
 
+  final bool showNonLaunchable;
   final String defaultApkName;
 
   SettingsModel copyWith({
-    final bool? gridView,
     final bool? showNonLaunchable,
     final String? defaultApkName,
-  }) => SettingsModel(defaultApkName: defaultApkName ?? this.defaultApkName);
+  }) => SettingsModel(
+    showNonLaunchable: showNonLaunchable ?? this.showNonLaunchable,
+    defaultApkName: defaultApkName ?? this.defaultApkName,
+  );
 }
 
 class SettingsNotifier extends Notifier<SettingsModel> {
@@ -21,11 +27,18 @@ class SettingsNotifier extends Notifier<SettingsModel> {
   SettingsModel build() {
     final defaultApkName = 'name_version.apk';
 
-    return SettingsModel(defaultApkName: defaultApkName);
+    return SettingsModel(
+      showNonLaunchable: false,
+      defaultApkName: defaultApkName,
+    );
   }
 
   void setApkName(final String? value) {
     final name = value ?? 'name_version.apk';
     state = state.copyWith(defaultApkName: name);
+  }
+
+  void toggleNonLaunchable(final bool value, final WidgetRef ref) {
+    state = state.copyWith(showNonLaunchable: value);
   }
 }
