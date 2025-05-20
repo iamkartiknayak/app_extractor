@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../../appinfo/presentation/pages/app_info_page.dart';
+
 class BuildAppList extends ConsumerWidget {
   const BuildAppList({super.key, required this.apps});
 
@@ -23,7 +25,13 @@ class BuildAppList extends ConsumerWidget {
               context,
             ).colorScheme.surfaceTint.withValues(alpha: 0.04),
             child: ListTile(
-              onTap: () {},
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) => AppInfoPage(app: app),
+                    ),
+                  ),
               contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
               leading: Icon(
                 Symbols.android,
