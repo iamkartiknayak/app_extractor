@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../../core/helpers/app_utils.dart';
 import '../../../core/helpers/box_helper.dart';
 import '../../applist/application/long_press_provider.dart';
+import '../../settings/application/settings_provider.dart';
 import '../data/models/extracted_app_model.dart';
 
 final extractedAppsProvider =
@@ -61,7 +62,7 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
     );
 
     try {
-      final defaultApkName = 'name_version.apk';
+      final defaultApkName = ref.read(settingsProvider).defaultApkName;
       final apkFileName = AppUtils.generateApkFileName(app, defaultApkName);
 
       final results = await Future.wait([
