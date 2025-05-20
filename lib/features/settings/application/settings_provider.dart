@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../../core/helpers/box_helper.dart';
 
 final settingsProvider = NotifierProvider<SettingsNotifier, SettingsModel>(
   () => SettingsNotifier(),
@@ -27,20 +30,29 @@ class SettingsModel {
 }
 
 class SettingsNotifier extends Notifier<SettingsModel> {
+  late final Box<dynamic> _settingsBox;
+
   @override
   SettingsModel build() {
-    final defaultApkName = 'name_version.apk';
+    _settingsBox = BoxHelper.instance.settingsBox;
+
+    final gridView = _settingsBox.get('gridView', defaultValue: false) as bool;
+    final defaultApkName = _settingsBox.get(
+      'defaultApkName',
+      defaultValue: 'name_version.apk',
+    );
 
     return SettingsModel(
       showNonLaunchable: false,
       defaultApkName: defaultApkName,
-      gridView: false,
+      gridView: gridView,
     );
   }
 
   void setApkName(final String? value) {
     final name = value ?? 'name_version.apk';
     state = state.copyWith(defaultApkName: name);
+    _settingsBox.put('defaultApkName', name);
   }
 
   void toggleNonLaunchable(final bool value, final WidgetRef ref) {
@@ -50,5 +62,6 @@ class SettingsNotifier extends Notifier<SettingsModel> {
   void toggleGridView() {
     final updated = !state.gridView;
     state = state.copyWith(gridView: updated);
+    _settingsBox.put('gridView', updated);
   }
 }

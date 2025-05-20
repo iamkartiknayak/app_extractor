@@ -6,6 +6,7 @@ class BoxHelper {
   BoxHelper._internal();
   static final BoxHelper _instance = BoxHelper._internal();
   late final Box<dynamic> _appBox;
+  late final Box<dynamic> _settingsBox;
 
   static BoxHelper get instance => _instance;
 
@@ -15,9 +16,11 @@ class BoxHelper {
       Hive.registerAdapter(ExtractedAppModelAdapter());
     }
     _appBox = await Hive.openBox<dynamic>('appData');
+    _settingsBox = await Hive.openBox<dynamic>('settingsBox');
   }
 
   Box<dynamic> get appBox => _appBox;
+  Box<dynamic> get settingsBox => _settingsBox;
 
   Future<void> saveFavorites(final List<String> favoriteAppsIdList) async {
     await _appBox.put('favoriteApps', favoriteAppsIdList);
