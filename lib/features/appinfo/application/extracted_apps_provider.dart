@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../core/helpers/app_utils.dart';
 import '../../../core/helpers/box_helper.dart';
@@ -138,6 +139,23 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
 
     state = state.copyWith(extractedApps: updatedMap);
     await BoxHelper.instance.saveExtractedApps(updatedMap.values.toList());
+  }
+
+  Future<void> deleteAllApks() async {
+    final dir = await getExternalStorageDirectory();
+    if (dir == null) {
+      return;
+    }
+
+    final files = dir.listSync(recursive: true);
+    for (final file in files) {
+      if (file is File) {
+        await file.delete();
+      }
+    }
+
+    state = const ExtractedAppsState();
+    await BoxHelper.instance.saveExtractedApps([]);
   }
 
   String? getExtractedApkPath(final String packageName) =>

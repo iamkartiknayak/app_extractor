@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../applist/presentation/pages/app_gallery.dart';
+import '../../settings/presentation/pages/settings_page.dart';
 
 final navbarProvider = NotifierProvider<NavbarIndexNotifier, int>(
   () => NavbarIndexNotifier(),
@@ -21,6 +22,6 @@ final navbarPages = Provider<List<Widget>>(
     AppGallery(AppGalleryType.installed),
     AppGallery(AppGalleryType.system),
     AppGallery(AppGalleryType.favorites),
-    Text('Settings Page'),
+    SettingsPage(),
   ],
 );
