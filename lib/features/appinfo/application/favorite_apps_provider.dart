@@ -1,6 +1,7 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/helpers/box_helper.dart';
 import '../../applist/application/all_apps_provider.dart';
 
 final favoritesProvider = NotifierProvider<FavoritesNotifier, Set<String>>(
@@ -20,7 +21,7 @@ final favoriteAppsProvider = Provider<List<Application>>((final ref) {
 
 class FavoritesNotifier extends Notifier<Set<String>> {
   @override
-  Set<String> build() => {};
+  Set<String> build() => BoxHelper.instance.getFavoriteAppsIdList().toSet();
 
   void toggleFavorite(final String packageName) {
     if (state.contains(packageName)) {
@@ -28,6 +29,7 @@ class FavoritesNotifier extends Notifier<Set<String>> {
     } else {
       state = {...state}..add(packageName);
     }
+    BoxHelper.instance.saveFavorites(state.toList());
   }
 
   bool isFavorite(final String packageName) => state.contains(packageName);

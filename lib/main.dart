@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import './core/helpers/box_helper.dart';
 import './features/home/presentation/pages/home_page.dart';
 
-void main() => runApp(const ProviderScope(child: Dexify()));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await BoxHelper.instance.init();
+  runApp(const ProviderScope(child: Dexify()));
+}
 
 class Dexify extends StatelessWidget {
   const Dexify({super.key});
