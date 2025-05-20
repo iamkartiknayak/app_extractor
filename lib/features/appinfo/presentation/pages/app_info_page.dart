@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../../common/extract_share_button.dart';
 import '../../../../core/helpers/date_time_helper.dart';
 import '../../application/app_info_provider.dart';
 import '../widgets/app_action_bar.dart';
@@ -25,7 +26,7 @@ class AppInfoPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('App Info'),
         actionsPadding: const EdgeInsets.only(right: 8.0),
-        actions: const [Icon(Symbols.unarchive)],
+        actions: [ExtractShareButton(app: app)],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

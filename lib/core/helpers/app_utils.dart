@@ -3,7 +3,9 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppUtils {
@@ -170,6 +172,64 @@ class AppUtils {
     }
   }
 
+  static String generateApkFileName(
+    final Application app,
+    final String condition,
+  ) {
+    final sanitizedAppName = app.appName.replaceAll(
+      RegExp(r'[^a-zA-Z0-9]+'),
+      '_',
+    );
+    final sanitizedSourceName = app.packageName.replaceAll(
+      RegExp(r'[^\w\s]+'),
+      '_',
+    );
+    final version = app.versionName;
+
+    switch (condition) {
+      case 'source_version.apk':
+        return '${sanitizedSourceName}_$version.apk';
+      case 'name_version.apk':
+        return '${sanitizedAppName}_$version.apk';
+      case 'source.apk':
+        return '$sanitizedSourceName.apk';
+      case 'name.apk':
+        return '$sanitizedAppName.apk';
+      default:
+        return '${sanitizedAppName}_$version.apk';
+    }
+  }
+
+  static Future<String?> extractApk(
+    final String apkFilePath,
+    final String appName,
+  ) async {
+    try {
+      final extractionDir = await _getPrivateExtractionDirectory();
+      if (extractionDir == null) {
+        return null;
+      }
+
+      final sourceApkPath = apkFilePath;
+      if (sourceApkPath.isEmpty) {
+        return null;
+      }
+
+      final sourceFile = File(sourceApkPath);
+      final destinationPath = '${extractionDir.path}/$appName';
+
+      if (!await sourceFile.exists()) {
+        return null;
+      }
+
+      await sourceFile.copy(destinationPath);
+      return destinationPath;
+    } catch (e) {
+      debugPrint('Error extracting APK: $e');
+      return null;
+    }
+  }
+
   // private methods
   static String _formatBytes(final int bytes, [final int decimals = 2]) {
     if (bytes <= 0) {
@@ -179,5 +239,23 @@ class AppUtils {
     final i = (log(bytes) / log(1024)).floor();
     final size = bytes / pow(1024, i);
     return '${size.toStringAsFixed(decimals)} ${suffixes[i]}';
+  }
+
+  static Future<Directory?> _getPrivateExtractionDirectory() async {
+    try {
+      final baseDir = await getExternalStorageDirectory();
+      if (baseDir == null) {
+        return null;
+      }
+
+      final extractorDir = Directory('${baseDir.path}/ApxExtractor');
+      if (!await extractorDir.exists()) {
+        await extractorDir.create(recursive: true);
+      }
+      return extractorDir;
+    } catch (e) {
+      debugPrint('Error creating private directory: $e');
+      return null;
+    }
   }
 }

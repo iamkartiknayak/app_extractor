@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../../../common/extract_share_button.dart';
 import '../../../appinfo/presentation/pages/app_info_page.dart';
 
 class BuildAppList extends ConsumerWidget {
@@ -39,7 +40,7 @@ class BuildAppList extends ConsumerWidget {
               ),
               title: _TileText(text: app.appName),
               subtitle: _TileText(text: app.packageName),
-              trailing: const Icon(Symbols.unarchive),
+              trailing: ExtractShareButton(app: app),
             ),
           );
         },
