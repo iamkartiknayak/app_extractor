@@ -73,6 +73,14 @@ class AppGallery extends ConsumerWidget {
             );
           }
 
+          if (type == AppGalleryType.favorites && apps.isEmpty) {
+            return const EmptyDataWidget(
+              icon: Symbols.heart_broken,
+              title: 'No Favorites has been added',
+              subTitle: 'Start adding items you love to see them here',
+            );
+          }
+
           final searchList = ref.watch(
             searchProvider.select((final s) => s.filteredApps),
           );
