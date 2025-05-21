@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../../common/empty_data_widget.dart';
 import '../../../appinfo/application/extracted_apps_provider.dart';
 import '../../../appinfo/application/favorite_apps_provider.dart';
 import '../../../settings/application/settings_provider.dart';
 import '../../application/installed_apps_provider.dart';
 import '../../application/long_press_provider.dart';
+import '../../application/search_provider.dart';
 import '../../application/system_apps_provider.dart';
 import '../widgets/build_app_grid.dart';
 import '../widgets/build_app_list.dart';
@@ -41,7 +43,6 @@ class AppGallery extends ConsumerWidget {
         appProvider = systemAppsProvider;
         title = 'System Apps';
         break;
-
       case AppGalleryType.favorites:
         appProvider = favoriteAppsProvider;
         title = 'Favorite Apps';
@@ -57,8 +58,31 @@ class AppGallery extends ConsumerWidget {
                 onPressed: () => exAppNotifier.batchExtractApks(ref, apps),
                 icon: Symbols.unarchive,
               )
-              : DefaultAppBar(title: title, count: apps.length),
-      body: gridView ? BuildAppGrid(apps: apps) : BuildAppList(apps: apps),
+              : DefaultAppBar(title: title, apps: apps),
+      body: Builder(
+        builder: (_) {
+          final noResults = ref.watch(
+            searchProvider.select((final s) => s.noResults),
+          );
+
+          if (noResults) {
+            return const EmptyDataWidget(
+              icon: Symbols.search_off,
+              title: 'No results found',
+              subTitle: 'Try adjusting your search keywords',
+            );
+          }
+
+          final searchList = ref.watch(
+            searchProvider.select((final s) => s.filteredApps),
+          );
+          final appList = searchList.isNotEmpty ? searchList : apps;
+
+          return gridView
+              ? BuildAppGrid(apps: appList)
+              : BuildAppList(apps: appList);
+        },
+      ),
     );
   }
 }

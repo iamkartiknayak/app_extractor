@@ -7,8 +7,8 @@ import '../../../../common/custom_list_tile.dart';
 import '../../../../common/leading_widget.dart';
 import '../../../../core/helpers/app_interaction_helper.dart';
 import '../../../appinfo/application/extracted_apps_provider.dart';
+import '../../../appinfo/data/models/extracted_app_model.dart';
 import '../../application/long_press_provider.dart';
-import '../widgets/default_app_bar.dart';
 import '../widgets/selection_app_bar.dart';
 
 class ExtractedAppListPage extends ConsumerWidget {
@@ -28,10 +28,11 @@ class ExtractedAppListPage extends ConsumerWidget {
                 onPressed: () => exAppNotifier.batchDeleteApks(ref),
                 icon: Symbols.delete_forever,
               )
-              : DefaultAppBar(
-                title: 'Extracted Apps',
-                count: extractedApps.length,
-                showActions: false,
+              : PreferredSize(
+                preferredSize: const Size(double.infinity, 60.0),
+                child: AppBar(
+                  title: Text('Extracted Apps (${extractedApps.length})'),
+                ),
               ),
       body: ListView.separated(
         itemCount: extractedApps.length,
@@ -49,20 +50,7 @@ class ExtractedAppListPage extends ConsumerWidget {
             leading: LeadingWidget(index: index),
             title: app.appName,
             subTitle: app.appSize,
-            trailing:
-                longPress
-                    ? null
-                    : IconButton(
-                      onPressed: () {
-                        SharePlus.instance.share(
-                          ShareParams(files: [XFile(app.appPath)]),
-                        );
-                      },
-                      icon: Icon(
-                        Symbols.share,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
+            trailing: longPress ? null : _buildShareButton(app, context),
           );
         },
         padding: const EdgeInsets.all(12.0),
@@ -70,4 +58,14 @@ class ExtractedAppListPage extends ConsumerWidget {
       ),
     );
   }
+
+  IconButton _buildShareButton(
+    final ExtractedAppModel app,
+    final BuildContext context,
+  ) => IconButton(
+    onPressed: () {
+      SharePlus.instance.share(ShareParams(files: [XFile(app.appPath)]));
+    },
+    icon: Icon(Symbols.share, color: Theme.of(context).colorScheme.primary),
+  );
 }
