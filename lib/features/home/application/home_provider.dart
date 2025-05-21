@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../applist/application/long_press_provider.dart';
+import '../../applist/application/search_provider.dart';
 import '../../applist/presentation/pages/app_gallery.dart';
 import '../../settings/presentation/pages/settings_page.dart';
 
@@ -12,7 +14,9 @@ class NavbarIndexNotifier extends Notifier<int> {
   @override
   int build() => 0;
 
-  void updateIndex(final int selectedIndex) {
+  void updateIndex(final int selectedIndex, final WidgetRef ref) {
+    ref.read(searchProvider.notifier).clearSearch();
+    resetSelection(ref);
     state = selectedIndex;
   }
 }

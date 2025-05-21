@@ -17,7 +17,9 @@ class HomePage extends ConsumerWidget {
       body: pages[currentIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentIndex,
-        onDestinationSelected: ref.read(navbarProvider.notifier).updateIndex,
+        onDestinationSelected: (final index) {
+          ref.read(navbarProvider.notifier).updateIndex(index, ref);
+        },
         destinations: const [
           NavbarItem(icon: Symbols.archive, label: 'Installed Apps'),
           NavbarItem(icon: Symbols.phone_android, label: 'System Apps'),
