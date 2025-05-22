@@ -7,6 +7,7 @@ import '../../../../common/extract_share_button.dart';
 import '../../../../common/leading_widget.dart';
 import '../../../../core/helpers/app_interaction_helper.dart';
 import '../../application/long_press_provider.dart';
+import './shimmer_widget.dart';
 
 class BuildAppList extends ConsumerWidget {
   const BuildAppList({super.key, required this.apps});
@@ -16,11 +17,17 @@ class BuildAppList extends ConsumerWidget {
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
     final longPress = ref.watch(longPressProvider);
+    final isLoading = apps.isEmpty;
+
     debugPrint('build called...');
 
     return ListView.separated(
-      itemCount: apps.length,
+      itemCount: isLoading ? 10 : apps.length,
       itemBuilder: (_, final index) {
+        if (isLoading) {
+          return const ShimmerTile();
+        }
+
         final app = apps[index];
         final tap = AppInteractionHelper.getTapHandlers(
           context: context,
