@@ -4,6 +4,8 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/helpers/box_helper.dart';
+
 final iconCacheProvider =
     NotifierProvider<IconCacheNotifier, Map<String, Uint8List>>(
       IconCacheNotifier.new,
@@ -19,7 +21,7 @@ final iconProvider = Provider.family<Uint8List?, String>((
 
 class IconCacheNotifier extends Notifier<Map<String, Uint8List>> {
   @override
-  Map<String, Uint8List> build() => <String, Uint8List>{};
+  Map<String, Uint8List> build() => BoxHelper.instance.getIconCache();
 
   void cacheIcons(final bool showNonLaunchable) {
     Future.microtask(() async {
@@ -32,16 +34,17 @@ class IconCacheNotifier extends Notifier<Map<String, Uint8List>> {
       final Map<String, Uint8List> updates = {};
 
       for (final app in appsWithIcons) {
-        final appIcon = (app as ApplicationWithIcon).icon;
-        if (state.containsKey(app.packageName) &&
-            state[app.packageName] == appIcon) {
+        final icon = (app as ApplicationWithIcon).icon;
+        final cachedIcon = state[app.packageName];
+        if (cachedIcon != null && listEquals(cachedIcon, icon)) {
           continue;
         }
-        updates[app.packageName] = appIcon;
+        updates[app.packageName] = icon;
       }
 
       if (updates.isNotEmpty) {
         state = {...state, ...updates};
+        await BoxHelper.instance.saveIconCache(state);
       }
     });
   }
