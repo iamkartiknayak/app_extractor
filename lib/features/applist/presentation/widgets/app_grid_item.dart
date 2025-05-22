@@ -44,7 +44,11 @@ class AppGridItem extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 8.0),
-              LeadingWidget(index: index, packageName: app.packageName),
+              LeadingWidget(
+                index: index,
+                packageName: app.packageName,
+                size: 50.0,
+              ),
               const SizedBox(height: 20.0),
               _GridItemText(
                 text: app.appName,

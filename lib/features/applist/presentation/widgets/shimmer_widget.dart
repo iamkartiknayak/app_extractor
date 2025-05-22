@@ -59,7 +59,7 @@ class ShimmerCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const _ShimmerContainer(height: 40.0, width: 40.0),
+              const _ShimmerContainer(height: 50.0, width: 50.0),
               const SizedBox(height: 20.0),
               _ShimmerContainer(height: 16.0, width: itemWidth / 2.5),
               const SizedBox(height: 8.0),

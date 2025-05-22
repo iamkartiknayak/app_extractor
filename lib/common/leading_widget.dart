@@ -13,6 +13,7 @@ class LeadingWidget extends ConsumerWidget {
     required this.index,
     this.packageName,
     this.rawIcon,
+    this.size = 40.0,
   }) : assert(
          packageName != null || rawIcon != null,
          'Either packageName or rawIcon must be provided.',
@@ -21,6 +22,7 @@ class LeadingWidget extends ConsumerWidget {
   final int index;
   final String? packageName;
   final Uint8List? rawIcon;
+  final double size;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
@@ -28,6 +30,6 @@ class LeadingWidget extends ConsumerWidget {
 
     return isSelected
         ? const SelectionIndicator()
-        : AppIcon(packageName: packageName, rawIcon: rawIcon);
+        : AppIcon(packageName: packageName, rawIcon: rawIcon, size: size);
   }
 }
