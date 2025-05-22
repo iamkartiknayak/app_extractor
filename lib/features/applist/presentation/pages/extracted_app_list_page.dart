@@ -55,7 +55,7 @@ class ExtractedAppListPage extends ConsumerWidget {
                   return CustomListTile(
                     onTap: tap.onTap,
                     onLongPress: tap.onLongPress,
-                    leading: LeadingWidget(index: index),
+                    leading: LeadingWidget(index: index, rawIcon: app.appIcon),
                     title: app.appName,
                     subTitle: app.appSize,
                     trailing:

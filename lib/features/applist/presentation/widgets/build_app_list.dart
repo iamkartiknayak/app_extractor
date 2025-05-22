@@ -32,7 +32,7 @@ class BuildAppList extends ConsumerWidget {
         return CustomListTile(
           onTap: tap.onTap,
           onLongPress: tap.onLongPress,
-          leading: LeadingWidget(index: index),
+          leading: LeadingWidget(index: index, packageName: app.packageName),
           title: app.appName,
           subTitle: app.packageName,
           trailing: longPress ? null : ExtractShareButton(app: app),

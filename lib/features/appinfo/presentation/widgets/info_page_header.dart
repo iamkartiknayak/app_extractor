@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
+import '../../../../common/app_icon.dart';
 import '../../application/favorite_apps_provider.dart';
 import './favorite_button.dart';
 
@@ -24,11 +24,7 @@ class InfoPageHeader extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20.0),
       child: Row(
         children: [
-          Icon(
-            Symbols.android,
-            size: 40.0,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          AppIcon(packageName: packageName, size: 50.0),
           const SizedBox(width: 20.0),
           Expanded(
             child: Column(
