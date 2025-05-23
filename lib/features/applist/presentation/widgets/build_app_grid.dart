@@ -2,7 +2,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../application/long_press_provider.dart';
+import '../../../../core/helpers/app_interaction_helper.dart';
 import './app_grid_item.dart';
 import './shimmer_widget.dart';
 
@@ -13,8 +13,6 @@ class BuildAppGrid extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    final longPress = ref.watch(longPressProvider);
-    final selectedIndexes = ref.watch(selectedItemsProvider);
     final isLoading = apps.isEmpty;
 
     return LayoutBuilder(
@@ -32,20 +30,20 @@ class BuildAppGrid extends ConsumerWidget {
             crossAxisSpacing: 12.0,
             childAspectRatio: itemWidth / itemHeight,
           ),
-          itemBuilder: (final context, final index) {
+          itemBuilder: (_, final index) {
             if (isLoading) {
               return ShimmerCard(itemWidth: itemWidth);
             }
 
             final app = apps[index];
-            final isSelected = selectedIndexes.contains(index);
-
-            return AppGridItem(
-              app: app,
+            final tap = AppInteractionHelper.getTapHandlers(
+              context: context,
+              ref: ref,
               index: index,
-              isSelected: isSelected,
-              longPress: longPress,
+              app: app,
             );
+
+            return AppGridItem(app: app, index: index, tap: tap);
           },
         );
       },

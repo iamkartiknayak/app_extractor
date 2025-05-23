@@ -6,29 +6,26 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../../common/extract_share_button.dart';
 import '../../../../common/leading_widget.dart';
 import '../../../../core/helpers/app_interaction_helper.dart';
+import '../../application/long_press_provider.dart';
 
 class AppGridItem extends ConsumerWidget {
   const AppGridItem({
     super.key,
     required this.app,
     required this.index,
-    required this.isSelected,
-    required this.longPress,
+    required this.tap,
   });
 
   final Application app;
   final int index;
-  final bool isSelected;
-  final bool longPress;
+  final TapCallbacks tap;
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    final tap = AppInteractionHelper.getTapHandlers(
-      context: context,
-      ref: ref,
-      index: index,
-      app: app,
-    );
+    final longPress = ref.watch(longPressProvider);
+    final selected = ref.watch(selectedItemsProvider).contains(index);
+
+    final textColor = selected ? Theme.of(context).colorScheme.primary : null;
 
     return Card(
       elevation: 0,
@@ -46,6 +43,7 @@ class AppGridItem extends ConsumerWidget {
               const SizedBox(height: 8.0),
               LeadingWidget(
                 index: index,
+                selected: selected,
                 packageName: app.packageName,
                 size: 50.0,
               ),
@@ -53,12 +51,16 @@ class AppGridItem extends ConsumerWidget {
               _GridItemText(
                 text: app.appName,
                 longPress: longPress,
-                textStyle: Theme.of(context).textTheme.titleMedium!,
+                textStyle: Theme.of(
+                  context,
+                ).textTheme.titleMedium!.copyWith(color: textColor),
               ),
               _GridItemText(
                 text: app.packageName,
                 longPress: longPress,
-                textStyle: Theme.of(context).textTheme.bodySmall!,
+                textStyle: Theme.of(
+                  context,
+                ).textTheme.bodySmall!.copyWith(color: textColor),
               ),
               const SizedBox(height: 4.0),
               if (!longPress)

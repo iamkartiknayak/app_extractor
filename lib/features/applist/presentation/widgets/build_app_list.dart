@@ -16,10 +16,7 @@ class BuildAppList extends ConsumerWidget {
 
   @override
   Widget build(final BuildContext context, final WidgetRef ref) {
-    final longPress = ref.watch(longPressProvider);
     final isLoading = apps.isEmpty;
-
-    debugPrint('build called...');
 
     return ListView.separated(
       itemCount: isLoading ? 10 : apps.length,
@@ -36,13 +33,25 @@ class BuildAppList extends ConsumerWidget {
           app: app,
         );
 
-        return CustomListTile(
-          onTap: tap.onTap,
-          onLongPress: tap.onLongPress,
-          leading: LeadingWidget(index: index, packageName: app.packageName),
-          title: app.appName,
-          subTitle: app.packageName,
-          trailing: longPress ? null : ExtractShareButton(app: app),
+        return Consumer(
+          builder: (_, final ref, _) {
+            final longPress = ref.watch(longPressProvider);
+            final selected = ref.watch(selectedItemsProvider).contains(index);
+
+            return CustomListTile(
+              onTap: tap.onTap,
+              onLongPress: tap.onLongPress,
+              selected: selected,
+              leading: LeadingWidget(
+                index: index,
+                selected: selected,
+                packageName: app.packageName,
+              ),
+              title: app.appName,
+              subTitle: app.packageName,
+              trailing: longPress ? null : ExtractShareButton(app: app),
+            );
+          },
         );
       },
       padding: const EdgeInsets.all(12.0),

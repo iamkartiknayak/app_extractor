@@ -5,6 +5,7 @@ class CustomListTile extends StatelessWidget {
     super.key,
     this.onTap,
     this.onLongPress,
+    this.selected = false,
     required this.leading,
     required this.title,
     required this.subTitle,
@@ -13,6 +14,7 @@ class CustomListTile extends StatelessWidget {
 
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final bool selected;
   final Widget leading;
   final String title;
   final String subTitle;
@@ -27,6 +29,7 @@ class CustomListTile extends StatelessWidget {
     child: ListTile(
       onTap: onTap,
       onLongPress: onLongPress,
+      selected: selected,
       contentPadding: const EdgeInsets.only(left: 16.0, right: 12.0),
       leading: leading,
       title: _TileText(text: title),
