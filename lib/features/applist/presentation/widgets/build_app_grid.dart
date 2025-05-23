@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/helpers/app_interaction_helper.dart';
+import '../../../home/application/home_provider.dart';
 import './app_grid_item.dart';
 import './shimmer_widget.dart';
 
@@ -22,6 +23,7 @@ class BuildAppGrid extends ConsumerWidget {
         final itemHeight = itemWidth * 1;
 
         return GridView.builder(
+          controller: ref.read(scrollControllerProvider),
           padding: const EdgeInsets.all(12.0),
           itemCount: isLoading ? 10 : apps.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

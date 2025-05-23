@@ -10,11 +10,30 @@ final navbarProvider = NotifierProvider<NavbarIndexNotifier, int>(
   () => NavbarIndexNotifier(),
 );
 
+final scrollControllerProvider = Provider<ScrollController>(
+  (_) => ScrollController(),
+);
+
 class NavbarIndexNotifier extends Notifier<int> {
   @override
   int build() => 0;
 
   void updateIndex(final int selectedIndex, final WidgetRef ref) {
+    final scrollController = ref.read(scrollControllerProvider);
+
+    if (scrollController.hasClients) {
+      if (state == selectedIndex) {
+        scrollController.animateTo(
+          0.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+        return;
+      } else {
+        scrollController.jumpTo(0.0);
+      }
+    }
+
     ref.read(searchProvider.notifier).clearSearch();
     resetSelection(ref);
     state = selectedIndex;

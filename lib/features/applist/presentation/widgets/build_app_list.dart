@@ -6,6 +6,7 @@ import '../../../../common/custom_list_tile.dart';
 import '../../../../common/extract_share_button.dart';
 import '../../../../common/leading_widget.dart';
 import '../../../../core/helpers/app_interaction_helper.dart';
+import '../../../home/application/home_provider.dart';
 import '../../application/long_press_provider.dart';
 import './shimmer_widget.dart';
 
@@ -19,6 +20,7 @@ class BuildAppList extends ConsumerWidget {
     final isLoading = apps.isEmpty;
 
     return ListView.separated(
+      controller: ref.read(scrollControllerProvider),
       itemCount: isLoading ? 10 : apps.length,
       itemBuilder: (_, final index) {
         if (isLoading) {
