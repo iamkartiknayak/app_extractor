@@ -21,32 +21,36 @@ class ExtractedAppListPage extends ConsumerWidget {
     final extractedApps =
         ref.watch(extractedAppsProvider).extractedApps.values.toList();
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 60.0),
-        child: Consumer(
-          builder: (_, final ref, _) {
-            final longPress = ref.watch(longPressProvider);
+    return PopScope(
+      canPop: !ref.watch(longPressProvider),
+      onPopInvokedWithResult: (_, _) => resetSelection(ref),
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 60.0),
+          child: Consumer(
+            builder: (_, final ref, _) {
+              final longPress = ref.watch(longPressProvider);
 
-            return longPress
-                ? SelectionAppBar(
-                  onPressed: () => exAppNotifier.batchDeleteApks(ref),
-                  icon: Symbols.delete_forever,
-                )
-                : AppBar(
-                  title: Text('Extracted Apps (${extractedApps.length})'),
-                );
-          },
+              return longPress
+                  ? SelectionAppBar(
+                    onPressed: () => exAppNotifier.batchDeleteApks(ref),
+                    icon: Symbols.delete_forever,
+                  )
+                  : AppBar(
+                    title: Text('Extracted Apps (${extractedApps.length})'),
+                  );
+            },
+          ),
         ),
+        body:
+            extractedApps.isEmpty
+                ? const EmptyDataWidget(
+                  icon: Symbols.inbox,
+                  title: 'No APKs extracted yet',
+                  subTitle: 'Start by extracting an app to see it listed here',
+                )
+                : _buildExtractedAppsList(extractedApps, context, ref),
       ),
-      body:
-          extractedApps.isEmpty
-              ? const EmptyDataWidget(
-                icon: Symbols.inbox,
-                title: 'No APKs extracted yet',
-                subTitle: 'Start by extracting an app to see it listed here',
-              )
-              : _buildExtractedAppsList(extractedApps, context, ref),
     );
   }
 

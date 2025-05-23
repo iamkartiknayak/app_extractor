@@ -51,45 +51,49 @@ class AppGallery extends ConsumerWidget {
 
     final apps = ref.watch(appProvider);
 
-    return Scaffold(
-      appBar:
-          longPress
-              ? SelectionAppBar(
-                onPressed: () => exAppNotifier.batchExtractApks(ref, apps),
-                icon: Symbols.unarchive,
-              )
-              : DefaultAppBar(title: title, apps: apps),
-      body: Builder(
-        builder: (_) {
-          final noResults = ref.watch(
-            searchProvider.select((final s) => s.noResults),
-          );
-
-          if (noResults) {
-            return const EmptyDataWidget(
-              icon: Symbols.search_off,
-              title: 'No results found',
-              subTitle: 'Try adjusting your search keywords',
+    return PopScope(
+      canPop: !longPress,
+      onPopInvokedWithResult: (_, _) => resetSelection(ref),
+      child: Scaffold(
+        appBar:
+            longPress
+                ? SelectionAppBar(
+                  onPressed: () => exAppNotifier.batchExtractApks(ref, apps),
+                  icon: Symbols.unarchive,
+                )
+                : DefaultAppBar(title: title, apps: apps),
+        body: Builder(
+          builder: (_) {
+            final noResults = ref.watch(
+              searchProvider.select((final s) => s.noResults),
             );
-          }
 
-          if (type == AppGalleryType.favorites && apps.isEmpty) {
-            return const EmptyDataWidget(
-              icon: Symbols.heart_broken,
-              title: 'No Favorites has been added',
-              subTitle: 'Start adding items you love to see them here',
+            if (noResults) {
+              return const EmptyDataWidget(
+                icon: Symbols.search_off,
+                title: 'No results found',
+                subTitle: 'Try adjusting your search keywords',
+              );
+            }
+
+            if (type == AppGalleryType.favorites && apps.isEmpty) {
+              return const EmptyDataWidget(
+                icon: Symbols.heart_broken,
+                title: 'No Favorites has been added',
+                subTitle: 'Start adding items you love to see them here',
+              );
+            }
+
+            final searchList = ref.watch(
+              searchProvider.select((final s) => s.filteredApps),
             );
-          }
+            final appList = searchList.isNotEmpty ? searchList : apps;
 
-          final searchList = ref.watch(
-            searchProvider.select((final s) => s.filteredApps),
-          );
-          final appList = searchList.isNotEmpty ? searchList : apps;
-
-          return gridView
-              ? BuildAppGrid(apps: appList)
-              : BuildAppList(apps: appList);
-        },
+            return gridView
+                ? BuildAppGrid(apps: appList)
+                : BuildAppList(apps: appList);
+          },
+        ),
       ),
     );
   }
