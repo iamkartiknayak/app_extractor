@@ -20,7 +20,9 @@ final allAppsProvider = FutureProvider<List<Application>>((final ref) async {
         a.appName.toUpperCase().compareTo(b.appName.toUpperCase()),
   );
 
-  ref.read(iconCacheProvider.notifier).cacheIcons(showNonLaunchable);
+  ref
+      .read(iconCacheProvider.notifier)
+      .cacheIcons(showNonLaunchable, apps.length);
 
   return apps;
 });

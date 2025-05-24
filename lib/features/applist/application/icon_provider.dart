@@ -23,8 +23,12 @@ class IconCacheNotifier extends Notifier<Map<String, Uint8List>> {
   @override
   Map<String, Uint8List> build() => BoxHelper.instance.getIconCache();
 
-  void cacheIcons(final bool showNonLaunchable) {
+  void cacheIcons(final bool showNonLaunchable, final int appListLength) {
     Future.microtask(() async {
+      if (state.length >= appListLength) {
+        return;
+      }
+
       final appsWithIcons = await DeviceApps.getInstalledApplications(
         includeAppIcons: true,
         includeSystemApps: true,
