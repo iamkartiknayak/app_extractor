@@ -2,14 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 
+import '../../../../core/helpers/app_event_helper.dart';
 import '../../application/home_provider.dart';
 import '../widgets/navbar_item.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(final BuildContext context, final WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  late final AppEventHelper appEventHelper;
+
+  @override
+  void initState() {
+    super.initState();
+    appEventHelper = AppEventHelper(ref, context);
+  }
+
+  @override
+  void dispose() {
+    appEventHelper.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     final currentIndex = ref.watch(navbarProvider);
     final pages = ref.read(navbarPages);
 

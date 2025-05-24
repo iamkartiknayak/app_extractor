@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^6.3.1
   hive_flutter: ^1.1.0
   shimmer: ^3.0.0
+  app_install_events: ^0.0.3
+  image: ^4.5.4
 
 dev_dependencies:
   flutter_test:

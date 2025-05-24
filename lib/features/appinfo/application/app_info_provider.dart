@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/helpers/app_utils.dart';
 
+final openedAppIdProvider = StateProvider<String?>((final ref) => null);
+
 final isAppOnPlayStoreProvider = FutureProvider.family<bool, String>((
   final ref,
   final packageName,

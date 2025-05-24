@@ -40,6 +40,7 @@ class IconCacheNotifier extends Notifier<Map<String, Uint8List>> {
       for (final app in appsWithIcons) {
         final icon = (app as ApplicationWithIcon).icon;
         final cachedIcon = state[app.packageName];
+
         if (cachedIcon != null && listEquals(cachedIcon, icon)) {
           continue;
         }
@@ -51,5 +52,17 @@ class IconCacheNotifier extends Notifier<Map<String, Uint8List>> {
         await BoxHelper.instance.saveIconCache(state);
       }
     });
+  }
+
+  Future<void> addIconToCache(
+    final String packageName,
+    final Uint8List icon,
+  ) async {
+    if (state.containsKey(packageName)) {
+      return;
+    }
+
+    state = {...state, packageName: icon};
+    await BoxHelper.instance.saveIconCache(state);
   }
 }
