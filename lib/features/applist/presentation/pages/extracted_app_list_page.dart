@@ -83,7 +83,7 @@ class ExtractedAppListPage extends ConsumerWidget {
               rawIcon: app.appIcon,
             ),
             title: app.appName,
-            subTitle: app.packageName,
+            subTitle: app.appSize,
             trailing: longPress ? null : _buildShareButton(app, context),
           );
         },
