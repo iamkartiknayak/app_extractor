@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import './core/helpers/box_helper.dart';
+import './core/helpers/snackbar_helper.dart';
 import './features/home/presentation/pages/home_page.dart';
 
 void main() async {
@@ -59,6 +60,7 @@ class Dexify extends StatelessWidget {
             ),
             scaffoldBackgroundColor: darkScheme.surface,
           ),
+          scaffoldMessengerKey: scaffoldMessengerKey,
         );
       },
     );

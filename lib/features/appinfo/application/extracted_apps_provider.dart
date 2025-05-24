@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../core/helpers/app_utils.dart';
 import '../../../core/helpers/box_helper.dart';
+import '../../../core/helpers/snackbar_helper.dart';
 import '../../applist/application/long_press_provider.dart';
 import '../../settings/application/settings_provider.dart';
 import '../data/models/extracted_app_model.dart';
@@ -100,15 +101,22 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
       state = state.copyWith(
         extractingApps: {...state.extractingApps}..remove(app.packageName),
       );
+      if (showSnackBar) {
+        SnackbarHelper.show('${app.appName} has been extracted successfully');
+      }
     }
   }
 
-  void batchExtractApks(final WidgetRef ref, final List<Application> apps) {
+  Future<void> batchExtractApks(
+    final WidgetRef ref,
+    final List<Application> apps,
+  ) async {
     final indexList = ref.read(selectedItemsProvider);
     resetSelection(ref);
     for (final index in indexList) {
-      extractApk(app: apps[index]);
+      await extractApk(app: apps[index], showSnackBar: false);
     }
+    SnackbarHelper.show('All selected apps have been extracted successfully');
   }
 
   Future<void> batchDeleteApks(
@@ -139,6 +147,7 @@ class ExtractedAppsNotifier extends Notifier<ExtractedAppsState> {
     );
 
     state = state.copyWith(extractedApps: updatedMap);
+    SnackbarHelper.show('All selected apps have been deleted successfully');
     await BoxHelper.instance.saveExtractedApps(updatedMap.values.toList());
   }
 
