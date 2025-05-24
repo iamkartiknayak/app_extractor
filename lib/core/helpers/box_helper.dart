@@ -43,6 +43,7 @@ class BoxHelper {
 
   Future<void> saveIconCache(final Map<String, Uint8List> iconCache) async {
     await _appBox.put('iconCache', iconCache);
+    await _appBox.compact();
   }
 
   Map<String, Uint8List> getIconCache() {
